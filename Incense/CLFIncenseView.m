@@ -51,15 +51,34 @@
         make.top.equalTo(self);
         make.left.equalTo(self);
         make.right.equalTo(self);
-        make.height.equalTo(@10);
+        make.height.equalTo(@8);
     }];
     
     [self.incenseDustView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.incenseHeadView.mas_bottom);
         make.left.equalTo(self);
         make.right.equalTo(self);
-        make.height.equalTo(@5);
+        make.height.equalTo(@3);
     }];
+    
+    UIView *layerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 6, 10)];
+    
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.startPoint = CGPointMake(0.0, 0.0);
+    gradientLayer.endPoint = CGPointMake(0.0, 1.0);
+    
+    gradientLayer.frame = layerView.bounds;
+    NSMutableArray *colors = [NSMutableArray array];
+    
+    [colors addObject:(id)[UIColor colorWithRed:0.6f green:0.0f blue:0.0f alpha:1.0f].CGColor];
+    [colors addObject:(id)[UIColor colorWithRed:0.8f green:0.0f blue:0.0f alpha:1.0f].CGColor];
+    [colors addObject:(id)[UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:1.0f].CGColor];
+    
+    gradientLayer.colors = colors;
+    
+    [layerView.layer insertSublayer:gradientLayer atIndex:0];
+    [self.incenseHeadView addSubview:layerView];
+
 }
 
 - (void)setBrightnessCallback:(void (^)(CLFIncenseView *))brightnessCallback {

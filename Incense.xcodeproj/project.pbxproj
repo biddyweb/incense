@@ -20,6 +20,8 @@
 		3F1956C91B78B95A003A5575 /* View+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956BC1B78B95A003A5575 /* View+MASAdditions.m */; };
 		3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956BF1B78B95A003A5575 /* ViewController+MASAdditions.m */; };
 		3F1956CD1B78B98F003A5575 /* CLFIncenseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */; };
+		3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F3AA2B41B7B0BFD00DD9E84 /* BMWaveLayer.m */; };
+		3F3AA2B81B7B0BFD00DD9E84 /* BMWaveMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F3AA2B61B7B0BFD00DD9E84 /* BMWaveMaker.m */; };
 		3F48CDF81B78777F00F889BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CDF71B78777F00F889BC /* main.m */; };
 		3F48CDFB1B78777F00F889BC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CDFA1B78777F00F889BC /* AppDelegate.m */; };
 		3F48CDFE1B78777F00F889BC /* CLFMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CDFD1B78777F00F889BC /* CLFMainViewController.m */; };
@@ -76,6 +78,10 @@
 		3F1956BF1B78B95A003A5575 /* ViewController+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+MASAdditions.m"; sourceTree = "<group>"; };
 		3F1956CB1B78B98F003A5575 /* CLFIncenseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLFIncenseView.h; path = ../../CLFIncenseView.h; sourceTree = "<group>"; };
 		3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CLFIncenseView.m; path = ../../CLFIncenseView.m; sourceTree = "<group>"; };
+		3F3AA2B31B7B0BFD00DD9E84 /* BMWaveLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMWaveLayer.h; sourceTree = "<group>"; };
+		3F3AA2B41B7B0BFD00DD9E84 /* BMWaveLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMWaveLayer.m; sourceTree = "<group>"; };
+		3F3AA2B51B7B0BFD00DD9E84 /* BMWaveMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMWaveMaker.h; sourceTree = "<group>"; };
+		3F3AA2B61B7B0BFD00DD9E84 /* BMWaveMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMWaveMaker.m; sourceTree = "<group>"; };
 		3F48CDF21B78777F00F889BC /* Incense.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Incense.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F48CDF61B78777F00F889BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F48CDF71B78777F00F889BC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -123,6 +129,7 @@
 		3F1956A01B789B95003A5575 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				3F3AA2B21B7B0BFD00DD9E84 /* BMWaveMaker */,
 				3F1956A51B78B95A003A5575 /* Masonry */,
 				3F1956A11B789BCB003A5575 /* Waver */,
 			);
@@ -169,6 +176,17 @@
 				3F1956BF1B78B95A003A5575 /* ViewController+MASAdditions.m */,
 			);
 			path = Masonry;
+			sourceTree = "<group>";
+		};
+		3F3AA2B21B7B0BFD00DD9E84 /* BMWaveMaker */ = {
+			isa = PBXGroup;
+			children = (
+				3F3AA2B31B7B0BFD00DD9E84 /* BMWaveLayer.h */,
+				3F3AA2B41B7B0BFD00DD9E84 /* BMWaveLayer.m */,
+				3F3AA2B51B7B0BFD00DD9E84 /* BMWaveMaker.h */,
+				3F3AA2B61B7B0BFD00DD9E84 /* BMWaveMaker.m */,
+			);
+			path = BMWaveMaker;
 			sourceTree = "<group>";
 		};
 		3F48CDE91B78777F00F889BC = {
@@ -379,6 +397,7 @@
 				3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */,
 				3F1956C41B78B95A003A5575 /* MASLayoutConstraint.m in Sources */,
 				3F1956C71B78B95A003A5575 /* NSArray+MASAdditions.m in Sources */,
+				3F3AA2B81B7B0BFD00DD9E84 /* BMWaveMaker.m in Sources */,
 				3F1956C61B78B95A003A5575 /* MASViewConstraint.m in Sources */,
 				3F1956C51B78B95A003A5575 /* MASViewAttribute.m in Sources */,
 				3F6BDC591B7ADF050046FECE /* CLFFireEmitterView.m in Sources */,
@@ -386,6 +405,7 @@
 				3F48CDF81B78777F00F889BC /* main.m in Sources */,
 				3F1956A41B789BE7003A5575 /* Waver.m in Sources */,
 				3F1956C11B78B95A003A5575 /* MASCompositeConstraint.m in Sources */,
+				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				3F732C091B79C3E1009DE244 /* CLFSmokeView.m in Sources */,
 				3F1956CD1B78B98F003A5575 /* CLFIncenseView.m in Sources */,

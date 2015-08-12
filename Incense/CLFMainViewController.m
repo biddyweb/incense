@@ -13,6 +13,8 @@
 #import "CLFSmokeView.h"
 #import "Masonry.h"
 #import <AVFoundation/AVFoundation.h>
+#import "BMWaveMaker.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface CLFMainViewController () <CLFFireDelegate>
 @property (nonatomic, weak) CLFSmokeView *smokeView;
@@ -23,6 +25,8 @@
 
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, assign) CGFloat animateTime;
+@property (nonatomic, weak) UIView *rippleView;
+@property (nonatomic, strong) BMWaveMaker *rippleMaker;
 
 @end
 
@@ -34,7 +38,9 @@
     [self makeIncense];
     [self makeFire];
     [self makeSmoke];
+    [self makeRipple];
     
+    [self.rippleMaker spanWaveContinuallyWithTimeInterval:2.0f];
     self.animateTime = 10.0f;
 }
 
@@ -56,14 +62,14 @@
     
     waver.waverLevelCallback = ^(Waver * waver) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 40); // 5
         waver.level = normalizedValue;
     };
     self.waver = waver;
     
     self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 40);
         incense.brightnessLevel = normalizedValue;
     };
     
@@ -84,14 +90,14 @@
 #pragma mark - IncenseLighted
 
 - (void)timeFlow {
-    [self.incenseView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@30);
-    }];
-
     [UIView animateWithDuration:self.animateTime animations:^{
         [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-        [self.incenseView layoutIfNeeded]; // 执行时会导致烟雾抖动一下. 要换成 frame?
-        self.smokeView.alpha = 0.6f;
+        // 执行时会导致烟雾抖动一下. 要换成 frame?
+        // 好吧, 换成 frame 一样抖
+        // 好吧, autolayout 和 Core Animation 有冲突, 还是用 frame 吧
+//        [self.incenseView layoutIfNeeded];
+        self.incenseView.bounds = CGRectMake(0, 0, 6, 15);
+        self.smokeView.alpha = 1.0f;
     } completion:^(BOOL finished) {
         if (finished) {
             [UIView animateWithDuration:2 animations:^{
@@ -104,7 +110,7 @@
     // 这一小块要放到 Waver 里面去吗=,=
     CABasicAnimation *anim = [CABasicAnimation animation];
     anim.keyPath = @"bounds";
-    anim.toValue = [NSValue valueWithCGRect:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), [UIScreen mainScreen].bounds.size.height - 130)];
+    anim.toValue = [NSValue valueWithCGRect:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), [UIScreen mainScreen].bounds.size.height - 115)];
     anim.duration = self.animateTime;
     anim.delegate = self;
     anim.removedOnCompletion = NO;
@@ -133,7 +139,7 @@
 #pragma mark - Incense
 
 - (CLFIncenseView *)incenseView {
-    if (_incenseView == nil) {
+    if (!_incenseView) {
         CLFIncenseView *incenseView = [[CLFIncenseView alloc] init];
         incenseView.backgroundColor = [UIColor blackColor];
         [self.view addSubview:incenseView];
@@ -143,32 +149,33 @@
 }
 
 - (void)makeIncense {
-    [self.incenseView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@200);
-        make.width.equalTo(@6);
-        make.centerX.equalTo(self.view);
-        make.bottom.equalTo(self.view).offset(-100);
-    }];
+    CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
+    CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
+
+    self.incenseView.frame = CGRectMake((screenW - 6) / 2, screenH - 300, 6, 200);
+    
     self.incenseView.incenseHeadView.alpha = 0.0f;
     self.incenseView.incenseDustView.alpha = 0.0f;
+    
+    CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
+    anim.keyPath = @"position.y";
+    anim.repeatCount = 1000;
+    anim.values = @[@(screenH - 95), @(screenH - 100), @(screenH - 95)];
+    anim.duration = 4.0f;
+    anim.removedOnCompletion = NO;
+    anim.fillMode = kCAFillModeForwards;
+    self.incenseView.layer.position = CGPointMake(screenW / 2, screenH - 100);
+    self.incenseView.layer.anchorPoint = CGPointMake(0.5, 1);
+    [self.incenseView.layer addAnimation:anim forKey:nil];
+
 }
 
 
-//- (void)makeIncense {
-//    [self.incenseView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.height.equalTo(@200);
-//        make.width.equalTo(@6);
-//        make.centerX.equalTo(self.view);
-//        make.bottom.equalTo(self.view).offset(-100);
-//    }];
-//    self.incenseView.incenseHeadView.alpha = 0.0f;
-//    self.incenseView.incenseDustView.alpha = 0.0f;
-//}
 
 #pragma mark - Fire
 
 - (CLFFire *)fire {
-    if (_fire == nil) {
+    if (!_fire) {
         CLFFire *fire = [[CLFFire alloc] init];
         fire.backgroundColor = [UIColor clearColor];
         fire.delegate = self;
@@ -186,7 +193,7 @@
 #pragma mark - Smoke
 
 - (UIView *)smokeView {
-    if (_smokeView == nil) {
+    if (!_smokeView) {
         CLFSmokeView *smokeView = [[CLFSmokeView alloc] init];
         smokeView.backgroundColor = [UIColor clearColor];
         smokeView.alpha = 0.0f;
@@ -197,13 +204,77 @@
 }
 
 - (void)makeSmoke {
-    self.smokeView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 180);
+    [self.smokeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+        make.top.equalTo(self.view);
+        make.height.equalTo(@180);
+    }];
 }
+
+#pragma mark - Ripple
+
+- (UIView *)rippleView {
+    if (!_rippleView) {
+        UIView *rippleView = [[UIView alloc] init];
+        rippleView.backgroundColor = [UIColor clearColor];
+        [self.view addSubview:rippleView];
+        UIView *shadowView = [[UIView alloc] init];
+        shadowView.backgroundColor = [UIColor blackColor];
+        [rippleView addSubview:shadowView];
+        [shadowView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(@10);
+            make.width.equalTo(@10);
+            make.center.equalTo(rippleView);
+        }];
+        shadowView.layer.cornerRadius = 5.0f;
+        shadowView.layer.masksToBounds = YES;
+        _rippleView = rippleView;
+    }
+    return _rippleView;
+}
+
+- (void)makeRipple {
+    [self.rippleView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+        make.bottom.equalTo(self.view);
+        make.height.equalTo(@180);
+    }];
+    CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
+    self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);
+}
+
+- (BMWaveMaker *)rippleMaker {
+    if (!_rippleMaker) {
+        _rippleMaker = [[BMWaveMaker alloc] init];
+        _rippleMaker.animationView = self.rippleView;
+        _rippleMaker.spanScale = 100.0f;
+        _rippleMaker.originRadius = 0.9f;
+        _rippleMaker.waveColor = [UIColor whiteColor];
+        _rippleMaker.animationDuration = 10.0f;
+        _rippleMaker.wavePathWidth = 1.5f;
+    }
+    return _rippleMaker;
+}
+
+CATransform3D CATransform3DMakePerspective(CGPoint center, float disZ) {
+    CATransform3D transToCenter = CATransform3DMakeTranslation(-center.x, -center.y, 0);
+    CATransform3D transBack = CATransform3DMakeTranslation(center.x, center.y, 0);
+    CATransform3D scale = CATransform3DIdentity;
+    scale.m34 = -1.0f/disZ;
+    return CATransform3DConcat(CATransform3DConcat(transToCenter, scale), transBack);
+}
+
+CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ) {
+    return CATransform3DConcat(t, CATransform3DMakePerspective(center, disZ));
+}
+
 
 #pragma mark - Restart
 
 - (UIButton *)restartButton {
-    if (_restartButton == nil) {
+    if (!_restartButton) {
         UIButton *restartButton = [[UIButton alloc] init];
         [restartButton setTitle:@"再上一柱香" forState:UIControlStateNormal];
         [restartButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -239,7 +310,7 @@
 
 #pragma mark - Recorder
 
--(void)setupRecorder {
+- (void)setupRecorder {
     NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
     
     NSDictionary *settings = @{AVSampleRateKey:          [NSNumber numberWithFloat: 44100.0],
