@@ -7,7 +7,7 @@
 //
 
 #import "CLFFire.h"
-#import "CLFFireEmitterView.h"
+#import "UIImage+animatedGIF.h"
 
 @interface CLFFire ()
 
@@ -21,8 +21,9 @@ static CGFloat kScreenH;
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        CLFFireEmitterView *emitterView = [[CLFFireEmitterView alloc] initWithFrame:CGRectZero];
-        [self addSubview:emitterView];
+        self.userInteractionEnabled = YES;
+        NSURL *url = [[NSBundle mainBundle] URLForResource:@"3d-animated-gif" withExtension:@"gif"];
+        self.image = [UIImage animatedImageWithAnimatedGIFURL:url];
     }
     return self;
 }

@@ -29,12 +29,12 @@
 		3F48CE031B78777F00F889BC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CE021B78777F00F889BC /* Images.xcassets */; };
 		3F48CE061B78777F00F889BC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CE041B78777F00F889BC /* LaunchScreen.xib */; };
 		3F48CE121B78777F00F889BC /* IncenseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CE111B78777F00F889BC /* IncenseTests.m */; };
-		3F6BDC591B7ADF050046FECE /* CLFFireEmitterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F6BDC581B7ADF050046FECE /* CLFFireEmitterView.m */; };
-		3F6BDC5C1B7AE6910046FECE /* CLFSmokeEmitterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F6BDC5B1B7AE6910046FECE /* CLFSmokeEmitterView.m */; };
 		3F6BDC621B7AEC3A0046FECE /* Smoke.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F6BDC611B7AEC3A0046FECE /* Smoke.png */; };
 		3F732C091B79C3E1009DE244 /* CLFSmokeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F732C081B79C3E1009DE244 /* CLFSmokeView.m */; };
 		3F8429F11B7A5E34002EC748 /* DazFire.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F8429F01B7A5E34002EC748 /* DazFire.png */; };
 		3F8A67341B79A1780073D552 /* CLFFire.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8A67331B79A1780073D552 /* CLFFire.m */; };
+		3FCF3A4F1B7B9D2600B9FFFF /* 3d-animated-gif.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3FCF3A4E1B7B9D2600B9FFFF /* 3d-animated-gif.gif */; };
+		3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,10 +95,6 @@
 		3F48CE0B1B78777F00F889BC /* IncenseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncenseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F48CE101B78777F00F889BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F48CE111B78777F00F889BC /* IncenseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IncenseTests.m; sourceTree = "<group>"; };
-		3F6BDC571B7ADF050046FECE /* CLFFireEmitterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFFireEmitterView.h; sourceTree = "<group>"; };
-		3F6BDC581B7ADF050046FECE /* CLFFireEmitterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFFireEmitterView.m; sourceTree = "<group>"; };
-		3F6BDC5A1B7AE6910046FECE /* CLFSmokeEmitterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFSmokeEmitterView.h; sourceTree = "<group>"; };
-		3F6BDC5B1B7AE6910046FECE /* CLFSmokeEmitterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFSmokeEmitterView.m; sourceTree = "<group>"; };
 		3F6BDC611B7AEC3A0046FECE /* Smoke.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Smoke.png; sourceTree = "<group>"; };
 		3F732C071B79C3E1009DE244 /* CLFSmokeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLFSmokeView.h; path = ../../CLFSmokeView.h; sourceTree = "<group>"; };
 		3F732C081B79C3E1009DE244 /* CLFSmokeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CLFSmokeView.m; path = ../../CLFSmokeView.m; sourceTree = "<group>"; };
@@ -106,6 +102,9 @@
 		3F8429F01B7A5E34002EC748 /* DazFire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DazFire.png; sourceTree = "<group>"; };
 		3F8A67321B79A1780073D552 /* CLFFire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLFFire.h; path = ../../CLFFire.h; sourceTree = "<group>"; };
 		3F8A67331B79A1780073D552 /* CLFFire.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CLFFire.m; path = ../../CLFFire.m; sourceTree = "<group>"; };
+		3FCF3A4E1B7B9D2600B9FFFF /* 3d-animated-gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "3d-animated-gif.gif"; sourceTree = "<group>"; };
+		3FCF3A521B7B9F2D00B9FFFF /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
+		3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+animatedGIF.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +128,7 @@
 		3F1956A01B789B95003A5575 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				3FCF3A511B7B9E6200B9FFFF /* ThirdPartyCategory */,
 				3F3AA2B21B7B0BFD00DD9E84 /* BMWaveMaker */,
 				3F1956A51B78B95A003A5575 /* Masonry */,
 				3F1956A11B789BCB003A5575 /* Waver */,
@@ -221,6 +221,7 @@
 		3F48CDF51B78777F00F889BC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3FCF3A4E1B7B9D2600B9FFFF /* 3d-animated-gif.gif */,
 				3F6BDC611B7AEC3A0046FECE /* Smoke.png */,
 				3F8429F01B7A5E34002EC748 /* DazFire.png */,
 				3F48CE021B78777F00F889BC /* Images.xcassets */,
@@ -268,10 +269,6 @@
 				3F8A67331B79A1780073D552 /* CLFFire.m */,
 				3F732C071B79C3E1009DE244 /* CLFSmokeView.h */,
 				3F732C081B79C3E1009DE244 /* CLFSmokeView.m */,
-				3F6BDC571B7ADF050046FECE /* CLFFireEmitterView.h */,
-				3F6BDC581B7ADF050046FECE /* CLFFireEmitterView.m */,
-				3F6BDC5A1B7AE6910046FECE /* CLFSmokeEmitterView.h */,
-				3F6BDC5B1B7AE6910046FECE /* CLFSmokeEmitterView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -284,6 +281,15 @@
 				3F48CDFD1B78777F00F889BC /* CLFMainViewController.m */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		3FCF3A511B7B9E6200B9FFFF /* ThirdPartyCategory */ = {
+			isa = PBXGroup;
+			children = (
+				3FCF3A521B7B9F2D00B9FFFF /* UIImage+animatedGIF.h */,
+				3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */,
+			);
+			path = ThirdPartyCategory;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -367,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F8429F11B7A5E34002EC748 /* DazFire.png in Resources */,
+				3FCF3A4F1B7B9D2600B9FFFF /* 3d-animated-gif.gif in Resources */,
 				3F1956C01B78B95A003A5575 /* Info.plist in Resources */,
 				3F48CE011B78777F00F889BC /* Main.storyboard in Resources */,
 				3F48CE061B78777F00F889BC /* LaunchScreen.xib in Resources */,
@@ -391,7 +398,6 @@
 			files = (
 				3F1956C31B78B95A003A5575 /* MASConstraintMaker.m in Sources */,
 				3F48CDFE1B78777F00F889BC /* CLFMainViewController.m in Sources */,
-				3F6BDC5C1B7AE6910046FECE /* CLFSmokeEmitterView.m in Sources */,
 				3F48CDFB1B78777F00F889BC /* AppDelegate.m in Sources */,
 				3F1956C21B78B95A003A5575 /* MASConstraint.m in Sources */,
 				3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */,
@@ -400,7 +406,6 @@
 				3F3AA2B81B7B0BFD00DD9E84 /* BMWaveMaker.m in Sources */,
 				3F1956C61B78B95A003A5575 /* MASViewConstraint.m in Sources */,
 				3F1956C51B78B95A003A5575 /* MASViewAttribute.m in Sources */,
-				3F6BDC591B7ADF050046FECE /* CLFFireEmitterView.m in Sources */,
 				3F1956C91B78B95A003A5575 /* View+MASAdditions.m in Sources */,
 				3F48CDF81B78777F00F889BC /* main.m in Sources */,
 				3F1956A41B789BE7003A5575 /* Waver.m in Sources */,
@@ -408,6 +413,7 @@
 				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				3F732C091B79C3E1009DE244 /* CLFSmokeView.m in Sources */,
+				3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */,
 				3F1956CD1B78B98F003A5575 /* CLFIncenseView.m in Sources */,
 				3F8A67341B79A1780073D552 /* CLFFire.m in Sources */,
 			);

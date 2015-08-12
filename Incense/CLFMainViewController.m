@@ -16,7 +16,7 @@
 #import "BMWaveMaker.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface CLFMainViewController () <CLFFireDelegate>
+@interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate>
 @property (nonatomic, weak) CLFSmokeView *smokeView;
 @property (nonatomic, weak) CLFIncenseView *incenseView;
 @property (nonatomic, weak) Waver *waver;
@@ -47,31 +47,32 @@
 - (void)lightTheIncense {
     [self setupRecorder];
     
-    Waver *waver = [[Waver alloc] init];
-    [self.view addSubview:waver];
+    CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
+    CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
     
-    [waver mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.incenseView.mas_top);
-        make.left.equalTo(self.view);
-        make.right.equalTo(self.view);
-        make.top.equalTo(self.view);
-    }];
+    Waver *waver = [[Waver alloc] init];
+//    waver.backgroundColor = [UIColor grayColor];
+    [self.view insertSubview:waver belowSubview:self.incenseView];
+    
+//    [waver mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.equalTo(self.incenseView.mas_top);
+//        make.left.equalTo(self.view);
+//        make.right.equalTo(self.view);
+//        make.top.equalTo(self.view);
+//    }];
+    
+    waver.frame = CGRectMake(0, 0, screenW, screenH - 300);
+    
     waver.alpha = 0;
     
     __block AVAudioRecorder *weakRecorder = self.recorder;
     
     waver.waverLevelCallback = ^(Waver * waver) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 40); // 5
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5); // 5
         waver.level = normalizedValue;
     };
     self.waver = waver;
-    
-    self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
-        [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 40);
-        incense.brightnessLevel = normalizedValue;
-    };
     
     self.fire.dragEnable = NO;
     [UIView animateWithDuration:3.0 animations:^{
@@ -90,22 +91,34 @@
 #pragma mark - IncenseLighted
 
 - (void)timeFlow {
-    [UIView animateWithDuration:self.animateTime animations:^{
-        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+    CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
+    CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
+    self.waver.frame = CGRectMake(0, 0, screenW, screenH - 115);
+//    [UIView animateWithDuration:self.animateTime animations:^{
+//        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
         // 执行时会导致烟雾抖动一下. 要换成 frame?
         // 好吧, 换成 frame 一样抖
         // 好吧, autolayout 和 Core Animation 有冲突, 还是用 frame 吧
+        // 好吧, 这种方法做燃烧不好,不用这种方法了=,=
+        
 //        [self.incenseView layoutIfNeeded];
-        self.incenseView.bounds = CGRectMake(0, 0, 6, 15);
-        self.smokeView.alpha = 1.0f;
-    } completion:^(BOOL finished) {
-        if (finished) {
-            [UIView animateWithDuration:2 animations:^{
-                self.incenseView.incenseDustView.alpha = 0;
-                self.incenseView.incenseHeadView.alpha = 0;
-            }];
-        }
-    }];
+//        self.incenseView.bounds = CGRectMake(0, 0, 6, 15);
+//        self.smokeView.alpha = 1.0f;
+//    } completion:^(BOOL finished) {
+//        if (finished) {
+//            [UIView animateWithDuration:2 animations:^{
+//                self.incenseView.incenseDustView.alpha = 0;
+//                self.incenseView.incenseHeadView.alpha = 0;
+//            }];
+//        }
+//    }];
+    
+    __block AVAudioRecorder *weakRecorder = self.recorder;
+    self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
+        [weakRecorder updateMeters];
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5);
+        incense.brightnessLevel = normalizedValue;
+    };
     
     // 这一小块要放到 Waver 里面去吗=,=
     CABasicAnimation *anim = [CABasicAnimation animation];
@@ -121,10 +134,12 @@
     }
 }
 
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+- (void)incenseDidBurnOff {
     self.restartButton.alpha = 0.0f;
     [UIView animateWithDuration:2.0f animations:^{
         self.waver.alpha = 0.0f;
+        self.incenseView.incenseDustView.alpha = 0.0f;
+        self.incenseView.incenseHeadView.alpha = 0.0f;
     } completion:^(BOOL finished) {
         if (finished) {
             [UIView animateWithDuration:2.0f animations:^{
@@ -136,12 +151,14 @@
     [self.incenseView.displaylink invalidate];
 }
 
+
 #pragma mark - Incense
 
 - (CLFIncenseView *)incenseView {
     if (!_incenseView) {
         CLFIncenseView *incenseView = [[CLFIncenseView alloc] init];
         incenseView.backgroundColor = [UIColor blackColor];
+        incenseView.delegate = self;
         [self.view addSubview:incenseView];
         _incenseView = incenseView;
     }
@@ -159,7 +176,7 @@
     
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
-    anim.repeatCount = 1000;
+    anim.repeatCount = 1500;
     anim.values = @[@(screenH - 95), @(screenH - 100), @(screenH - 95)];
     anim.duration = 4.0f;
     anim.removedOnCompletion = NO;
@@ -167,10 +184,7 @@
     self.incenseView.layer.position = CGPointMake(screenW / 2, screenH - 100);
     self.incenseView.layer.anchorPoint = CGPointMake(0.5, 1);
     [self.incenseView.layer addAnimation:anim forKey:nil];
-
 }
-
-
 
 #pragma mark - Fire
 
@@ -293,18 +307,21 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 }
 
 - (void)oneMoreIncense {
-    
-    [UIView animateWithDuration:2.0 animations:^{
-//        [self.incenseView removeFromSuperview];
-        self.incenseView = nil;
+    [UIView animateWithDuration:0.1 animations:^{
+        [self.incenseView removeFromSuperview];
         [self.waver removeFromSuperview];
         [self.smokeView removeFromSuperview];
         [self.fire removeFromSuperview];
         [self.restartButton removeFromSuperview];
+        self.incenseView = nil;
+        self.waver = nil;
+        self.smokeView = nil;
+        self.fire = nil;
+        self.restartButton = nil;
     } completion:^(BOOL finished) {
-            [self makeIncense];
-            [self makeFire];
-            [self makeSmoke];
+        [self makeIncense];
+        [self makeFire];
+        [self makeSmoke];
     }];
 }
 

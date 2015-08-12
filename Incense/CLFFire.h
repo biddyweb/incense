@@ -14,7 +14,7 @@
 
 @end
 
-@interface CLFFire : UIButton
+@interface CLFFire : UIImageView
 
 @property (nonatomic, assign, getter=isDragEnable) BOOL dragEnable;
 @property (nonatomic, weak) id<CLFFireDelegate> delegate;

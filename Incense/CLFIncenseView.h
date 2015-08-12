@@ -8,13 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol CLFIncenseViewDelegate <NSObject>
+
+- (void)incenseDidBurnOff;
+
+@end
+
 @interface CLFIncenseView : UIView
 
+@property (nonatomic, weak) UIView *headDustView;
 @property (nonatomic, weak) UIView *incenseHeadView;
 @property (nonatomic, weak) UIView *incenseDustView;
 
 @property (nonatomic, assign) CGFloat brightnessLevel;
 @property (nonatomic, copy) void (^brightnessCallback)(CLFIncenseView * incense);
 @property (nonatomic) CADisplayLink *displaylink;;
+
+@property (nonatomic, weak) id<CLFIncenseViewDelegate> delegate;
 
 @end
