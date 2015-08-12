@@ -70,7 +70,7 @@
         CGFloat progress = 1.0f - (CGFloat)i / self.numberOfWaves; // ??
         CGFloat multiplier = MIN(1.0, (progress / 3.0f * 2.0f) + (1.0f / 3.0f)); // ??
         
-		UIColor *color = [self.waveColor colorWithAlphaComponent:(i == 0 ? 1.0 : 1.0 * multiplier * 0.4)];
+		UIColor *color = [self.waveColor colorWithAlphaComponent:(1.0 * multiplier * 0.4)];
 		waveline.strokeColor = color.CGColor;
         [self.layer addSublayer:waveline];
         

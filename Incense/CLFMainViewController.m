@@ -22,6 +22,7 @@
 @property (nonatomic, weak) UIButton *restartButton;
 
 @property (nonatomic, strong) AVAudioRecorder *recorder;
+@property (nonatomic, assign) CGFloat animateTime;
 
 @end
 
@@ -33,6 +34,8 @@
     [self makeIncense];
     [self makeFire];
     [self makeSmoke];
+    
+    self.animateTime = 10.0f;
 }
 
 - (void)lightTheIncense {
@@ -85,23 +88,24 @@
         make.height.equalTo(@30);
     }];
 
-    [UIView animateWithDuration:30 animations:^{
+    [UIView animateWithDuration:self.animateTime animations:^{
         [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-        [self.incenseView layoutIfNeeded];
+        [self.incenseView layoutIfNeeded]; // 执行时会导致烟雾抖动一下. 要换成 frame?
         self.smokeView.alpha = 0.6f;
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:2 animations:^{
-            self.incenseView.incenseDustView.alpha = 0;
-            self.incenseView.incenseHeadView.alpha = 0;
-        }];
+        if (finished) {
+            [UIView animateWithDuration:2 animations:^{
+                self.incenseView.incenseDustView.alpha = 0;
+                self.incenseView.incenseHeadView.alpha = 0;
+            }];
+        }
     }];
-    
     
     // 这一小块要放到 Waver 里面去吗=,=
     CABasicAnimation *anim = [CABasicAnimation animation];
     anim.keyPath = @"bounds";
     anim.toValue = [NSValue valueWithCGRect:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), [UIScreen mainScreen].bounds.size.height - 130)];
-    anim.duration = 30;
+    anim.duration = self.animateTime;
     anim.delegate = self;
     anim.removedOnCompletion = NO;
     anim.fillMode = kCAFillModeForwards;
@@ -112,7 +116,6 @@
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    self.waver.alpha = 1.0f;
     self.restartButton.alpha = 0.0f;
     [UIView animateWithDuration:2.0f animations:^{
         self.waver.alpha = 0.0f;
@@ -149,6 +152,18 @@
     self.incenseView.incenseHeadView.alpha = 0.0f;
     self.incenseView.incenseDustView.alpha = 0.0f;
 }
+
+
+//- (void)makeIncense {
+//    [self.incenseView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.height.equalTo(@200);
+//        make.width.equalTo(@6);
+//        make.centerX.equalTo(self.view);
+//        make.bottom.equalTo(self.view).offset(-100);
+//    }];
+//    self.incenseView.incenseHeadView.alpha = 0.0f;
+//    self.incenseView.incenseDustView.alpha = 0.0f;
+//}
 
 #pragma mark - Fire
 
