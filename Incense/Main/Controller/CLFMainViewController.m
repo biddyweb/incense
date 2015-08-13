@@ -7,7 +7,6 @@
 //
 
 #import "CLFMainViewController.h"
-#import "Waver.h"
 #import "CLFFire.h"
 #import "CLFIncenseView.h"
 #import "CLFSmokeView.h"
@@ -15,16 +14,15 @@
 #import <AVFoundation/AVFoundation.h>
 #import "BMWaveMaker.h"
 #import <QuartzCore/QuartzCore.h>
+#import "Waver.h"
 
 @interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate>
 @property (nonatomic, weak) CLFSmokeView *smokeView;
 @property (nonatomic, weak) CLFIncenseView *incenseView;
-@property (nonatomic, weak) Waver *waver;
 @property (nonatomic, weak) CLFFire *fire;
 @property (nonatomic, weak) UIButton *restartButton;
 
 @property (nonatomic, strong) AVAudioRecorder *recorder;
-@property (nonatomic, assign) CGFloat animateTime;
 @property (nonatomic, weak) UIView *rippleView;
 @property (nonatomic, strong) BMWaveMaker *rippleMaker;
 
@@ -41,45 +39,23 @@
     [self makeRipple];
     
     [self.rippleMaker spanWaveContinuallyWithTimeInterval:2.0f];
-    self.animateTime = 10.0f;
 }
 
 - (void)lightTheIncense {
     [self setupRecorder];
-    
-    CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
-    CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
-    
-    Waver *waver = [[Waver alloc] init];
-    waver.backgroundColor = [UIColor grayColor];
-    [self.view insertSubview:waver belowSubview:self.incenseView];
-    
-//    [waver mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.bottom.equalTo(self.incenseView.mas_top);
-//        make.left.equalTo(self.view);
-//        make.right.equalTo(self.view);
-//        make.top.equalTo(self.view);
-//    }];
-    
-    waver.frame = CGRectMake(0, 0, screenW, screenH - 300);
-    
-    waver.alpha = 0;
-    
     __block AVAudioRecorder *weakRecorder = self.recorder;
-    
-    waver.waverLevelCallback = ^(Waver * waver) {
+    self.incenseView.waver.waverLevelCallback = ^(Waver *waver) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5); // 5
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 40);
         waver.level = normalizedValue;
     };
-    self.waver = waver;
-    
+
     self.fire.dragEnable = NO;
     [UIView animateWithDuration:3.0 animations:^{
         self.fire.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 1.0f;
         self.incenseView.incenseDustView.alpha = 1.0f;
-        self.waver.alpha = 1.0f;
+        self.incenseView.waver.alpha = 1.0f;
     } completion:^(BOOL finished) {
         if (finished) {
             [self.fire removeFromSuperview];
@@ -91,14 +67,11 @@
 #pragma mark - IncenseLighted
 
 - (void)timeFlow {
-    CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
-    CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
-    self.waver.frame = CGRectMake(0, 0, screenW, screenH - 115);
-    
     __block AVAudioRecorder *weakRecorder = self.recorder;
+    
     self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 40);
         incense.brightnessLevel = normalizedValue;
     };
 }
@@ -106,7 +79,7 @@
 - (void)incenseDidBurnOff {
     self.restartButton.alpha = 0.0f;
     [UIView animateWithDuration:2.0f animations:^{
-        self.waver.alpha = 0.0f;
+        self.incenseView.waver.alpha = 0.0f;
         self.incenseView.incenseDustView.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 0.0f;
     } completion:^(BOOL finished) {
@@ -116,7 +89,7 @@
             }];
         }
     }];
-    [self.waver.displaylink invalidate];
+    [self.incenseView.waver.displaylink invalidate];
     [self.incenseView.displaylink invalidate];
 }
 
@@ -126,7 +99,7 @@
 - (CLFIncenseView *)incenseView {
     if (!_incenseView) {
         CLFIncenseView *incenseView = [[CLFIncenseView alloc] init];
-        incenseView.backgroundColor = [UIColor blackColor];
+        incenseView.backgroundColor = [UIColor greenColor];
         incenseView.delegate = self;
         [self.view addSubview:incenseView];
         _incenseView = incenseView;
@@ -138,8 +111,8 @@
     CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
     CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
 
-    self.incenseView.frame = CGRectMake((screenW - 6) / 2, screenH - 300, 6, 200);
-    
+    self.incenseView.frame = CGRectMake(0, screenH - 300, screenW, 200);
+    self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
     self.incenseView.incenseDustView.alpha = 0.0f;
     
@@ -150,8 +123,8 @@
     anim.duration = 4.0f;
     anim.removedOnCompletion = NO;
     anim.fillMode = kCAFillModeForwards;
-    self.incenseView.layer.position = CGPointMake(screenW / 2, screenH - 100);
-    self.incenseView.layer.anchorPoint = CGPointMake(0.5, 1);
+    self.incenseView.layer.position = CGPointMake(0, screenH - 100);
+    self.incenseView.layer.anchorPoint = CGPointMake(0, 1);
     [self.incenseView.layer addAnimation:anim forKey:nil];
 }
 
@@ -224,8 +197,9 @@
         make.bottom.equalTo(self.view);
         make.height.equalTo(@180);
     }];
+    self.rippleView.backgroundColor = [UIColor lightGrayColor];
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
-    self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);
+    self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 180);
 }
 
 - (BMWaveMaker *)rippleMaker {
@@ -245,7 +219,7 @@ CATransform3D CATransform3DMakePerspective(CGPoint center, float disZ) {
     CATransform3D transToCenter = CATransform3DMakeTranslation(-center.x, -center.y, 0);
     CATransform3D transBack = CATransform3DMakeTranslation(center.x, center.y, 0);
     CATransform3D scale = CATransform3DIdentity;
-    scale.m34 = -1.0f/disZ;
+    scale.m34 = -1.0f / disZ;
     return CATransform3DConcat(CATransform3DConcat(transToCenter, scale), transBack);
 }
 
@@ -277,12 +251,10 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 - (void)oneMoreIncense {
     [UIView animateWithDuration:0.1 animations:^{
         [self.incenseView removeFromSuperview];
-        [self.waver removeFromSuperview];
         [self.smokeView removeFromSuperview];
         [self.fire removeFromSuperview];
         [self.restartButton removeFromSuperview];
         self.incenseView = nil;
-        self.waver = nil;
         self.smokeView = nil;
         self.fire = nil;
         self.restartButton = nil;

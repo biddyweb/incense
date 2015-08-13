@@ -104,7 +104,6 @@
 
 -(void)invokeWaveCallback {
     _waverLevelCallback(self);
-//    NSLog(@"invokeWaveCallback");
 }
 
 - (void)setLevel:(CGFloat)level {
@@ -151,8 +150,7 @@
     UIGraphicsEndImageContext();
     
     for (CAGradientLayer *layer in self.gradientLayers) {
-        CGFloat gradientHeight = CGRectGetHeight(layer.bounds) + 2.5;
-        layer.bounds = CGRectMake(0, 0, 375, gradientHeight);
+        layer.bounds = CGRectMake(0, 0, 375, CGRectGetHeight(self.bounds));
     }
 }
 

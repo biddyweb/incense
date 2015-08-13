@@ -14,11 +14,15 @@
 
 @end
 
+@class Waver;
+
 @interface CLFIncenseView : UIView
 
 @property (nonatomic, weak) UIView *headDustView;
 @property (nonatomic, weak) UIView *incenseHeadView;
 @property (nonatomic, weak) UIView *incenseDustView;
+@property (nonatomic, weak) UIView *incenseBodyView;
+@property (nonatomic, weak) Waver *waver;
 
 @property (nonatomic, assign) CGFloat brightnessLevel;
 @property (nonatomic, copy) void (^brightnessCallback)(CLFIncenseView * incense);
