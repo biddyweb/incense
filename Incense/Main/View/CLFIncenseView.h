@@ -18,9 +18,8 @@
 
 @interface CLFIncenseView : UIView
 
-@property (nonatomic, weak) UIView *headDustView;
-@property (nonatomic, weak) UIView *incenseHeadView;
-@property (nonatomic, weak) UIView *incenseDustView;
+@property (nonatomic, weak) UIImageView *headDustView;
+@property (nonatomic, weak) UIImageView *incenseHeadView;
 @property (nonatomic, weak) UIView *incenseBodyView;
 @property (nonatomic, weak) Waver *waver;
 

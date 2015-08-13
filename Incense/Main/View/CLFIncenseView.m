@@ -48,8 +48,8 @@ static CGFloat incenseStickerWidth = 2.0f;;
     if (!_lightView) {
         UIImageView *lightView = [[UIImageView alloc] init];
         lightView.image = [UIImage imageNamed:@"spark"];
-        lightView.alpha = 0.0f;
-        [self.incenseHeadView addSubview:lightView];
+        lightView.alpha = 1.0f;
+        [self.waver addSubview:lightView];
         _lightView = lightView;
     }
     return _lightView;
@@ -68,29 +68,19 @@ static CGFloat incenseStickerWidth = 2.0f;;
 
 - (UIView *)incenseHeadView {
     if (!_incenseHeadView) {
-        UIView *incenseHeadView = [[UIView alloc] init];
-        incenseHeadView.backgroundColor = [UIColor redColor];
+        UIImageView *incenseHeadView = [[UIImageView alloc] init];
+        incenseHeadView.image = [UIImage imageNamed:@"星"];
         [self.incenseBodyView addSubview:incenseHeadView];
         _incenseHeadView = incenseHeadView;
     }
     return _incenseHeadView;
 }
 
-- (UIView *)incenseDustView {
-    if (!_incenseDustView) {
-        UIView *incenseDustView = [[UIView alloc] init];
-        incenseDustView.backgroundColor = [UIColor lightGrayColor];
-        [self.incenseBodyView addSubview:incenseDustView];
-        _incenseDustView = incenseDustView;
-    }
-    return _incenseDustView;
-}
-
 - (UIView *)headDustView {
     if (!_headDustView) {
-        UIView *headDustView = [[UIView alloc] init];
-        headDustView.backgroundColor = [UIColor lightGrayColor];
-        [self addSubview:headDustView];
+        UIImageView *headDustView = [[UIImageView alloc] init];
+        headDustView.image = [UIImage imageNamed:@"单独的灰"];
+        [self.incenseBodyView addSubview:headDustView];
         _headDustView = headDustView;
     }
     return _headDustView;
@@ -101,7 +91,7 @@ static CGFloat incenseStickerWidth = 2.0f;;
         UIView *incenseSticker = [[UIView alloc] init];
         incenseSticker.backgroundColor = [UIColor blackColor];
         incenseSticker.layer.cornerRadius = 1.0f;
-        [self.incenseBodyView addSubview:incenseSticker];
+        [self.incenseBodyView insertSubview:incenseSticker belowSubview:self.incenseHeadView];
         _incenseSticker = incenseSticker;
     }
     return _incenseSticker;
@@ -116,18 +106,11 @@ static CGFloat incenseStickerWidth = 2.0f;;
         make.top.equalTo(self);
         make.height.equalTo(self).offset(-50);
     }];
-    
-    [self.incenseDustView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.incenseHeadView.mas_bottom);
-        make.left.equalTo(self.incenseBodyView);
-        make.right.equalTo(self.incenseBodyView);
-        make.height.equalTo(@2);
-    }];
-    
-    self.headDustView.frame = CGRectMake((screenW - 5) / 2, 0, 5, headDustHeight);
+        
+    self.headDustView.frame = CGRectMake(0, 3, 5, headHeight);
     
     [self.incenseHeadView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.incenseBodyView);
+        make.top.equalTo(self.incenseBodyView).offset(-2);
         make.left.equalTo(self.incenseBodyView);
         make.right.equalTo(self.incenseBodyView);
         make.height.equalTo(@8);
@@ -142,26 +125,9 @@ static CGFloat incenseStickerWidth = 2.0f;;
     
     self.waver.frame = CGRectMake(0, 0, screenW, waverHeight);
     
-//    UIView *layerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, incenseWidth, 10)];
-//    
-//    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-//    gradientLayer.startPoint = CGPointMake(0.0, 0.0);
-//    gradientLayer.endPoint = CGPointMake(0.0, 1.0);
-//    
-//    gradientLayer.frame = layerView.bounds;
-//    NSMutableArray *colors = [NSMutableArray array];
-//    
-//    [colors addObject:(id)[UIColor colorWithRed:0.6f green:0.0f blue:0.0f alpha:1.0f].CGColor];
-//    [colors addObject:(id)[UIColor colorWithRed:0.8f green:0.0f blue:0.0f alpha:1.0f].CGColor];
-//    [colors addObject:(id)[UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:1.0f].CGColor];
-//    
-//    gradientLayer.colors = colors;
-//    
-//    [layerView.layer insertSublayer:gradientLayer atIndex:0];
-//    [self.incenseHeadView addSubview:layerView];
-    
     [self.lightView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self.incenseHeadView);
+        make.centerX.equalTo(self.waver);
+        make.top.equalTo(self.waver.mas_bottom).offset(-6);
         make.width.equalTo(@22);
         make.height.equalTo(@22);
     }];
@@ -186,14 +152,10 @@ static CGFloat incenseStickerWidth = 2.0f;;
         self.animating = YES;
         self.headDustView.alpha = 1.0f;
         [UIView animateWithDuration:1.0f animations:^{
-            self.incenseHeadView.backgroundColor = [UIColor yellowColor];
-            self.incenseDustView.backgroundColor = [UIColor blackColor];
             self.headDustView.alpha = 0.5f;
             self.lightView.alpha = 1.0f;
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:1.0f animations:^{
-                self.incenseHeadView.backgroundColor = [UIColor redColor];
-                self.incenseDustView.backgroundColor = [UIColor grayColor];
                 self.headDustView.alpha = 0.0f;
                 self.lightView.alpha = 0.0f;
             } completion:^(BOOL finished) {

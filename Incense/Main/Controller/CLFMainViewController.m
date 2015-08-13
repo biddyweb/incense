@@ -46,7 +46,7 @@
     __block AVAudioRecorder *weakRecorder = self.recorder;
     self.incenseView.waver.waverLevelCallback = ^(Waver *waver) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 40);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5);
         waver.level = normalizedValue;
     };
 
@@ -54,7 +54,6 @@
     [UIView animateWithDuration:3.0 animations:^{
         self.fire.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 1.0f;
-        self.incenseView.incenseDustView.alpha = 1.0f;
         self.incenseView.waver.alpha = 1.0f;
     } completion:^(BOOL finished) {
         if (finished) {
@@ -71,7 +70,7 @@
     
     self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 40);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5);
         incense.brightnessLevel = normalizedValue;
     };
 }
@@ -80,7 +79,6 @@
     self.restartButton.alpha = 0.0f;
     [UIView animateWithDuration:2.0f animations:^{
         self.incenseView.waver.alpha = 0.0f;
-        self.incenseView.incenseDustView.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 0.0f;
     } completion:^(BOOL finished) {
         if (finished) {
@@ -114,7 +112,6 @@
     self.incenseView.frame = CGRectMake(0, screenH - 300, screenW, 200);
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
-    self.incenseView.incenseDustView.alpha = 0.0f;
     
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
