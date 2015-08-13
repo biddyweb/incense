@@ -15,16 +15,20 @@
 #import "BMWaveMaker.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Waver.h"
+#import "UIImage+ImageEffects.h"
+#import "UIERealTimeBlurView.h"
 
 @interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate>
 @property (nonatomic, weak)   CLFSmokeView    *smokeView;
 @property (nonatomic, weak)   CLFIncenseView  *incenseView;
+@property (nonatomic, weak)   UIImageView     *incenseShadowView;
 @property (nonatomic, weak)   CLFFire         *fire;
-@property (nonatomic, weak)   UIButton        *restartButton;
 
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, weak)   UIView          *rippleView;
 @property (nonatomic, strong) BMWaveMaker     *rippleMaker;
+
+@property (nonatomic, weak) UIERealTimeBlurView *blurView;
 
 @end
 
@@ -37,8 +41,6 @@
     [self makeFire];
     [self makeSmoke];
     [self makeRipple];
-    
-    [self.rippleMaker spanWaveContinuallyWithTimeInterval:2.0f];
 }
 
 - (void)lightTheIncense {
@@ -76,14 +78,20 @@
 }
 
 - (void)incenseDidBurnOff {
-    self.restartButton.alpha = 0.0f;
+    [self.rippleMaker stopWave];
+    self.blurView.alpha = 0.0f;
     [UIView animateWithDuration:2.0f animations:^{
         self.incenseView.waver.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 0.0f;
+        self.blurView.alpha = 0.9f;
+        self.rippleView.alpha = 0.3f;
     } completion:^(BOOL finished) {
         if (finished) {
-            [UIView animateWithDuration:2.0f animations:^{
-                self.restartButton.alpha = 1.0f;
+            [UIView animateWithDuration:1.0f animations:^{
+                self.blurView.alpha = 1.0f;
+                self.rippleView.alpha = 0.0f;
+            } completion:^(BOOL finished) {
+
             }];
         }
     }];
@@ -91,13 +99,12 @@
     [self.incenseView.displaylink invalidate];
 }
 
-
 #pragma mark - Incense
 
 - (CLFIncenseView *)incenseView {
     if (!_incenseView) {
         CLFIncenseView *incenseView = [[CLFIncenseView alloc] init];
-        incenseView.backgroundColor = [UIColor clearColor];
+        incenseView.backgroundColor = [UIColor greenColor];
         incenseView.delegate = self;
         [self.view addSubview:incenseView];
         _incenseView = incenseView;
@@ -105,13 +112,27 @@
     return _incenseView;
 }
 
+- (UIImageView *)incenseShadowView {
+    if (!_incenseShadowView) {
+        UIImageView *incenseShadowView = [[UIImageView alloc] init];
+        incenseShadowView.image = [UIImage imageNamed:@"StickShadow"];
+        [self.view addSubview:incenseShadowView];
+        _incenseShadowView = incenseShadowView;
+    }
+    return _incenseShadowView;
+}
+
 - (void)makeIncense {
     CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
     CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
+    
+    [self.incenseView initialSetup];
 
     self.incenseView.frame = CGRectMake(0, screenH - 300, screenW, 200);
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
+    
+    self.incenseShadowView.frame = CGRectMake((screenW - 6) / 2, screenH - 90, 6, 3);
     
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
@@ -123,6 +144,20 @@
     self.incenseView.layer.position = CGPointMake(0, screenH - 100);
     self.incenseView.layer.anchorPoint = CGPointMake(0, 1);
     [self.incenseView.layer addAnimation:anim forKey:nil];
+    
+    NSValue *bounds1 = [NSValue valueWithCGRect:CGRectMake(0, 0, 6, 3)];
+    NSValue *bounds2 = [NSValue valueWithCGRect:CGRectMake(0, 0, 3, 1.5)];
+    
+    CAKeyframeAnimation *shadowAnim = [CAKeyframeAnimation animation];
+    shadowAnim.keyPath = @"bounds";
+    shadowAnim.repeatCount = 1500;
+    shadowAnim.values = @[bounds1, bounds2, bounds1];
+    shadowAnim.duration = 4.0f;
+    shadowAnim.removedOnCompletion = NO;
+    shadowAnim.fillMode = kCAFillModeForwards;
+    self.incenseShadowView.layer.position = CGPointMake(screenW / 2, screenH - 90);
+    self.incenseShadowView.layer.anchorPoint = CGPointMake(0.5, 0.5);
+    [self.incenseShadowView.layer addAnimation:shadowAnim forKey:nil];
 }
 
 #pragma mark - Fire
@@ -169,7 +204,11 @@
 
 - (UIView *)rippleView {
     if (!_rippleView) {
+        CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
+        CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
+
         UIView *rippleView = [[UIView alloc] init];
+        rippleView.frame = CGRectMake(0, screenH - 180, screenW, 180);
         rippleView.backgroundColor = [UIColor clearColor];
         [self.view addSubview:rippleView];
         _rippleView = rippleView;
@@ -178,20 +217,17 @@
 }
 
 - (void)makeRipple {
-    [self.rippleView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view);
-        make.right.equalTo(self.view);
-        make.bottom.equalTo(self.view);
-        make.height.equalTo(@180);
-    }];
-    CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
+    self.rippleView.alpha = 1.0f;
+
+    self.rippleMaker.animationView = self.rippleView;
+    [self.rippleMaker spanWaveContinuallyWithTimeInterval:2.0f];
+        CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
     self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);
 }
 
 - (BMWaveMaker *)rippleMaker {
     if (!_rippleMaker) {
         _rippleMaker = [[BMWaveMaker alloc] init];
-        _rippleMaker.animationView = self.rippleView;
         _rippleMaker.spanScale = 100.0f;
         _rippleMaker.originRadius = 0.9f;
         _rippleMaker.waveColor = [UIColor whiteColor];
@@ -215,40 +251,37 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 
 #pragma mark - Restart
 
-- (UIButton *)restartButton {
-    if (!_restartButton) {
+- (UIERealTimeBlurView *)blurView {
+    if (!_blurView) {
+        CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
+        CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
+//
+//        UIImage *blurImage = [[UIImage imageNamed:@"Finish"] applyTintEffectWithColor:[UIColor whiteColor]];
+//        UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
+//        blurView.userInteractionEnabled = YES;
+//        blurView.frame = self.view.frame;
+        UIERealTimeBlurView *blurView = [[UIERealTimeBlurView alloc] initWithFrame:self.view.frame];
+        [self.view addSubview:blurView];
+        
+        blurView.renderStatic = YES;
+        
         UIButton *restartButton = [[UIButton alloc] init];
-        [restartButton setTitle:@"再上一柱香" forState:UIControlStateNormal];
-        [restartButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        restartButton.backgroundColor = [UIColor whiteColor];
+        [blurView addSubview:restartButton];
+        restartButton.frame = CGRectMake((screenW - 44)/2, (screenH - 314)/2, 44, 214);
         [restartButton addTarget:self action:@selector(oneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:restartButton];
-        [restartButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(self.view);
-            make.centerY.equalTo(self.view).offset(-100);
-            make.width.equalTo(@120);
-            make.height.equalTo(@50);
-        }];
-        _restartButton = restartButton;
+        [restartButton setImage:[UIImage imageNamed:@"時"] forState:UIControlStateNormal];
+        
+        _blurView = blurView;
     }
-    return _restartButton;
+    return _blurView;
 }
 
 - (void)oneMoreIncense {
-    [UIView animateWithDuration:0.1 animations:^{
-        [self.incenseView removeFromSuperview];
-        [self.smokeView removeFromSuperview];
-        [self.fire removeFromSuperview];
-        [self.restartButton removeFromSuperview];
-        self.incenseView = nil;
-        self.smokeView = nil;
-        self.fire = nil;
-        self.restartButton = nil;
-    } completion:^(BOOL finished) {
-        [self makeIncense];
-        [self makeFire];
-        [self makeSmoke];
-    }];
+    [self.blurView removeFromSuperview];
+    [self makeIncense];
+    [self makeFire];
+    [self makeSmoke];
+    [self makeRipple];
 }
 
 #pragma mark - Recorder
@@ -285,6 +318,5 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 @end

@@ -98,7 +98,7 @@ static NSString *const kBMViewError = @"the animationView is nil";
                                                               startAngle:0
                                                                 endAngle:M_PI*2
                                                                clockwise:YES];
-    CGRect rect = CGRectMake(0.0f, 0.0f, radius*2, radius*2);
+    CGRect rect = CGRectMake(0.0f, 0.0f, radius * 2, radius * 2);
     BMWaveLayer *waveLayer = [BMWaveLayer layer];
     waveLayer.contentsScale = [[UIScreen mainScreen] scale];
     waveLayer.fillColor = self.waveFillColor.CGColor;

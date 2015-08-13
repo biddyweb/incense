@@ -68,6 +68,8 @@ static CGFloat kScreenH;
     CGFloat newCenterY;
     if (self.center.y + offsetY > kScreenH - 300) {
         newCenterY = kScreenH - 300;
+    } else if (self.center.y + offsetY < 40) {
+        newCenterY = 40;
     } else {
         newCenterY = self.center.y + offsetY;
     }

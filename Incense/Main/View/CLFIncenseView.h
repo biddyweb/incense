@@ -18,15 +18,17 @@
 
 @interface CLFIncenseView : UIView
 
-@property (nonatomic, weak) UIImageView *headDustView;
-@property (nonatomic, weak) UIImageView *incenseHeadView;
-@property (nonatomic, weak) UIView *incenseBodyView;
-@property (nonatomic, weak) Waver *waver;
+@property (nonatomic, weak)   UIImageView *headDustView;
+@property (nonatomic, weak)   UIImageView *incenseHeadView;
+@property (nonatomic, weak)   UIView *incenseBodyView;
+@property (nonatomic, weak)   Waver *waver;
 
 @property (nonatomic, assign) CGFloat brightnessLevel;
-@property (nonatomic, copy) void (^brightnessCallback)(CLFIncenseView * incense);
-@property (nonatomic) CADisplayLink *displaylink;;
+@property (nonatomic, copy)   void (^brightnessCallback)(CLFIncenseView * incense);
+@property (nonatomic)         CADisplayLink *displaylink;;
 
-@property (nonatomic, weak) id<CLFIncenseViewDelegate> delegate;
+@property (nonatomic, weak)   id<CLFIncenseViewDelegate> delegate;
+
+- (void)initialSetup;
 
 @end

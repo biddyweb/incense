@@ -13,8 +13,8 @@
 @interface CLFIncenseView ()
 
 @property (nonatomic, assign, getter=isAnimating) BOOL animating;
-@property (nonatomic, weak) UIImageView *lightView;
-@property (nonatomic, weak) UIView *incenseSticker;
+@property (nonatomic, weak)                       UIImageView *lightView;
+@property (nonatomic, weak)                       UIView *incenseStick;
 
 @end
 
@@ -23,15 +23,7 @@
 static CGFloat headHeight;
 static CGFloat waverHeight;
 static CGFloat incenseWidth = 5.0f;
-static CGFloat incenseStickerWidth = 2.0f;;
-
-- (instancetype)init {
-    if (self = [super init]) {
-        headHeight = 0.0f;
-        waverHeight = - [UIScreen mainScreen].bounds.size.height;
-    }
-    return self;
-}
+static CGFloat incenseStickWidth = 2.0f;;
 
 - (Waver *)waver {
     if (!_waver) {
@@ -48,8 +40,8 @@ static CGFloat incenseStickerWidth = 2.0f;;
     if (!_lightView) {
         UIImageView *lightView = [[UIImageView alloc] init];
         lightView.image = [UIImage imageNamed:@"spark"];
-        lightView.alpha = 1.0f;
-        [self.waver addSubview:lightView];
+        lightView.alpha = 0.0f;
+        [self.incenseHeadView addSubview:lightView];
         _lightView = lightView;
     }
     return _lightView;
@@ -86,15 +78,15 @@ static CGFloat incenseStickerWidth = 2.0f;;
     return _headDustView;
 }
 
-- (UIView *)incenseSticker {
-    if (!_incenseSticker) {
-        UIView *incenseSticker = [[UIView alloc] init];
-        incenseSticker.backgroundColor = [UIColor blackColor];
-        incenseSticker.layer.cornerRadius = 1.0f;
-        [self.incenseBodyView insertSubview:incenseSticker belowSubview:self.incenseHeadView];
-        _incenseSticker = incenseSticker;
+- (UIView *)incenseStick {
+    if (!_incenseStick) {
+        UIView *incenseStick = [[UIView alloc] init];
+        incenseStick.backgroundColor = [UIColor blackColor];
+        incenseStick.layer.cornerRadius = 1.0f;
+        [self.incenseBodyView insertSubview:incenseStick belowSubview:self.incenseHeadView];
+        _incenseStick = incenseStick;
     }
-    return _incenseSticker;
+    return _incenseStick;
 }
 
 - (void)layoutSubviews {
@@ -116,18 +108,18 @@ static CGFloat incenseStickerWidth = 2.0f;;
         make.height.equalTo(@8);
     }];
     
-    [self.incenseSticker mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.incenseStick mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self);
         make.centerX.equalTo(self);
         make.height.equalTo(@70);
-        make.width.equalTo(@(incenseStickerWidth));
+        make.width.equalTo(@(incenseStickWidth));
     }];
     
     self.waver.frame = CGRectMake(0, 0, screenW, waverHeight);
     
     [self.lightView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.waver);
-        make.top.equalTo(self.waver.mas_bottom).offset(-6);
+        make.centerX.equalTo(self.incenseHeadView);
+        make.top.equalTo(self.incenseHeadView).offset(-4);
         make.width.equalTo(@22);
         make.height.equalTo(@22);
     }];
@@ -168,14 +160,14 @@ static CGFloat incenseStickerWidth = 2.0f;;
 }
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
-    CGFloat newHeight = CGRectGetHeight(self.frame) - 2;
+    CGFloat newHeight = CGRectGetHeight(self.frame) - 5;
     self.frame = (CGRect){self.frame.origin, {CGRectGetWidth(self.frame), newHeight}};
     
-    waverHeight -= 2;
+    waverHeight -= 5;
     self.waver.frame = (CGRect) {self.waver.frame.origin, {CGRectGetWidth(self.waver.frame), waverHeight}};
 
     if (!self.isAnimating) {
-        headHeight -= 0.4;
+        headHeight -= 0.3;
         if (!self.headDustView.alpha) {
             self.headDustView.alpha = 1.0f;
         }
@@ -185,6 +177,11 @@ static CGFloat incenseStickerWidth = 2.0f;;
     if (newHeight <= 65) {
         [self.delegate incenseDidBurnOff];
     }
+}
+
+- (void)initialSetup {
+    headHeight = 0.0f;
+    waverHeight = - [UIScreen mainScreen].bounds.size.height;
 }
 
 @end

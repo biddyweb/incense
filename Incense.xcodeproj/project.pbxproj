@@ -35,10 +35,17 @@
 		3F48CE031B78777F00F889BC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CE021B78777F00F889BC /* Images.xcassets */; };
 		3F48CE061B78777F00F889BC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CE041B78777F00F889BC /* LaunchScreen.xib */; };
 		3F48CE121B78777F00F889BC /* IncenseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CE111B78777F00F889BC /* IncenseTests.m */; };
+		3F4C210A1B7CEF660099D028 /* Finish.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F4C21091B7CEF660099D028 /* Finish.png */; };
+		3F4C210C1B7CF0EC0099D028 /* 時.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F4C210B1B7CF0EC0099D028 /* 時.png */; };
+		3F4C210E1B7D03420099D028 /* StickShadow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F4C210D1B7D03420099D028 /* StickShadow@2x.png */; };
 		3F732C091B79C3E1009DE244 /* CLFSmokeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F732C081B79C3E1009DE244 /* CLFSmokeView.m */; };
+		3F7A2EC11B7D0E66004B6050 /* UIERealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7A2EBE1B7D0E66004B6050 /* UIERealTimeBlurView.m */; };
+		3F7A2EC21B7D0E66004B6050 /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7A2EC01B7D0E66004B6050 /* UIImage+BoxBlur.m */; };
+		3F7A2EC41B7D0EA6004B6050 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F7A2EC31B7D0EA6004B6050 /* Accelerate.framework */; };
 		3F8A67341B79A1780073D552 /* CLFFire.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8A67331B79A1780073D552 /* CLFFire.m */; };
 		3FCF3A4F1B7B9D2600B9FFFF /* 3d-animated-gif.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3FCF3A4E1B7B9D2600B9FFFF /* 3d-animated-gif.gif */; };
 		3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */; };
+		3FF47E411B7CBFDE00AD81C8 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,14 +112,23 @@
 		3F48CE0B1B78777F00F889BC /* IncenseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncenseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F48CE101B78777F00F889BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F48CE111B78777F00F889BC /* IncenseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IncenseTests.m; sourceTree = "<group>"; };
+		3F4C21091B7CEF660099D028 /* Finish.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Finish.png; sourceTree = "<group>"; };
+		3F4C210B1B7CF0EC0099D028 /* 時.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "時.png"; sourceTree = "<group>"; };
+		3F4C210D1B7D03420099D028 /* StickShadow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StickShadow@2x.png"; sourceTree = "<group>"; };
 		3F732C071B79C3E1009DE244 /* CLFSmokeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFSmokeView.h; sourceTree = "<group>"; };
 		3F732C081B79C3E1009DE244 /* CLFSmokeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFSmokeView.m; sourceTree = "<group>"; };
-		3F732C131B7A11DA009DE244 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		3F7A2EBD1B7D0E66004B6050 /* UIERealTimeBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIERealTimeBlurView.h; sourceTree = "<group>"; };
+		3F7A2EBE1B7D0E66004B6050 /* UIERealTimeBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIERealTimeBlurView.m; sourceTree = "<group>"; };
+		3F7A2EBF1B7D0E66004B6050 /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
+		3F7A2EC01B7D0E66004B6050 /* UIImage+BoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BoxBlur.m"; sourceTree = "<group>"; };
+		3F7A2EC31B7D0EA6004B6050 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		3F8A67321B79A1780073D552 /* CLFFire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFFire.h; sourceTree = "<group>"; };
 		3F8A67331B79A1780073D552 /* CLFFire.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFFire.m; sourceTree = "<group>"; };
 		3FCF3A4E1B7B9D2600B9FFFF /* 3d-animated-gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "3d-animated-gif.gif"; sourceTree = "<group>"; };
 		3FCF3A521B7B9F2D00B9FFFF /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
 		3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+animatedGIF.m"; sourceTree = "<group>"; };
+		3FF47E3F1B7CBFDE00AD81C8 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +136,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F7A2EC41B7D0EA6004B6050 /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,6 +153,7 @@
 		3F1956A01B789B95003A5575 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				3F7A2EBC1B7D0E66004B6050 /* UIERealTimeBlur */,
 				3FCF3A511B7B9E6200B9FFFF /* ThirdPartyCategory */,
 				3F3AA2B21B7B0BFD00DD9E84 /* BMWaveMaker */,
 				3F1956A51B78B95A003A5575 /* Masonry */,
@@ -200,7 +218,7 @@
 		3F48CDE91B78777F00F889BC = {
 			isa = PBXGroup;
 			children = (
-				3F732C131B7A11DA009DE244 /* CoreGraphics.framework */,
+				3F7A2EC31B7D0EA6004B6050 /* Accelerate.framework */,
 				3F48CDF41B78777F00F889BC /* Incense */,
 				3F48CE0E1B78777F00F889BC /* IncenseTests */,
 				3F48CDF31B78777F00F889BC /* Products */,
@@ -229,6 +247,8 @@
 		3F48CDF51B78777F00F889BC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3F4C210D1B7D03420099D028 /* StickShadow@2x.png */,
+				3F4C210B1B7CF0EC0099D028 /* 時.png */,
 				3FCF3A4E1B7B9D2600B9FFFF /* 3d-animated-gif.gif */,
 				3F2F0BE11B7C6DC200BE1665 /* Fire.gif */,
 				3F2F0BE31B7C84D500BE1665 /* spark.png */,
@@ -236,6 +256,7 @@
 				3F2F0BE61B7C8DBF00BE1665 /* 星火.png */,
 				3F2F0BE71B7C8DBF00BE1665 /* 灰.png */,
 				3F2F0BEB1B7C925A00BE1665 /* 单独的灰.png */,
+				3F4C21091B7CEF660099D028 /* Finish.png */,
 				3F48CE021B78777F00F889BC /* Images.xcassets */,
 				3F48CE041B78777F00F889BC /* LaunchScreen.xib */,
 				3F48CDF91B78777F00F889BC /* AppDelegate.h */,
@@ -295,11 +316,24 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		3F7A2EBC1B7D0E66004B6050 /* UIERealTimeBlur */ = {
+			isa = PBXGroup;
+			children = (
+				3F7A2EBD1B7D0E66004B6050 /* UIERealTimeBlurView.h */,
+				3F7A2EBE1B7D0E66004B6050 /* UIERealTimeBlurView.m */,
+				3F7A2EBF1B7D0E66004B6050 /* UIImage+BoxBlur.h */,
+				3F7A2EC01B7D0E66004B6050 /* UIImage+BoxBlur.m */,
+			);
+			path = UIERealTimeBlur;
+			sourceTree = "<group>";
+		};
 		3FCF3A511B7B9E6200B9FFFF /* ThirdPartyCategory */ = {
 			isa = PBXGroup;
 			children = (
 				3FCF3A521B7B9F2D00B9FFFF /* UIImage+animatedGIF.h */,
 				3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */,
+				3FF47E3F1B7CBFDE00AD81C8 /* UIImage+ImageEffects.h */,
+				3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */,
 			);
 			path = ThirdPartyCategory;
 			sourceTree = "<group>";
@@ -384,9 +418,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F4C210E1B7D03420099D028 /* StickShadow@2x.png in Resources */,
 				3FCF3A4F1B7B9D2600B9FFFF /* 3d-animated-gif.gif in Resources */,
 				3F1956C01B78B95A003A5575 /* Info.plist in Resources */,
 				3F2F0BE21B7C6DC200BE1665 /* Fire.gif in Resources */,
+				3F4C210C1B7CF0EC0099D028 /* 時.png in Resources */,
 				3F48CE011B78777F00F889BC /* Main.storyboard in Resources */,
 				3F48CE061B78777F00F889BC /* LaunchScreen.xib in Resources */,
 				3F2F0BE41B7C84D500BE1665 /* spark.png in Resources */,
@@ -394,6 +430,7 @@
 				3F2F0BEA1B7C8DBF00BE1665 /* 灰.png in Resources */,
 				3F2F0BE91B7C8DBF00BE1665 /* 星火.png in Resources */,
 				3F48CE031B78777F00F889BC /* Images.xcassets in Resources */,
+				3F4C210A1B7CEF660099D028 /* Finish.png in Resources */,
 				3F2F0BE81B7C8DBF00BE1665 /* 星.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,8 +451,10 @@
 			files = (
 				3F1956C31B78B95A003A5575 /* MASConstraintMaker.m in Sources */,
 				3F48CDFE1B78777F00F889BC /* CLFMainViewController.m in Sources */,
+				3FF47E411B7CBFDE00AD81C8 /* UIImage+ImageEffects.m in Sources */,
 				3F48CDFB1B78777F00F889BC /* AppDelegate.m in Sources */,
 				3F1956C21B78B95A003A5575 /* MASConstraint.m in Sources */,
+				3F7A2EC21B7D0E66004B6050 /* UIImage+BoxBlur.m in Sources */,
 				3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */,
 				3F1956C41B78B95A003A5575 /* MASLayoutConstraint.m in Sources */,
 				3F1956C71B78B95A003A5575 /* NSArray+MASAdditions.m in Sources */,
@@ -427,6 +466,7 @@
 				3F1956A41B789BE7003A5575 /* Waver.m in Sources */,
 				3F1956C11B78B95A003A5575 /* MASCompositeConstraint.m in Sources */,
 				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,
+				3F7A2EC11B7D0E66004B6050 /* UIERealTimeBlurView.m in Sources */,
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				3F732C091B79C3E1009DE244 /* CLFSmokeView.m in Sources */,
 				3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */,
