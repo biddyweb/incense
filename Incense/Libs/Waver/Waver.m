@@ -138,6 +138,12 @@
             
             CGFloat x = scaling * self.maxAmplitude * normedAmplitude * sinf(2 * M_PI *((y) / self.waveHeight) * self.frequency + self.phase) + (self.waveWidth * 0.5);
             
+            
+            
+            
+            
+            
+            
             if ((self.density + self.waveHeight - y) == 0) {
                 [wavelinePath moveToPoint:CGPointMake(x, (self.density + self.waveHeight - y))];
             } else {

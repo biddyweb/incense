@@ -13,6 +13,7 @@
 @interface CLFIncenseView ()
 
 @property (nonatomic, assign, getter=isAnimating) BOOL animating;
+@property (nonatomic, weak) UIImageView *lightView;
 
 @end
 
@@ -23,7 +24,7 @@ static CGFloat waverHeight;
 
 - (instancetype)init {
     if (self = [super init]) {
-        headDustHeight = 0;
+        headDustHeight = 0.0f;
         waverHeight = - [UIScreen mainScreen].bounds.size.height;
     }
     return self;
@@ -32,12 +33,23 @@ static CGFloat waverHeight;
 - (Waver *)waver {
     if (!_waver) {
         Waver *waver = [[Waver alloc] init];
-        waver.backgroundColor = [UIColor grayColor];
-        waver.alpha = 0;
+        waver.backgroundColor = [UIColor clearColor];
+        waver.alpha = 0.0f;
         [self addSubview:waver];
         _waver = waver;
     }
     return _waver;
+}
+
+- (UIImageView *)lightView {
+    if (!_lightView) {
+        UIImageView *lightView = [[UIImageView alloc] init];
+        lightView.backgroundColor = [UIColor orangeColor];
+        lightView.alpha = 0.0f;
+        [self.incenseHeadView addSubview:lightView];
+        _lightView = lightView;
+    }
+    return _lightView;
 }
 
 - (UIView *)incenseBodyView {
@@ -81,17 +93,12 @@ static CGFloat waverHeight;
 }
 
 - (void)layoutSubviews {
+    CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
+    
     [self.incenseBodyView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(@6);
         make.center.equalTo(self);
         make.height.equalTo(self);
-    }];
-    
-    [self.incenseHeadView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.incenseBodyView);
-        make.left.equalTo(self.incenseBodyView);
-        make.right.equalTo(self.incenseBodyView);
-        make.height.equalTo(@8);
     }];
     
     [self.incenseDustView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -101,19 +108,16 @@ static CGFloat waverHeight;
         make.height.equalTo(@3);
     }];
     
-    CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
-    CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
-    
-#warning frame 要调整
-    
-//    [self.waver mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.superview);
-//        make.left.equalTo(self.superview);
-//        make.right.equalTo(self.superview);
-//        make.bottom.equalTo(self.mas_top);
-//    }];
-    self.waver.frame = CGRectMake(0, 0, screenW, waverHeight);
     self.headDustView.frame = CGRectMake((screenW - 6) / 2, 0, 6, headDustHeight);
+    
+    [self.incenseHeadView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.incenseBodyView);
+        make.left.equalTo(self.incenseBodyView);
+        make.right.equalTo(self.incenseBodyView);
+        make.height.equalTo(@8);
+    }];
+    
+    self.waver.frame = CGRectMake(0, 0, screenW, waverHeight);
     
     UIView *layerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 6, 10)];
     
@@ -132,6 +136,12 @@ static CGFloat waverHeight;
     
     [layerView.layer insertSublayer:gradientLayer atIndex:0];
     [self.incenseHeadView addSubview:layerView];
+    
+    [self.lightView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.incenseHeadView);
+        make.width.equalTo(self.incenseHeadView).with.multipliedBy(2);
+        make.height.equalTo(self.incenseHeadView).multipliedBy(2);
+    }];
 }
 
 - (void)setBrightnessCallback:(void (^)(CLFIncenseView *))brightnessCallback {
@@ -156,11 +166,13 @@ static CGFloat waverHeight;
             self.incenseHeadView.backgroundColor = [UIColor yellowColor];
             self.incenseDustView.backgroundColor = [UIColor blackColor];
             self.headDustView.alpha = 0.5f;
+            self.lightView.alpha = 1.0f;
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.5f animations:^{
                 self.incenseHeadView.backgroundColor = [UIColor redColor];
                 self.incenseDustView.backgroundColor = [UIColor grayColor];
                 self.headDustView.alpha = 0.0f;
+                self.lightView.alpha = 0.0f;
             } completion:^(BOOL finished) {
                 self.animating = NO;
                 headDustHeight = 0.1;
@@ -171,13 +183,12 @@ static CGFloat waverHeight;
 }
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
-    CGFloat newHeight = CGRectGetHeight(self.frame) - 25 * brightnessLevel;
+    CGFloat newHeight = CGRectGetHeight(self.frame) - 0.4;
     self.frame = (CGRect){self.frame.origin, {CGRectGetWidth(self.frame), newHeight}};
     
-    waverHeight -= 25 * brightnessLevel;
+    waverHeight -= 0.4;
     self.waver.frame = (CGRect) {self.waver.frame.origin, {CGRectGetWidth(self.waver.frame), waverHeight}};
-    
-//    NSLog(@"%f", newWaverHeight);
+
     if (!self.isAnimating) {
         headDustHeight -= 0.4;
         if (!self.headDustView.alpha) {

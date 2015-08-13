@@ -17,14 +17,14 @@
 #import "Waver.h"
 
 @interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate>
-@property (nonatomic, weak) CLFSmokeView *smokeView;
-@property (nonatomic, weak) CLFIncenseView *incenseView;
-@property (nonatomic, weak) CLFFire *fire;
-@property (nonatomic, weak) UIButton *restartButton;
+@property (nonatomic, weak)   CLFSmokeView    *smokeView;
+@property (nonatomic, weak)   CLFIncenseView  *incenseView;
+@property (nonatomic, weak)   CLFFire         *fire;
+@property (nonatomic, weak)   UIButton        *restartButton;
 
 @property (nonatomic, strong) AVAudioRecorder *recorder;
-@property (nonatomic, weak) UIView *rippleView;
-@property (nonatomic, strong) BMWaveMaker *rippleMaker;
+@property (nonatomic, weak)   UIView          *rippleView;
+@property (nonatomic, strong) BMWaveMaker     *rippleMaker;
 
 @end
 
@@ -99,7 +99,7 @@
 - (CLFIncenseView *)incenseView {
     if (!_incenseView) {
         CLFIncenseView *incenseView = [[CLFIncenseView alloc] init];
-        incenseView.backgroundColor = [UIColor greenColor];
+        incenseView.backgroundColor = [UIColor clearColor];
         incenseView.delegate = self;
         [self.view addSubview:incenseView];
         _incenseView = incenseView;
@@ -197,7 +197,6 @@
         make.bottom.equalTo(self.view);
         make.height.equalTo(@180);
     }];
-    self.rippleView.backgroundColor = [UIColor lightGrayColor];
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
     self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 180);
 }
