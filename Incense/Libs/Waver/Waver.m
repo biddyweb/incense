@@ -111,10 +111,10 @@
     _level = level / 3;
     self.phase += self.phaseShift; // Move the wave
     self.amplitude = fmax(_level, self.idleAmplitude);
-    [self updateMeters];
+    [self updateMetersWithLevel:level];
 }
 
-- (void)updateMeters {
+- (void)updateMetersWithLevel:(CGFloat)level {
 	self.waveHeight = CGRectGetHeight(self.bounds);
     self.waveHeight = self.waveHeight ? : [UIScreen mainScreen].bounds.size.height - 300;
     self.waveWidth = CGRectGetWidth(self.bounds);
@@ -149,6 +149,11 @@
         waveline.path = [wavelinePath CGPath];
     }
     UIGraphicsEndImageContext();
+    
+    for (CAGradientLayer *layer in self.gradientLayers) {
+        CGFloat gradientHeight = CGRectGetHeight(layer.bounds) + 2.5;
+        layer.bounds = CGRectMake(0, 0, 375, gradientHeight);
+    }
 }
 
 @end

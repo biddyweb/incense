@@ -51,7 +51,7 @@
     CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
     
     Waver *waver = [[Waver alloc] init];
-//    waver.backgroundColor = [UIColor grayColor];
+    waver.backgroundColor = [UIColor grayColor];
     [self.view insertSubview:waver belowSubview:self.incenseView];
     
 //    [waver mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -94,24 +94,6 @@
     CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
     CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
     self.waver.frame = CGRectMake(0, 0, screenW, screenH - 115);
-//    [UIView animateWithDuration:self.animateTime animations:^{
-//        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-        // 执行时会导致烟雾抖动一下. 要换成 frame?
-        // 好吧, 换成 frame 一样抖
-        // 好吧, autolayout 和 Core Animation 有冲突, 还是用 frame 吧
-        // 好吧, 这种方法做燃烧不好,不用这种方法了=,=
-        
-//        [self.incenseView layoutIfNeeded];
-//        self.incenseView.bounds = CGRectMake(0, 0, 6, 15);
-//        self.smokeView.alpha = 1.0f;
-//    } completion:^(BOOL finished) {
-//        if (finished) {
-//            [UIView animateWithDuration:2 animations:^{
-//                self.incenseView.incenseDustView.alpha = 0;
-//                self.incenseView.incenseHeadView.alpha = 0;
-//            }];
-//        }
-//    }];
     
     __block AVAudioRecorder *weakRecorder = self.recorder;
     self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
@@ -119,19 +101,6 @@
         CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5);
         incense.brightnessLevel = normalizedValue;
     };
-    
-    // 这一小块要放到 Waver 里面去吗=,=
-    CABasicAnimation *anim = [CABasicAnimation animation];
-    anim.keyPath = @"bounds";
-    anim.toValue = [NSValue valueWithCGRect:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), [UIScreen mainScreen].bounds.size.height - 115)];
-    anim.duration = self.animateTime;
-    anim.delegate = self;
-    anim.removedOnCompletion = NO;
-    anim.fillMode = kCAFillModeForwards;
-    
-    for (CAGradientLayer *layer in self.waver.gradientLayers) {
-        [layer addAnimation:anim forKey:nil];
-    }
 }
 
 - (void)incenseDidBurnOff {
@@ -283,7 +252,6 @@ CATransform3D CATransform3DMakePerspective(CGPoint center, float disZ) {
 CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ) {
     return CATransform3DConcat(t, CATransform3DMakePerspective(center, disZ));
 }
-
 
 #pragma mark - Restart
 
