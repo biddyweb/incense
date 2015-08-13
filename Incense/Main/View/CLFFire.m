@@ -8,8 +8,11 @@
 
 #import "CLFFire.h"
 #import "UIImage+animatedGIF.h"
+#import "Masonry.h"
 
 @interface CLFFire ()
+
+@property (nonatomic, weak) UIImageView *fireImage;
 
 @end
 
@@ -22,10 +25,24 @@ static CGFloat kScreenH;
     self = [super initWithFrame:frame];
     if (self) {
         self.userInteractionEnabled = YES;
-        NSURL *url = [[NSBundle mainBundle] URLForResource:@"3d-animated-gif" withExtension:@"gif"];
-        self.image = [UIImage animatedImageWithAnimatedGIFURL:url];
+        NSURL *url = [[NSBundle mainBundle] URLForResource:@"Fire" withExtension:@"gif"];
+        self.fireImage.image = [UIImage animatedImageWithAnimatedGIFURL:url];
     }
     return self;
+}
+
+- (UIImageView *)fireImage {
+    if (!_fireImage) {
+        UIImageView *fireImage = [[UIImageView alloc] init];
+        [self addSubview:fireImage];
+        [fireImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(@24);
+            make.width.equalTo(@18);
+            make.center.equalTo(self);
+        }];
+        _fireImage = fireImage;
+    }
+    return _fireImage;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -46,21 +63,20 @@ static CGFloat kScreenH;
     
     CGPoint currentPoint = [touch locationInView:self];
     
-    CGFloat offsetX = currentPoint.x - beginPoint.x;
     CGFloat offsetY = currentPoint.y - beginPoint.y;
     
     CGFloat newCenterY;
-    if (self.center.y + offsetY > kScreenH - 310) {
-        newCenterY = kScreenH - 310;
+    if (self.center.y + offsetY > kScreenH - 300) {
+        newCenterY = kScreenH - 300;
     } else {
         newCenterY = self.center.y + offsetY;
     }
     
-    CGFloat newCenterX = self.center.x + offsetX;
+    CGFloat newCenterX = self.center.x;
     
     self.center = CGPointMake(newCenterX, newCenterY);
     
-    if ( (newCenterX > [UIScreen mainScreen].bounds.size.width / 2 - 10 && newCenterX < [UIScreen mainScreen].bounds.size.width / 2 + 10) && newCenterY == kScreenH - 310) {
+    if ( (newCenterX > [UIScreen mainScreen].bounds.size.width / 2 - 5 && newCenterX < [UIScreen mainScreen].bounds.size.width / 2 + 5) && newCenterY == kScreenH - 300) {
         [self.delegate lightTheIncense];
     }
 }

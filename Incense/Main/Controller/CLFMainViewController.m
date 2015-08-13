@@ -175,16 +175,6 @@
         UIView *rippleView = [[UIView alloc] init];
         rippleView.backgroundColor = [UIColor clearColor];
         [self.view addSubview:rippleView];
-        UIView *shadowView = [[UIView alloc] init];
-        shadowView.backgroundColor = [UIColor blackColor];
-        [rippleView addSubview:shadowView];
-        [shadowView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.height.equalTo(@10);
-            make.width.equalTo(@10);
-            make.center.equalTo(rippleView);
-        }];
-        shadowView.layer.cornerRadius = 5.0f;
-        shadowView.layer.masksToBounds = YES;
         _rippleView = rippleView;
     }
     return _rippleView;
@@ -198,7 +188,7 @@
         make.height.equalTo(@180);
     }];
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
-    self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 180);
+    self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);
 }
 
 - (BMWaveMaker *)rippleMaker {

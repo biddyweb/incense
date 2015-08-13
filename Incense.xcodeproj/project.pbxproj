@@ -20,6 +20,8 @@
 		3F1956C91B78B95A003A5575 /* View+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956BC1B78B95A003A5575 /* View+MASAdditions.m */; };
 		3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956BF1B78B95A003A5575 /* ViewController+MASAdditions.m */; };
 		3F1956CD1B78B98F003A5575 /* CLFIncenseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */; };
+		3F2F0BE21B7C6DC200BE1665 /* Fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F2F0BE11B7C6DC200BE1665 /* Fire.gif */; };
+		3F2F0BE41B7C84D500BE1665 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F2F0BE31B7C84D500BE1665 /* spark.png */; };
 		3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F3AA2B41B7B0BFD00DD9E84 /* BMWaveLayer.m */; };
 		3F3AA2B81B7B0BFD00DD9E84 /* BMWaveMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F3AA2B61B7B0BFD00DD9E84 /* BMWaveMaker.m */; };
 		3F48CDF81B78777F00F889BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CDF71B78777F00F889BC /* main.m */; };
@@ -76,6 +78,8 @@
 		3F1956BF1B78B95A003A5575 /* ViewController+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+MASAdditions.m"; sourceTree = "<group>"; };
 		3F1956CB1B78B98F003A5575 /* CLFIncenseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFIncenseView.h; sourceTree = "<group>"; };
 		3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFIncenseView.m; sourceTree = "<group>"; };
+		3F2F0BE11B7C6DC200BE1665 /* Fire.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Fire.gif; sourceTree = "<group>"; };
+		3F2F0BE31B7C84D500BE1665 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		3F3AA2B31B7B0BFD00DD9E84 /* BMWaveLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMWaveLayer.h; sourceTree = "<group>"; };
 		3F3AA2B41B7B0BFD00DD9E84 /* BMWaveLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMWaveLayer.m; sourceTree = "<group>"; };
 		3F3AA2B51B7B0BFD00DD9E84 /* BMWaveMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMWaveMaker.h; sourceTree = "<group>"; };
@@ -218,6 +222,8 @@
 			isa = PBXGroup;
 			children = (
 				3FCF3A4E1B7B9D2600B9FFFF /* 3d-animated-gif.gif */,
+				3F2F0BE11B7C6DC200BE1665 /* Fire.gif */,
+				3F2F0BE31B7C84D500BE1665 /* spark.png */,
 				3F48CE021B78777F00F889BC /* Images.xcassets */,
 				3F48CE041B78777F00F889BC /* LaunchScreen.xib */,
 				3F48CDF91B78777F00F889BC /* AppDelegate.h */,
@@ -368,8 +374,10 @@
 			files = (
 				3FCF3A4F1B7B9D2600B9FFFF /* 3d-animated-gif.gif in Resources */,
 				3F1956C01B78B95A003A5575 /* Info.plist in Resources */,
+				3F2F0BE21B7C6DC200BE1665 /* Fire.gif in Resources */,
 				3F48CE011B78777F00F889BC /* Main.storyboard in Resources */,
 				3F48CE061B78777F00F889BC /* LaunchScreen.xib in Resources */,
+				3F2F0BE41B7C84D500BE1665 /* spark.png in Resources */,
 				3F48CE031B78777F00F889BC /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
