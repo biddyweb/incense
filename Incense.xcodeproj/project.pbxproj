@@ -76,8 +76,8 @@
 		3F1956BD1B78B95A003A5575 /* View+MASShorthandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+MASShorthandAdditions.h"; sourceTree = "<group>"; };
 		3F1956BE1B78B95A003A5575 /* ViewController+MASAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ViewController+MASAdditions.h"; sourceTree = "<group>"; };
 		3F1956BF1B78B95A003A5575 /* ViewController+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+MASAdditions.m"; sourceTree = "<group>"; };
-		3F1956CB1B78B98F003A5575 /* CLFIncenseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLFIncenseView.h; path = ../../CLFIncenseView.h; sourceTree = "<group>"; };
-		3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CLFIncenseView.m; path = ../../CLFIncenseView.m; sourceTree = "<group>"; };
+		3F1956CB1B78B98F003A5575 /* CLFIncenseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFIncenseView.h; sourceTree = "<group>"; };
+		3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFIncenseView.m; sourceTree = "<group>"; };
 		3F3AA2B31B7B0BFD00DD9E84 /* BMWaveLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMWaveLayer.h; sourceTree = "<group>"; };
 		3F3AA2B41B7B0BFD00DD9E84 /* BMWaveLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMWaveLayer.m; sourceTree = "<group>"; };
 		3F3AA2B51B7B0BFD00DD9E84 /* BMWaveMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMWaveMaker.h; sourceTree = "<group>"; };
@@ -87,8 +87,8 @@
 		3F48CDF71B78777F00F889BC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3F48CDF91B78777F00F889BC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3F48CDFA1B78777F00F889BC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		3F48CDFC1B78777F00F889BC /* CLFMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CLFMainViewController.h; path = ../../CLFMainViewController.h; sourceTree = "<group>"; };
-		3F48CDFD1B78777F00F889BC /* CLFMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CLFMainViewController.m; path = ../../CLFMainViewController.m; sourceTree = "<group>"; };
+		3F48CDFC1B78777F00F889BC /* CLFMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLFMainViewController.h; sourceTree = "<group>"; };
+		3F48CDFD1B78777F00F889BC /* CLFMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CLFMainViewController.m; sourceTree = "<group>"; };
 		3F48CE001B78777F00F889BC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3F48CE021B78777F00F889BC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3F48CE051B78777F00F889BC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -96,12 +96,12 @@
 		3F48CE101B78777F00F889BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F48CE111B78777F00F889BC /* IncenseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IncenseTests.m; sourceTree = "<group>"; };
 		3F6BDC611B7AEC3A0046FECE /* Smoke.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Smoke.png; sourceTree = "<group>"; };
-		3F732C071B79C3E1009DE244 /* CLFSmokeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLFSmokeView.h; path = ../../CLFSmokeView.h; sourceTree = "<group>"; };
-		3F732C081B79C3E1009DE244 /* CLFSmokeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CLFSmokeView.m; path = ../../CLFSmokeView.m; sourceTree = "<group>"; };
+		3F732C071B79C3E1009DE244 /* CLFSmokeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFSmokeView.h; sourceTree = "<group>"; };
+		3F732C081B79C3E1009DE244 /* CLFSmokeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFSmokeView.m; sourceTree = "<group>"; };
 		3F732C131B7A11DA009DE244 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3F8429F01B7A5E34002EC748 /* DazFire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DazFire.png; sourceTree = "<group>"; };
-		3F8A67321B79A1780073D552 /* CLFFire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLFFire.h; path = ../../CLFFire.h; sourceTree = "<group>"; };
-		3F8A67331B79A1780073D552 /* CLFFire.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CLFFire.m; path = ../../CLFFire.m; sourceTree = "<group>"; };
+		3F8A67321B79A1780073D552 /* CLFFire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFFire.h; sourceTree = "<group>"; };
+		3F8A67331B79A1780073D552 /* CLFFire.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFFire.m; sourceTree = "<group>"; };
 		3FCF3A4E1B7B9D2600B9FFFF /* 3d-animated-gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "3d-animated-gif.gif"; sourceTree = "<group>"; };
 		3FCF3A521B7B9F2D00B9FFFF /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
 		3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+animatedGIF.m"; sourceTree = "<group>"; };
