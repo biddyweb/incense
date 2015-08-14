@@ -16,7 +16,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Waver.h"
 #import "UIImage+ImageEffects.h"
-#import "UIERealTimeBlurView.h"
 
 @interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate>
 @property (nonatomic, weak)   CLFSmokeView    *smokeView;
@@ -28,14 +27,23 @@
 @property (nonatomic, weak)   UIView          *rippleView;
 @property (nonatomic, strong) BMWaveMaker     *rippleMaker;
 
-@property (nonatomic, weak) UIERealTimeBlurView *blurView;
+@property (nonatomic, weak)   UIImageView     *blurView;
 
 @end
 
 @implementation CLFMainViewController
 
+static CGFloat screenWidth;
+static CGFloat screenHeight;
+
+static const CGFloat kVoiceFactor = 5.0f;
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    screenWidth = [UIScreen mainScreen].bounds.size.width;
+    screenHeight = [UIScreen mainScreen].bounds.size.height;
     
     [self makeIncense];
     [self makeFire];
@@ -43,12 +51,14 @@
     [self makeRipple];
 }
 
+#pragma mark - LightTheIncense
+
 - (void)lightTheIncense {
     [self setupRecorder];
     __block AVAudioRecorder *weakRecorder = self.recorder;
     self.incenseView.waver.waverLevelCallback = ^(Waver *waver) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kVoiceFactor);
         waver.level = normalizedValue;
     };
 
@@ -72,20 +82,20 @@
     
     self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / 5);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kVoiceFactor);
         incense.brightnessLevel = normalizedValue;
     };
 }
 
 - (void)incenseDidBurnOff {
     [self.rippleMaker stopWave];
-    self.blurView.alpha = 0.0f;
+
     [UIView animateWithDuration:2.0f animations:^{
         self.incenseView.waver.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 0.0f;
-        self.blurView.alpha = 0.9f;
         self.rippleView.alpha = 0.3f;
     } completion:^(BOOL finished) {
+        self.blurView.alpha = 0.0f;
         if (finished) {
             [UIView animateWithDuration:1.0f animations:^{
                 self.blurView.alpha = 1.0f;
@@ -104,7 +114,7 @@
 - (CLFIncenseView *)incenseView {
     if (!_incenseView) {
         CLFIncenseView *incenseView = [[CLFIncenseView alloc] init];
-        incenseView.backgroundColor = [UIColor greenColor];
+        incenseView.backgroundColor = [UIColor clearColor];
         incenseView.delegate = self;
         [self.view addSubview:incenseView];
         _incenseView = incenseView;
@@ -123,25 +133,22 @@
 }
 
 - (void)makeIncense {
-    CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
-    CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
-    
     [self.incenseView initialSetup];
 
-    self.incenseView.frame = CGRectMake(0, screenH - 300, screenW, 200);
+    self.incenseView.frame = CGRectMake(0, screenHeight - 300, screenWidth, 200);
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
     
-    self.incenseShadowView.frame = CGRectMake((screenW - 6) / 2, screenH - 90, 6, 3);
+    self.incenseShadowView.frame = CGRectMake((screenWidth - 6) / 2, screenHeight - 90, 6, 3);
     
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
     anim.repeatCount = 1500;
-    anim.values = @[@(screenH - 95), @(screenH - 100), @(screenH - 95)];
+    anim.values = @[@(screenHeight - 95), @(screenHeight - 100), @(screenHeight - 95)];
     anim.duration = 4.0f;
     anim.removedOnCompletion = NO;
     anim.fillMode = kCAFillModeForwards;
-    self.incenseView.layer.position = CGPointMake(0, screenH - 100);
+    self.incenseView.layer.position = CGPointMake(0, screenHeight - 100);
     self.incenseView.layer.anchorPoint = CGPointMake(0, 1);
     [self.incenseView.layer addAnimation:anim forKey:nil];
     
@@ -155,7 +162,7 @@
     shadowAnim.duration = 4.0f;
     shadowAnim.removedOnCompletion = NO;
     shadowAnim.fillMode = kCAFillModeForwards;
-    self.incenseShadowView.layer.position = CGPointMake(screenW / 2, screenH - 90);
+    self.incenseShadowView.layer.position = CGPointMake(screenWidth / 2, screenHeight - 90);
     self.incenseShadowView.layer.anchorPoint = CGPointMake(0.5, 0.5);
     [self.incenseShadowView.layer addAnimation:shadowAnim forKey:nil];
 }
@@ -175,7 +182,9 @@
 }
 
 - (void)makeFire {
-    self.fire.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - 20, 80, 40, 40);
+    CGFloat fireW = 40;
+    CGFloat fireH = 40;
+    self.fire.frame = CGRectMake((screenWidth - fireW) / 2, 80, fireW, fireH);
 }
 
 #pragma mark - Smoke
@@ -204,11 +213,8 @@
 
 - (UIView *)rippleView {
     if (!_rippleView) {
-        CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
-        CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
-
         UIView *rippleView = [[UIView alloc] init];
-        rippleView.frame = CGRectMake(0, screenH - 180, screenW, 180);
+        rippleView.frame = CGRectMake(0, screenHeight - 180, screenWidth, 180);
         rippleView.backgroundColor = [UIColor clearColor];
         [self.view addSubview:rippleView];
         _rippleView = rippleView;
@@ -251,23 +257,32 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 
 #pragma mark - Restart
 
-- (UIERealTimeBlurView *)blurView {
+- (UIImage *)takeSnapshotOfView:(UIView *)view
+{
+    CGFloat reductionFactor = 1;
+    UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor));
+    [view drawViewHierarchyInRect:CGRectMake(0, 0, view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor) afterScreenUpdates:YES];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
+
+- (UIImageView *)blurView {
     if (!_blurView) {
-        CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
-        CGFloat screenH = [UIScreen mainScreen].bounds.size.height;
-//
-//        UIImage *blurImage = [[UIImage imageNamed:@"Finish"] applyTintEffectWithColor:[UIColor whiteColor]];
-//        UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
-//        blurView.userInteractionEnabled = YES;
-//        blurView.frame = self.view.frame;
-        UIERealTimeBlurView *blurView = [[UIERealTimeBlurView alloc] initWithFrame:self.view.frame];
-        [self.view addSubview:blurView];
+        UIImage *blurImage = [[self takeSnapshotOfView:self.view] applyBlurWithRadius:5 tintColor:[UIColor colorWithWhite:1.0f alpha:0.05f] saturationDeltaFactor:1.0 maskImage:nil];
+        UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
+        blurView.userInteractionEnabled = YES;
+        blurView.frame = self.view.frame;
         
-        blurView.renderStatic = YES;
+        [self.view addSubview:blurView];
         
         UIButton *restartButton = [[UIButton alloc] init];
         [blurView addSubview:restartButton];
-        restartButton.frame = CGRectMake((screenW - 44)/2, (screenH - 314)/2, 44, 214);
+        restartButton.frame = CGRectMake((screenWidth - 44) /2, (screenHeight - 314) / 2, 44, 230);
+        restartButton.contentMode = UIViewContentModeTop;
+        restartButton.backgroundColor = [UIColor greenColor];
         [restartButton addTarget:self action:@selector(oneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
         [restartButton setImage:[UIImage imageNamed:@"時"] forState:UIControlStateNormal];
         

@@ -28,8 +28,7 @@
     
     gradientLayer.frame = self.bounds;
     NSMutableArray *colors = [NSMutableArray array];
-    
-//    [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.9f].CGColor];
+
     [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor];
     [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.8f].CGColor];
     [colors addObject:(id)[UIColor colorWithRed:245/255.0 green:245/255.0 blue:245/255.0 alpha:1.0f].CGColor];

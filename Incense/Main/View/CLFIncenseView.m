@@ -12,9 +12,11 @@
 
 @interface CLFIncenseView ()
 
-@property (nonatomic, assign, getter=isAnimating) BOOL animating;
+@property (nonatomic, assign, getter=isAnimating) BOOL        animating;
 @property (nonatomic, weak)                       UIImageView *lightView;
-@property (nonatomic, weak)                       UIView *incenseStick;
+@property (nonatomic, weak)                       UIView      *incenseStick;
+@property (nonatomic, weak)                       UIView      *incenseBodyView;
+@property (nonatomic, weak)                       UIImageView *headDustView;
 
 @end
 
@@ -22,8 +24,11 @@
 
 static CGFloat headHeight;
 static CGFloat waverHeight;
-static CGFloat incenseWidth = 5.0f;
-static CGFloat incenseStickWidth = 2.0f;;
+static CGFloat screenWidth;
+
+static const CGFloat kIncenseWidth = 5.0f;
+static const CGFloat kIncenseStickWidth = 2.0f;
+static const CGFloat kIncenseStickHeight = 70.0f;
 
 - (Waver *)waver {
     if (!_waver) {
@@ -41,7 +46,8 @@ static CGFloat incenseStickWidth = 2.0f;;
         UIImageView *lightView = [[UIImageView alloc] init];
         lightView.image = [UIImage imageNamed:@"spark"];
         lightView.alpha = 0.0f;
-        [self.incenseHeadView addSubview:lightView];
+        [self.headDustView addSubview:lightView];
+
         _lightView = lightView;
     }
     return _lightView;
@@ -53,6 +59,13 @@ static CGFloat incenseStickWidth = 2.0f;;
         incenseBodyView.backgroundColor = [UIColor blackColor];
         incenseBodyView.layer.cornerRadius = 3;
         [self addSubview:incenseBodyView];
+        [incenseBodyView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@(kIncenseWidth));
+            make.centerX.equalTo(self);
+            make.top.equalTo(self);
+            make.height.equalTo(self).offset(-50);
+        }];
+
         _incenseBodyView = incenseBodyView;
     }
     return _incenseBodyView;
@@ -63,6 +76,12 @@ static CGFloat incenseStickWidth = 2.0f;;
         UIImageView *incenseHeadView = [[UIImageView alloc] init];
         incenseHeadView.image = [UIImage imageNamed:@"星"];
         [self.incenseBodyView addSubview:incenseHeadView];
+        [incenseHeadView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.incenseBodyView).offset(-2);
+            make.left.equalTo(self.incenseBodyView);
+            make.right.equalTo(self.incenseBodyView);
+            make.height.equalTo(@8);
+        }];
         _incenseHeadView = incenseHeadView;
     }
     return _incenseHeadView;
@@ -81,45 +100,29 @@ static CGFloat incenseStickWidth = 2.0f;;
 - (UIView *)incenseStick {
     if (!_incenseStick) {
         UIView *incenseStick = [[UIView alloc] init];
-        incenseStick.backgroundColor = [UIColor blackColor];
         incenseStick.layer.cornerRadius = 1.0f;
         [self.incenseBodyView insertSubview:incenseStick belowSubview:self.incenseHeadView];
+        [incenseStick mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self);
+            make.centerX.equalTo(self);
+            make.height.equalTo(@(kIncenseStickHeight));
+            make.width.equalTo(@(kIncenseStickWidth));
+        }];
         _incenseStick = incenseStick;
     }
     return _incenseStick;
 }
 
 - (void)layoutSubviews {
-    CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
-    
-    [self.incenseBodyView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(@(incenseWidth));
-        make.centerX.equalTo(self);
-        make.top.equalTo(self);
-        make.height.equalTo(self).offset(-50);
-    }];
-        
     self.headDustView.frame = CGRectMake(0, 3, 5, headHeight);
     
-    [self.incenseHeadView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.incenseBodyView).offset(-2);
-        make.left.equalTo(self.incenseBodyView);
-        make.right.equalTo(self.incenseBodyView);
-        make.height.equalTo(@8);
-    }];
+    self.incenseStick.backgroundColor = [UIColor blackColor];
     
-    [self.incenseStick mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self);
-        make.centerX.equalTo(self);
-        make.height.equalTo(@70);
-        make.width.equalTo(@(incenseStickWidth));
-    }];
-    
-    self.waver.frame = CGRectMake(0, 0, screenW, waverHeight);
+    self.waver.frame = CGRectMake(0, 0, screenWidth, waverHeight);
     
     [self.lightView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.incenseHeadView);
-        make.top.equalTo(self.incenseHeadView).offset(-4);
+        make.centerX.equalTo(self.headDustView);
+        make.top.equalTo(self.headDustView.mas_bottom).offset(-7);
         make.width.equalTo(@22);
         make.height.equalTo(@22);
     }];
@@ -160,10 +163,10 @@ static CGFloat incenseStickWidth = 2.0f;;
 }
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
-    CGFloat newHeight = CGRectGetHeight(self.frame) - 5;
+    CGFloat newHeight = CGRectGetHeight(self.frame) - 2;
     self.frame = (CGRect){self.frame.origin, {CGRectGetWidth(self.frame), newHeight}};
     
-    waverHeight -= 5;
+    waverHeight -= 2;
     self.waver.frame = (CGRect) {self.waver.frame.origin, {CGRectGetWidth(self.waver.frame), waverHeight}};
 
     if (!self.isAnimating) {
@@ -171,7 +174,7 @@ static CGFloat incenseStickWidth = 2.0f;;
         if (!self.headDustView.alpha) {
             self.headDustView.alpha = 1.0f;
         }
-        self.headDustView.frame = CGRectMake(0, 0, incenseWidth, headHeight);
+        self.headDustView.frame = CGRectMake(0, 0, kIncenseWidth, headHeight);
     }
     
     if (newHeight <= 65) {
@@ -181,6 +184,7 @@ static CGFloat incenseStickWidth = 2.0f;;
 
 - (void)initialSetup {
     headHeight = 0.0f;
+    screenWidth = [UIScreen mainScreen].bounds.size.width;
     waverHeight = - [UIScreen mainScreen].bounds.size.height;
 }
 
