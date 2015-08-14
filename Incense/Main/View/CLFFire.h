@@ -11,6 +11,7 @@
 @protocol CLFFireDelegate <NSObject>
 
 - (void)lightTheIncense;
+- (void)fireFallDown;
 
 @end
 

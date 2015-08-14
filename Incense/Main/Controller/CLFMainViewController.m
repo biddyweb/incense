@@ -16,16 +16,21 @@
 #import "Waver.h"
 #import "UIImage+ImageEffects.h"
 
-@interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate>
-@property (nonatomic, weak)   CLFIncenseView  *incenseView;
-@property (nonatomic, weak)   UIImageView     *incenseShadowView;
-@property (nonatomic, weak)   CLFFire         *fire;
+@interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate, UICollisionBehaviorDelegate>
+@property (nonatomic, weak)   CLFIncenseView        *incenseView;
+@property (nonatomic, weak)   UIImageView           *incenseShadowView;
+@property (nonatomic, weak)   CLFFire               *fire;
 
-@property (nonatomic, strong) AVAudioRecorder *recorder;
-@property (nonatomic, weak)   UIView          *rippleView;
-@property (nonatomic, strong) BMWaveMaker     *rippleMaker;
+@property (nonatomic, strong) AVAudioRecorder       *recorder;
+@property (nonatomic, weak)   UIView                *rippleView;
+@property (nonatomic, strong) BMWaveMaker           *rippleMaker;
 
-@property (nonatomic, weak)   UIImageView     *blurView;
+@property (nonatomic, weak)   UIImageView           *blurView;
+
+@property (nonatomic, strong) UIDynamicAnimator     *animator;
+@property (nonatomic, weak)   UIDynamicItemBehavior *itemBehavior;
+
+@property (nonatomic, weak)   UIView                *gestureArea;
 
 @end
 
@@ -45,11 +50,11 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     screenHeight = [UIScreen mainScreen].bounds.size.height;
     
     if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
-        // iOS 7
         [self prefersStatusBarHidden];
         [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
     }
     
+    [self makeGestureArea];
     [self makeIncense];
     [self makeFire];
     [self makeRipple];
@@ -57,12 +62,75 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (BOOL)prefersStatusBarHidden
 {
-    return YES;//隐藏为YES，显示为NO
+    return YES;
+}
+
+- (UIView *)gestureArea {
+    if (!_gestureArea) {
+        UIView *gestureArea = [[UIView alloc] init];
+        gestureArea.frame = CGRectMake(0, 0, screenWidth, 180);
+        [self.view addSubview:gestureArea];
+        _gestureArea = gestureArea;
+    }
+    return _gestureArea;
+}
+
+- (void)makeGestureArea {
+    self.gestureArea.userInteractionEnabled = YES;
+    self.gestureArea.backgroundColor = [UIColor clearColor];
+    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(fireFallDown)];
+    swipe.direction = UISwipeGestureRecognizerDirectionDown;
+    [self.gestureArea addGestureRecognizer:swipe];
+}
+
+
+- (UIDynamicAnimator *)animator {
+    if (!_animator) {
+        _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    }
+    return _animator;
+}
+
+- (void)fireFallDown {
+//    self.fire.dragEnable = NO;
+    self.gestureArea.userInteractionEnabled = NO;
+    UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[self.fire]];
+    gravity.magnitude = 0.5;
+    
+    UICollisionBehavior *collision = [[UICollisionBehavior alloc] initWithItems:@[self.fire]];
+    collision.translatesReferenceBoundsIntoBoundary = YES;
+    
+    UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, screenWidth, screenHeight - 285)];
+    [collision addBoundaryWithIdentifier:@"barrier" forPath:path];
+    collision.collisionMode = UICollisionBehaviorModeBoundaries;
+    collision.collisionDelegate = self;
+    
+    UIDynamicItemBehavior *itemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[self.fire]];
+    itemBehavior.elasticity = 0.0f;
+    itemBehavior.allowsRotation = NO;
+    itemBehavior.resistance = 0;
+    self.itemBehavior = itemBehavior;
+    
+    [self.animator addBehavior:gravity];
+    [self.animator addBehavior:collision];
+    [self.animator addBehavior:itemBehavior];
+
+}
+
+- (void)collisionBehavior:(UICollisionBehavior *)behavior beganContactForItem:(id<UIDynamicItem>)item withBoundaryIdentifier:(id<NSCopying>)identifier atPoint:(CGPoint)p {
+    self.itemBehavior.resistance = 100;
+    [self lightTheIncense];
 }
 
 #pragma mark - LightTheIncense
 
 - (void)lightTheIncense {
+    self.itemBehavior.resistance = 0;
+    [self.animator removeAllBehaviors];
+    [self.itemBehavior removeItem:self.fire];
+    self.animator = nil;
+    self.itemBehavior = nil;
+    
     [self setupRecorder];
     __block AVAudioRecorder *weakRecorder = self.recorder;
     self.incenseView.waver.waverLevelCallback = ^(Waver *waver) {
@@ -103,14 +171,13 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         self.rippleView.alpha = 0.3f;
     } completion:^(BOOL finished) {
         self.blurView.alpha = 0.0f;
-        if (finished) {
             [UIView animateWithDuration:0.5f animations:^{
                 self.blurView.alpha = 1.0f;
                 self.rippleView.alpha = 0.0f;
             } completion:^(BOOL finished) {
 
             }];
-        }
+        
     }];
     [self.incenseView.waver.displaylink invalidate];
     [self.incenseView.displaylink invalidate];
@@ -132,7 +199,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (UIImageView *)incenseShadowView {
     if (!_incenseShadowView) {
         UIImageView *incenseShadowView = [[UIImageView alloc] init];
-        incenseShadowView.image = [UIImage imageNamed:@"StickShadow"];
+        incenseShadowView.image = [UIImage imageNamed:@"影"];
         [self.view addSubview:incenseShadowView];
         _incenseShadowView = incenseShadowView;
     }
@@ -181,7 +248,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         CLFFire *fire = [[CLFFire alloc] init];
         fire.backgroundColor = [UIColor clearColor];
         fire.delegate = self;
-        fire.dragEnable = YES;
         [self.view addSubview:fire];
         _fire = fire;
     }
@@ -191,11 +257,11 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)makeFire {
     CGFloat fireW = 40;
     CGFloat fireH = 40;
+    self.fire.alpha = 1.0f;
+    self.fire.dragEnable = YES;
     self.fire.frame = CGRectMake((screenWidth - fireW) / 2, 80, fireW, fireH);
+    
 }
-
-#pragma mark - Smoke
-
 
 #pragma mark - Ripple
 
@@ -280,6 +346,7 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 
 - (void)oneMoreIncense {
     [self.blurView removeFromSuperview];
+    [self makeGestureArea];
     [self makeIncense];
     [self makeFire];
     [self makeRipple];

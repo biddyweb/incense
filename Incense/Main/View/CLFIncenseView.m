@@ -13,12 +13,12 @@
 
 @interface CLFIncenseView ()
 
-@property (nonatomic, assign, getter=isAnimating) BOOL         animating;
+@property (nonatomic, assign, getter=isBlowing)   BOOL         blowing;
 @property (nonatomic, weak)                       UIImageView  *lightView;
 @property (nonatomic, weak)                       UIView       *incenseStick;
 @property (nonatomic, weak)                       UIView       *incenseBodyView;
 @property (nonatomic, weak)                       UIImageView  *headDustView;
-@property (nonatomic, weak)                       CLFSmokeView *smokeView;
+@property (nonatomic, weak)                       UIImageView *smokeView;
 
 @end
 
@@ -52,7 +52,12 @@ static const CGFloat kIncenseStickHeight = 70.0f;
         lightView.image = [UIImage imageNamed:@"spark"];
         lightView.alpha = 0.0f;
         [self.headDustView addSubview:lightView];
-
+        [lightView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.headDustView);
+            make.top.equalTo(self.headDustView.mas_bottom).offset(-8);
+            make.width.equalTo(@22);
+            make.height.equalTo(@22);
+        }];
         _lightView = lightView;
     }
     return _lightView;
@@ -95,7 +100,7 @@ static const CGFloat kIncenseStickHeight = 70.0f;
 - (UIView *)headDustView {
     if (!_headDustView) {
         UIImageView *headDustView = [[UIImageView alloc] init];
-        headDustView.image = [UIImage imageNamed:@"单独的灰"];
+        headDustView.image = [UIImage imageNamed:@"灰烬"];
         [self.incenseBodyView addSubview:headDustView];
         _headDustView = headDustView;
     }
@@ -118,11 +123,10 @@ static const CGFloat kIncenseStickHeight = 70.0f;
     return _incenseStick;
 }
 
-- (UIView *)smokeView {
+- (UIImageView *)smokeView {
     if (!_smokeView) {
-        CLFSmokeView *smokeView = [[CLFSmokeView alloc] init];
-        smokeView.backgroundColor = [UIColor clearColor];
-        smokeView.alpha = 0.0f;
+        UIImageView *smokeView = [[UIImageView alloc] init];
+        smokeView.image = [UIImage imageNamed:@"天"];
         [self addSubview:smokeView];
         [self bringSubviewToFront:smokeView];
         _smokeView = smokeView;
@@ -137,22 +141,16 @@ static const CGFloat kIncenseStickHeight = 70.0f;
     
     self.waver.frame = CGRectMake(0, 0, screenWidth, waverHeight);
     
-    self.smokeView.frame = CGRectMake(0, - screenHeight + 480, screenWidth, smokeHeight);
-    
-    [self.lightView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.headDustView);
-        make.top.equalTo(self.headDustView.mas_bottom).offset(-7);
-        make.width.equalTo(@22);
-        make.height.equalTo(@22);
-    }];
+    self.smokeView.frame = CGRectMake(0, - (screenHeight - 460), screenWidth, smokeHeight);
 }
 
 - (void)setBrightnessCallback:(void (^)(CLFIncenseView *))brightnessCallback {
     _brightnessCallback = brightnessCallback;
     
     _displaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(invokeBrightnessCallback)];
-    _displaylink.frameInterval = 8;
+    _displaylink.frameInterval = 1;
     [_displaylink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    self.blowing = NO;
 }
 
 - (void)invokeBrightnessCallback {
@@ -160,46 +158,47 @@ static const CGFloat kIncenseStickHeight = 70.0f;
 }
 
 - (void)setBrightnessLevel:(CGFloat)brightnessLevel {
-    if (brightnessLevel >= 0.02f) {
-        self.headDustView.alpha = 1.0f;
-        [UIView animateWithDuration:0.1f animations:^{
-            self.headDustView.alpha = 0.5f;
-            self.lightView.alpha = 1.0f;
+    if (brightnessLevel >= 0.2f) {
+        
+        self.lightView.alpha = 1.0f * brightnessLevel * 2;
+        self.blowing = YES;
+        if (self.isBlowing) {
+            headHeight = -10.0f;
+        }
+
+    } else {
+        [UIView animateWithDuration:2.0f animations:^{
+            self.lightView.alpha = 0.0f;
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.1f animations:^{
-                self.headDustView.alpha = 0.0f;
-                self.lightView.alpha = 0.0f;
-            } completion:^(BOOL finished) {
-                self.animating = NO;
-                headHeight = 0.1;
-            }];
+            self.blowing = NO;
         }];
     }
     [self updateHeightWithBrightnessLevel:brightnessLevel];
 }
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
-    incenseHeight -= 2 / 180.0f;
+    incenseHeight -= 2 * 8 / 18.0f;
     self.frame = (CGRect){self.frame.origin, {screenWidth, incenseHeight}};
     
-    waverHeight -= 2 / 180.0f;
+    waverHeight -= 2 * 8 / 18.0f;
     self.waver.frame = (CGRect) {{0, 0}, {screenWidth, waverHeight}};
+    
+    smokeHeight -= 2 * 8 / 18.0f;
+    self.smokeView.frame = (CGRect){self.smokeView.frame.origin, {screenWidth, smokeHeight}};
 
-    if (!self.isAnimating) {
-        headHeight -= 0.3 / 90.0f;
-        if (!self.headDustView.alpha) {
-            self.headDustView.alpha = 1.0f;
-        }
+    if (!self.isBlowing) {
+        headHeight -= 0.3 * 8 / 18.0f;
         self.headDustView.frame = CGRectMake(0, 0, kIncenseWidth, headHeight);
     }
     
     if (incenseHeight <= 65.0f) {
         [self.delegate incenseDidBurnOff];
+        self.lightView.alpha = 0.0f;
     }
 }
 
 - (void)initialSetup {
-    headHeight = 0.0f;
+    headHeight = -0.0f;
     smokeHeight = -180.0f;
     incenseHeight = 200.0f;
     screenWidth = [UIScreen mainScreen].bounds.size.width;

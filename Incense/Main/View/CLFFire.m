@@ -66,8 +66,8 @@ static CGFloat kScreenH;
     CGFloat offsetY = currentPoint.y - beginPoint.y;
     
     CGFloat newCenterY;
-    if (self.center.y + offsetY > kScreenH - 300) {
-        newCenterY = kScreenH - 300;
+    if (self.center.y + offsetY > kScreenH - 305) {
+        newCenterY = kScreenH - 305;
     } else if (self.center.y + offsetY < 40) {
         newCenterY = 40;
     } else {
@@ -78,8 +78,18 @@ static CGFloat kScreenH;
     
     self.center = CGPointMake(newCenterX, newCenterY);
     
-    if ( (newCenterX > [UIScreen mainScreen].bounds.size.width / 2 - 5 && newCenterX < [UIScreen mainScreen].bounds.size.width / 2 + 5) && newCenterY == kScreenH - 300) {
+    if ( (newCenterX > [UIScreen mainScreen].bounds.size.width / 2 - 5 && newCenterX < [UIScreen mainScreen].bounds.size.width / 2 + 5) && newCenterY == kScreenH - 305) {
         [self.delegate lightTheIncense];
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    if (!self.isDragEnable) {
+        return;
+    }
+
+    if (self.center.y > 180) {
+        [self.delegate fireFallDown];
     }
 }
 
