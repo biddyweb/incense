@@ -28,8 +28,9 @@
 		3F48CE011B78777F00F889BC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CDFF1B78777F00F889BC /* Main.storyboard */; };
 		3F48CE031B78777F00F889BC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CE021B78777F00F889BC /* Images.xcassets */; };
 		3F48CE121B78777F00F889BC /* IncenseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CE111B78777F00F889BC /* IncenseTests.m */; };
-		3F732C091B79C3E1009DE244 /* CLFSmokeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F732C081B79C3E1009DE244 /* CLFSmokeView.m */; };
 		3F7F66531B7D91E20045C689 /* Fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66521B7D91E20045C689 /* Fire.gif */; };
+		3F7F66561B7DF7EB0045C689 /* CLFEndButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7F66551B7DF7EB0045C689 /* CLFEndButton.m */; };
+		3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66571B7DFD390045C689 /* LaunchScreen.xib */; };
 		3F8A67341B79A1780073D552 /* CLFFire.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8A67331B79A1780073D552 /* CLFFire.m */; };
 		3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */; };
 		3FF47E411B7CBFDE00AD81C8 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */; };
@@ -92,9 +93,10 @@
 		3F48CE0B1B78777F00F889BC /* IncenseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncenseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F48CE101B78777F00F889BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F48CE111B78777F00F889BC /* IncenseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IncenseTests.m; sourceTree = "<group>"; };
-		3F732C071B79C3E1009DE244 /* CLFSmokeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFSmokeView.h; sourceTree = "<group>"; };
-		3F732C081B79C3E1009DE244 /* CLFSmokeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFSmokeView.m; sourceTree = "<group>"; };
 		3F7F66521B7D91E20045C689 /* Fire.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Fire.gif; sourceTree = "<group>"; };
+		3F7F66541B7DF7EB0045C689 /* CLFEndButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFEndButton.h; sourceTree = "<group>"; };
+		3F7F66551B7DF7EB0045C689 /* CLFEndButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFEndButton.m; sourceTree = "<group>"; };
+		3F7F66571B7DFD390045C689 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		3F8A67321B79A1780073D552 /* CLFFire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFFire.h; sourceTree = "<group>"; };
 		3F8A67331B79A1780073D552 /* CLFFire.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFFire.m; sourceTree = "<group>"; };
 		3FCF3A521B7B9F2D00B9FFFF /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				3F48CDFA1B78777F00F889BC /* AppDelegate.m */,
 				3F48CDF61B78777F00F889BC /* Info.plist */,
 				3F48CDF71B78777F00F889BC /* main.m */,
+				3F7F66571B7DFD390045C689 /* LaunchScreen.xib */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -259,8 +262,8 @@
 				3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */,
 				3F8A67321B79A1780073D552 /* CLFFire.h */,
 				3F8A67331B79A1780073D552 /* CLFFire.m */,
-				3F732C071B79C3E1009DE244 /* CLFSmokeView.h */,
-				3F732C081B79C3E1009DE244 /* CLFSmokeView.m */,
+				3F7F66541B7DF7EB0045C689 /* CLFEndButton.h */,
+				3F7F66551B7DF7EB0045C689 /* CLFEndButton.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */,
 				3F1956C01B78B95A003A5575 /* Info.plist in Resources */,
 				3F48CE011B78777F00F889BC /* Main.storyboard in Resources */,
 				3F7F66531B7D91E20045C689 /* Fire.gif in Resources */,
@@ -404,10 +408,10 @@
 				3F1956C11B78B95A003A5575 /* MASCompositeConstraint.m in Sources */,
 				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
-				3F732C091B79C3E1009DE244 /* CLFSmokeView.m in Sources */,
 				3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */,
 				3F1956CD1B78B98F003A5575 /* CLFIncenseView.m in Sources */,
 				3F8A67341B79A1780073D552 /* CLFFire.m in Sources */,
+				3F7F66561B7DF7EB0045C689 /* CLFEndButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,7 +530,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = Incense/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -537,7 +540,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = Incense/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

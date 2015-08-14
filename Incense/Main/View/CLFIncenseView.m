@@ -7,7 +7,6 @@
 //
 
 #import "CLFIncenseView.h"
-#import "CLFSmokeView.h"
 #import "Masonry.h"
 #import "Waver.h"
 
@@ -177,17 +176,17 @@ static const CGFloat kIncenseStickHeight = 70.0f;
 }
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
-    incenseHeight -= 2 * 8 / 18.0f;
+    incenseHeight -= 135.0f / 180000;
     self.frame = (CGRect){self.frame.origin, {screenWidth, incenseHeight}};
     
-    waverHeight -= 2 * 8 / 18.0f;
+    waverHeight -= 135.0f / 180000;
     self.waver.frame = (CGRect) {{0, 0}, {screenWidth, waverHeight}};
     
-    smokeHeight -= 2 * 8 / 18.0f;
+    smokeHeight -= 135.0f / 180000;
     self.smokeView.frame = (CGRect){self.smokeView.frame.origin, {screenWidth, smokeHeight}};
 
     if (!self.isBlowing) {
-        headHeight -= 0.3 * 8 / 18.0f;
+        headHeight -= 60.0f / 180000;
         self.headDustView.frame = CGRectMake(0, 0, kIncenseWidth, headHeight);
     }
     

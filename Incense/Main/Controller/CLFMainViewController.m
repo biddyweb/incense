@@ -80,7 +80,9 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     self.gestureArea.backgroundColor = [UIColor clearColor];
     UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(fireFallDown)];
     swipe.direction = UISwipeGestureRecognizerDirectionDown;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fireFallDown)];
     [self.gestureArea addGestureRecognizer:swipe];
+    [self.gestureArea addGestureRecognizer:tap];
 }
 
 
@@ -333,8 +335,13 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
         
         UIButton *restartButton = [[UIButton alloc] init];
         [blurView addSubview:restartButton];
-        restartButton.frame = CGRectMake((screenWidth - 22) /2, (screenHeight - 314) / 2, 22, 110);
+        restartButton.frame = self.view.frame;
+        restartButton.imageView.bounds = CGRectMake(0, 0, 22, 110);
         restartButton.contentMode = UIViewContentModeTop;
+        [restartButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
+        [restartButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
+        [restartButton setImageEdgeInsets:UIEdgeInsetsMake(CGRectGetHeight(restartButton.frame) * 1.0 / 3, 0, 0, 0)];
+        
         restartButton.backgroundColor = [UIColor clearColor];
         [restartButton addTarget:self action:@selector(oneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
         [restartButton setImage:[UIImage imageNamed:@"時"] forState:UIControlStateNormal];
