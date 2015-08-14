@@ -9,7 +9,6 @@
 #import "CLFMainViewController.h"
 #import "CLFFire.h"
 #import "CLFIncenseView.h"
-#import "CLFSmokeView.h"
 #import "Masonry.h"
 #import <AVFoundation/AVFoundation.h>
 #import "BMWaveMaker.h"
@@ -18,7 +17,6 @@
 #import "UIImage+ImageEffects.h"
 
 @interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate>
-@property (nonatomic, weak)   CLFSmokeView    *smokeView;
 @property (nonatomic, weak)   CLFIncenseView  *incenseView;
 @property (nonatomic, weak)   UIImageView     *incenseShadowView;
 @property (nonatomic, weak)   CLFFire         *fire;
@@ -36,7 +34,8 @@
 static CGFloat screenWidth;
 static CGFloat screenHeight;
 
-static const CGFloat kVoiceFactor = 5.0f;
+static const CGFloat kWaverVoiceFactor = 10.0f;
+static const CGFloat kFireVoiceFactor = 40.0f;
 
 
 - (void)viewDidLoad {
@@ -45,10 +44,20 @@ static const CGFloat kVoiceFactor = 5.0f;
     screenWidth = [UIScreen mainScreen].bounds.size.width;
     screenHeight = [UIScreen mainScreen].bounds.size.height;
     
+    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+        // iOS 7
+        [self prefersStatusBarHidden];
+        [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+    }
+    
     [self makeIncense];
     [self makeFire];
-    [self makeSmoke];
     [self makeRipple];
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;//隐藏为YES，显示为NO
 }
 
 #pragma mark - LightTheIncense
@@ -58,7 +67,7 @@ static const CGFloat kVoiceFactor = 5.0f;
     __block AVAudioRecorder *weakRecorder = self.recorder;
     self.incenseView.waver.waverLevelCallback = ^(Waver *waver) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kVoiceFactor);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kWaverVoiceFactor);
         waver.level = normalizedValue;
     };
 
@@ -75,14 +84,12 @@ static const CGFloat kVoiceFactor = 5.0f;
     }];
 }
 
-#pragma mark - IncenseLighted
-
 - (void)timeFlow {
     __block AVAudioRecorder *weakRecorder = self.recorder;
     
     self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kVoiceFactor);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kFireVoiceFactor);
         incense.brightnessLevel = normalizedValue;
     };
 }
@@ -97,7 +104,7 @@ static const CGFloat kVoiceFactor = 5.0f;
     } completion:^(BOOL finished) {
         self.blurView.alpha = 0.0f;
         if (finished) {
-            [UIView animateWithDuration:1.0f animations:^{
+            [UIView animateWithDuration:0.5f animations:^{
                 self.blurView.alpha = 1.0f;
                 self.rippleView.alpha = 0.0f;
             } completion:^(BOOL finished) {
@@ -189,25 +196,6 @@ static const CGFloat kVoiceFactor = 5.0f;
 
 #pragma mark - Smoke
 
-- (UIView *)smokeView {
-    if (!_smokeView) {
-        CLFSmokeView *smokeView = [[CLFSmokeView alloc] init];
-        smokeView.backgroundColor = [UIColor clearColor];
-        smokeView.alpha = 0.0f;
-        [self.view addSubview:smokeView];
-        _smokeView = smokeView;
-    }
-    return _smokeView;
-}
-
-- (void)makeSmoke {
-    [self.smokeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view);
-        make.right.equalTo(self.view);
-        make.top.equalTo(self.view);
-        make.height.equalTo(@180);
-    }];
-}
 
 #pragma mark - Ripple
 
@@ -268,10 +256,9 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
     return image;
 }
 
-
 - (UIImageView *)blurView {
     if (!_blurView) {
-        UIImage *blurImage = [[self takeSnapshotOfView:self.view] applyBlurWithRadius:5 tintColor:[UIColor colorWithWhite:1.0f alpha:0.05f] saturationDeltaFactor:1.0 maskImage:nil];
+        UIImage *blurImage = [[self takeSnapshotOfView:self.view] applyBlurWithRadius:10 tintColor:[UIColor colorWithWhite:1.0f alpha:0.7f] saturationDeltaFactor:1.0 maskImage:nil];
         UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
         blurView.userInteractionEnabled = YES;
         blurView.frame = self.view.frame;
@@ -280,9 +267,9 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
         
         UIButton *restartButton = [[UIButton alloc] init];
         [blurView addSubview:restartButton];
-        restartButton.frame = CGRectMake((screenWidth - 44) /2, (screenHeight - 314) / 2, 44, 230);
+        restartButton.frame = CGRectMake((screenWidth - 22) /2, (screenHeight - 314) / 2, 22, 110);
         restartButton.contentMode = UIViewContentModeTop;
-        restartButton.backgroundColor = [UIColor greenColor];
+        restartButton.backgroundColor = [UIColor clearColor];
         [restartButton addTarget:self action:@selector(oneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
         [restartButton setImage:[UIImage imageNamed:@"時"] forState:UIControlStateNormal];
         
@@ -295,7 +282,6 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
     [self.blurView removeFromSuperview];
     [self makeIncense];
     [self makeFire];
-    [self makeSmoke];
     [self makeRipple];
 }
 

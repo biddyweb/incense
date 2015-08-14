@@ -7,16 +7,18 @@
 //
 
 #import "CLFIncenseView.h"
+#import "CLFSmokeView.h"
 #import "Masonry.h"
 #import "Waver.h"
 
 @interface CLFIncenseView ()
 
-@property (nonatomic, assign, getter=isAnimating) BOOL        animating;
-@property (nonatomic, weak)                       UIImageView *lightView;
-@property (nonatomic, weak)                       UIView      *incenseStick;
-@property (nonatomic, weak)                       UIView      *incenseBodyView;
-@property (nonatomic, weak)                       UIImageView *headDustView;
+@property (nonatomic, assign, getter=isAnimating) BOOL         animating;
+@property (nonatomic, weak)                       UIImageView  *lightView;
+@property (nonatomic, weak)                       UIView       *incenseStick;
+@property (nonatomic, weak)                       UIView       *incenseBodyView;
+@property (nonatomic, weak)                       UIImageView  *headDustView;
+@property (nonatomic, weak)                       CLFSmokeView *smokeView;
 
 @end
 
@@ -24,7 +26,10 @@
 
 static CGFloat headHeight;
 static CGFloat waverHeight;
+static CGFloat smokeHeight;
+static CGFloat incenseHeight;
 static CGFloat screenWidth;
+static CGFloat screenHeight;
 
 static const CGFloat kIncenseWidth = 5.0f;
 static const CGFloat kIncenseStickWidth = 2.0f;
@@ -113,12 +118,26 @@ static const CGFloat kIncenseStickHeight = 70.0f;
     return _incenseStick;
 }
 
+- (UIView *)smokeView {
+    if (!_smokeView) {
+        CLFSmokeView *smokeView = [[CLFSmokeView alloc] init];
+        smokeView.backgroundColor = [UIColor clearColor];
+        smokeView.alpha = 0.0f;
+        [self addSubview:smokeView];
+        [self bringSubviewToFront:smokeView];
+        _smokeView = smokeView;
+    }
+    return _smokeView;
+}
+
 - (void)layoutSubviews {
     self.headDustView.frame = CGRectMake(0, 3, 5, headHeight);
     
     self.incenseStick.backgroundColor = [UIColor blackColor];
     
     self.waver.frame = CGRectMake(0, 0, screenWidth, waverHeight);
+    
+    self.smokeView.frame = CGRectMake(0, - screenHeight + 480, screenWidth, smokeHeight);
     
     [self.lightView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.headDustView);
@@ -134,8 +153,6 @@ static const CGFloat kIncenseStickHeight = 70.0f;
     _displaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(invokeBrightnessCallback)];
     _displaylink.frameInterval = 8;
     [_displaylink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-    
-    self.animating = NO;
 }
 
 - (void)invokeBrightnessCallback {
@@ -143,14 +160,13 @@ static const CGFloat kIncenseStickHeight = 70.0f;
 }
 
 - (void)setBrightnessLevel:(CGFloat)brightnessLevel {
-    if (self.isAnimating == NO && brightnessLevel >= 0.02f) {
-        self.animating = YES;
+    if (brightnessLevel >= 0.02f) {
         self.headDustView.alpha = 1.0f;
-        [UIView animateWithDuration:1.0f animations:^{
+        [UIView animateWithDuration:0.1f animations:^{
             self.headDustView.alpha = 0.5f;
             self.lightView.alpha = 1.0f;
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:1.0f animations:^{
+            [UIView animateWithDuration:0.1f animations:^{
                 self.headDustView.alpha = 0.0f;
                 self.lightView.alpha = 0.0f;
             } completion:^(BOOL finished) {
@@ -163,28 +179,31 @@ static const CGFloat kIncenseStickHeight = 70.0f;
 }
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
-    CGFloat newHeight = CGRectGetHeight(self.frame) - 2;
-    self.frame = (CGRect){self.frame.origin, {CGRectGetWidth(self.frame), newHeight}};
+    incenseHeight -= 2 / 180.0f;
+    self.frame = (CGRect){self.frame.origin, {screenWidth, incenseHeight}};
     
-    waverHeight -= 2;
-    self.waver.frame = (CGRect) {self.waver.frame.origin, {CGRectGetWidth(self.waver.frame), waverHeight}};
+    waverHeight -= 2 / 180.0f;
+    self.waver.frame = (CGRect) {{0, 0}, {screenWidth, waverHeight}};
 
     if (!self.isAnimating) {
-        headHeight -= 0.3;
+        headHeight -= 0.3 / 90.0f;
         if (!self.headDustView.alpha) {
             self.headDustView.alpha = 1.0f;
         }
         self.headDustView.frame = CGRectMake(0, 0, kIncenseWidth, headHeight);
     }
     
-    if (newHeight <= 65) {
+    if (incenseHeight <= 65.0f) {
         [self.delegate incenseDidBurnOff];
     }
 }
 
 - (void)initialSetup {
     headHeight = 0.0f;
+    smokeHeight = -180.0f;
+    incenseHeight = 200.0f;
     screenWidth = [UIScreen mainScreen].bounds.size.width;
+    screenHeight = [UIScreen mainScreen].bounds.size.height;
     waverHeight = - [UIScreen mainScreen].bounds.size.height;
 }
 
