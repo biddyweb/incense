@@ -20,6 +20,8 @@
 		3F1956C91B78B95A003A5575 /* View+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956BC1B78B95A003A5575 /* View+MASAdditions.m */; };
 		3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956BF1B78B95A003A5575 /* ViewController+MASAdditions.m */; };
 		3F1956CD1B78B98F003A5575 /* CLFIncenseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */; };
+		3F24D96E1B804CDC00882918 /* CLFCATransform3D.c in Sources */ = {isa = PBXBuildFile; fileRef = 3F24D96C1B804CDC00882918 /* CLFCATransform3D.c */; };
+		3F24D9701B80591700882918 /* 弯.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F24D96F1B80591700882918 /* 弯.gif */; };
 		3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F3AA2B41B7B0BFD00DD9E84 /* BMWaveLayer.m */; };
 		3F3AA2B81B7B0BFD00DD9E84 /* BMWaveMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F3AA2B61B7B0BFD00DD9E84 /* BMWaveMaker.m */; };
 		3F48CDF81B78777F00F889BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CDF71B78777F00F889BC /* main.m */; };
@@ -77,6 +79,9 @@
 		3F1956BF1B78B95A003A5575 /* ViewController+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+MASAdditions.m"; sourceTree = "<group>"; };
 		3F1956CB1B78B98F003A5575 /* CLFIncenseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFIncenseView.h; sourceTree = "<group>"; };
 		3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFIncenseView.m; sourceTree = "<group>"; };
+		3F24D96C1B804CDC00882918 /* CLFCATransform3D.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLFCATransform3D.c; sourceTree = "<group>"; };
+		3F24D96D1B804CDC00882918 /* CLFCATransform3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFCATransform3D.h; sourceTree = "<group>"; };
+		3F24D96F1B80591700882918 /* 弯.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "弯.gif"; sourceTree = "<group>"; };
 		3F3AA2B31B7B0BFD00DD9E84 /* BMWaveLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMWaveLayer.h; sourceTree = "<group>"; };
 		3F3AA2B41B7B0BFD00DD9E84 /* BMWaveLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMWaveLayer.m; sourceTree = "<group>"; };
 		3F3AA2B51B7B0BFD00DD9E84 /* BMWaveMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMWaveMaker.h; sourceTree = "<group>"; };
@@ -218,6 +223,9 @@
 		3F48CDF51B78777F00F889BC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3F24D96C1B804CDC00882918 /* CLFCATransform3D.c */,
+				3F24D96D1B804CDC00882918 /* CLFCATransform3D.h */,
+				3F24D96F1B80591700882918 /* 弯.gif */,
 				3F7F66521B7D91E20045C689 /* Fire.gif */,
 				3F48CE021B78777F00F889BC /* Images.xcassets */,
 				3F48CDF91B78777F00F889BC /* AppDelegate.h */,
@@ -369,6 +377,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F24D9701B80591700882918 /* 弯.gif in Resources */,
 				3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */,
 				3F1956C01B78B95A003A5575 /* Info.plist in Resources */,
 				3F48CE011B78777F00F889BC /* Main.storyboard in Resources */,
@@ -404,6 +413,7 @@
 				3F1956C51B78B95A003A5575 /* MASViewAttribute.m in Sources */,
 				3F1956C91B78B95A003A5575 /* View+MASAdditions.m in Sources */,
 				3F48CDF81B78777F00F889BC /* main.m in Sources */,
+				3F24D96E1B804CDC00882918 /* CLFCATransform3D.c in Sources */,
 				3F1956A41B789BE7003A5575 /* Waver.m in Sources */,
 				3F1956C11B78B95A003A5575 /* MASCompositeConstraint.m in Sources */,
 				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,

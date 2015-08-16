@@ -14,6 +14,7 @@
 #import "BMWaveMaker.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Waver.h"
+#import "CLFCATransform3D.h"
 #import "UIImage+ImageEffects.h"
 
 @interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate, UICollisionBehaviorDelegate>
@@ -94,7 +95,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)fireFallDown {
-//    self.fire.dragEnable = NO;
+    self.fire.dragEnable = NO;
     self.gestureArea.userInteractionEnabled = NO;
     UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[self.fire]];
     gravity.magnitude = 0.5;
@@ -141,7 +142,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         waver.level = normalizedValue;
     };
 
-    self.fire.dragEnable = NO;
     [UIView animateWithDuration:3.0 animations:^{
         self.fire.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 1.0f;
@@ -283,7 +283,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
     self.rippleMaker.animationView = self.rippleView;
     [self.rippleMaker spanWaveContinuallyWithTimeInterval:2.0f];
-        CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
+    CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
     self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);
 }
 
@@ -297,18 +297,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         _rippleMaker.wavePathWidth = 1.5f;
     }
     return _rippleMaker;
-}
-
-CATransform3D CATransform3DMakePerspective(CGPoint center, float disZ) {
-    CATransform3D transToCenter = CATransform3DMakeTranslation(-center.x, -center.y, 0);
-    CATransform3D transBack = CATransform3DMakeTranslation(center.x, center.y, 0);
-    CATransform3D scale = CATransform3DIdentity;
-    scale.m34 = -1.0f / disZ;
-    return CATransform3DConcat(CATransform3DConcat(transToCenter, scale), transBack);
-}
-
-CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ) {
-    return CATransform3DConcat(t, CATransform3DMakePerspective(center, disZ));
 }
 
 #pragma mark - Restart
@@ -353,6 +341,8 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 
 - (void)oneMoreIncense {
     [self.blurView removeFromSuperview];
+    [self.incenseView removeFromSuperview];
+    self.incenseView = nil;
     [self makeGestureArea];
     [self makeIncense];
     [self makeFire];
