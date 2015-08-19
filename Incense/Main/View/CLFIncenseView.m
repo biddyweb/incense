@@ -192,16 +192,17 @@ static const CGFloat kSeconds = 60.0f;
     return _incenseStick;
 }
 
-- (UIImageView *)smokeView {
-    if (!_smokeView) {
-        UIImageView *smokeView = [[UIImageView alloc] init];
-        smokeView.image = [UIImage imageNamed:@"天"];
-        [self addSubview:smokeView];
-        [self bringSubviewToFront:smokeView];
-        _smokeView = smokeView;
-    }
-    return _smokeView;
-}
+//- (UIImageView *)smokeView {
+//    if (!_smokeView) {
+//        UIImageView *smokeView = [[UIImageView alloc] init];
+//        smokeView.image = [UIImage imageNamed:@"云"];
+////        smokeView.backgroundColor = [UIColor blackColor];
+//        [self addSubview:smokeView];
+//        [self bringSubviewToFront:smokeView];
+//        _smokeView = smokeView;
+//    }
+//    return _smokeView;
+//}
 
 - (void)layoutSubviews {
     self.headDustView.frame = CGRectMake(0, -headDustHeight + 2, 69, headDustHeight);
@@ -210,8 +211,7 @@ static const CGFloat kSeconds = 60.0f;
     
     self.waver.frame = CGRectMake(0, -30, screenWidth, waverHeight);
     
-    self.smokeView.frame = CGRectMake(0, - (screenHeight - (incenseHeight + incenseLocation)) - smokeHeight - 10, screenWidth, smokeHeight);
-    NSLog(@"%@", NSStringFromCGRect(self.smokeView.frame));
+//    self.smokeView.frame = CGRectMake(0, - (screenHeight - (incenseHeight + incenseLocation)) - smokeHeight - 10, screenWidth, smokeHeight);
 }
 
 - (void)setBrightnessCallback:(void (^)(CLFIncenseView *))brightnessCallback {
@@ -401,7 +401,7 @@ CGFloat integral(CGFloat(*f)(CGFloat x), CGFloat low, CGFloat high, NSInteger n)
 
 - (void)initialSetup {
     headDustHeight = 73.0f * sizeRatio;
-    smokeHeight = -118.0f * sizeRatio;
+    smokeHeight = - 118.0f * sizeRatio;
     incenseHeight = 200.0f * sizeRatio;
     x = 2.5f;
     y = 0.0f;

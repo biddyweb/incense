@@ -52,7 +52,6 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 static CGFloat screenWidth;
 static CGFloat screenHeight;
 static CGFloat sizeRatio;
-static CGFloat rippleLocation;
 static CGFloat incenseLocation;
 
 static const CGFloat kWaverVoiceFactor = 10.0f;
@@ -93,7 +92,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (UIView *)gestureArea {
     if (!_gestureArea) {
         UIView *gestureArea = [[UIView alloc] init];
-        gestureArea.frame = CGRectMake(0, 0, screenWidth, 180);
+        gestureArea.frame = CGRectMake(0, 0, screenWidth, 118);
         [self.view addSubview:gestureArea];
         _gestureArea = gestureArea;
     }
@@ -162,7 +161,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     __block AVAudioRecorder *weakRecorder = self.recorder;
     self.incenseView.waver.waverLevelCallback = ^(Waver *waver) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kFireVoiceFactor);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kWaverVoiceFactor);
         waver.level = normalizedValue;
     };
     
@@ -301,7 +300,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     CGFloat fireH = 40;
     self.fire.alpha = 1.0f;
     self.fire.dragEnable = YES;
-    self.fire.frame = CGRectMake((screenWidth - fireW) / 2, 80, fireW, fireH);
+    self.fire.frame = CGRectMake((screenWidth - fireW) / 2, 65, fireW, fireH);
     
 }
 

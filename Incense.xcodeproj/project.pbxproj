@@ -28,8 +28,8 @@
 		3F48CE011B78777F00F889BC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CDFF1B78777F00F889BC /* Main.storyboard */; };
 		3F48CE031B78777F00F889BC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CE021B78777F00F889BC /* Images.xcassets */; };
 		3F48CE121B78777F00F889BC /* IncenseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CE111B78777F00F889BC /* IncenseTests.m */; };
+		3F69D23B1B84673B00DD6B03 /* UIImage+CLF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F69D23A1B84673B00DD6B03 /* UIImage+CLF.m */; };
 		3F7F66531B7D91E20045C689 /* Fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66521B7D91E20045C689 /* Fire.gif */; };
-		3F7F66561B7DF7EB0045C689 /* CLFEndButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7F66551B7DF7EB0045C689 /* CLFEndButton.m */; };
 		3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66571B7DFD390045C689 /* LaunchScreen.xib */; };
 		3F8A67341B79A1780073D552 /* CLFFire.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8A67331B79A1780073D552 /* CLFFire.m */; };
 		3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */; };
@@ -93,9 +93,9 @@
 		3F48CE0B1B78777F00F889BC /* IncenseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncenseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F48CE101B78777F00F889BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F48CE111B78777F00F889BC /* IncenseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IncenseTests.m; sourceTree = "<group>"; };
+		3F69D2391B84673B00DD6B03 /* UIImage+CLF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+CLF.h"; sourceTree = "<group>"; };
+		3F69D23A1B84673B00DD6B03 /* UIImage+CLF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CLF.m"; sourceTree = "<group>"; };
 		3F7F66521B7D91E20045C689 /* Fire.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Fire.gif; sourceTree = "<group>"; };
-		3F7F66541B7DF7EB0045C689 /* CLFEndButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFEndButton.h; sourceTree = "<group>"; };
-		3F7F66551B7DF7EB0045C689 /* CLFEndButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFEndButton.m; sourceTree = "<group>"; };
 		3F7F66571B7DFD390045C689 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		3F8A67321B79A1780073D552 /* CLFFire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFFire.h; sourceTree = "<group>"; };
 		3F8A67331B79A1780073D552 /* CLFFire.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFFire.m; sourceTree = "<group>"; };
@@ -262,8 +262,8 @@
 				3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */,
 				3F8A67321B79A1780073D552 /* CLFFire.h */,
 				3F8A67331B79A1780073D552 /* CLFFire.m */,
-				3F7F66541B7DF7EB0045C689 /* CLFEndButton.h */,
-				3F7F66551B7DF7EB0045C689 /* CLFEndButton.m */,
+				3F69D2391B84673B00DD6B03 /* UIImage+CLF.h */,
+				3F69D23A1B84673B00DD6B03 /* UIImage+CLF.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -391,6 +391,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F69D23B1B84673B00DD6B03 /* UIImage+CLF.m in Sources */,
 				3F1956C31B78B95A003A5575 /* MASConstraintMaker.m in Sources */,
 				3F48CDFE1B78777F00F889BC /* CLFMainViewController.m in Sources */,
 				3FF47E411B7CBFDE00AD81C8 /* UIImage+ImageEffects.m in Sources */,
@@ -411,7 +412,6 @@
 				3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */,
 				3F1956CD1B78B98F003A5575 /* CLFIncenseView.m in Sources */,
 				3F8A67341B79A1780073D552 /* CLFFire.m in Sources */,
-				3F7F66561B7DF7EB0045C689 /* CLFEndButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
