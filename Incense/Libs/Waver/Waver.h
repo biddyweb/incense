@@ -39,4 +39,7 @@
 
 @property (nonatomic) CADisplayLink *displaylink;;
 
+- (void)makeWaveLines;
+
+
 @end

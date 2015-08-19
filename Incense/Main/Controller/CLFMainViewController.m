@@ -14,11 +14,10 @@
 #import "BMWaveMaker.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Waver.h"
-#import "CLFCATransform3D.h"
 #import "UIImage+ImageEffects.h"
 
 @interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate, UICollisionBehaviorDelegate>
-@property (nonatomic, weak)   CLFIncenseView        *incenseView;
+
 @property (nonatomic, weak)   UIImageView           *incenseShadowView;
 @property (nonatomic, weak)   CLFFire               *fire;
 
@@ -35,25 +34,50 @@
 
 @end
 
+CATransform3D CATransform3DMakePerspective(CGPoint center, float disZ) {
+    CATransform3D transToCenter = CATransform3DMakeTranslation(-center.x, -center.y, 0);
+    CATransform3D transBack = CATransform3DMakeTranslation(center.x, center.y, 0);
+    CATransform3D scale = CATransform3DIdentity;
+    scale.m34 = -1.0f / disZ;
+    return CATransform3DConcat(CATransform3DConcat(transToCenter, scale), transBack);
+}
+
+CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ) {
+    return CATransform3DConcat(t, CATransform3DMakePerspective(center, disZ));
+}
+
+
 @implementation CLFMainViewController
 
 static CGFloat screenWidth;
 static CGFloat screenHeight;
+static CGFloat sizeRatio;
+static CGFloat rippleLocation;
+static CGFloat incenseLocation;
 
 static const CGFloat kWaverVoiceFactor = 10.0f;
 static const CGFloat kFireVoiceFactor = 40.0f;
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.burning = NO;
+        if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+            [self prefersStatusBarHidden];
+            [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+        }
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     screenWidth = [UIScreen mainScreen].bounds.size.width;
     screenHeight = [UIScreen mainScreen].bounds.size.height;
-    
-    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
-        [self prefersStatusBarHidden];
-        [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
-    }
+    sizeRatio = screenHeight / 667.0f;
+    incenseLocation = (screenHeight - 200 * sizeRatio) * 0.5;
     
     [self makeGestureArea];
     [self makeIncense];
@@ -86,7 +110,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self.gestureArea addGestureRecognizer:tap];
 }
 
-
 - (UIDynamicAnimator *)animator {
     if (!_animator) {
         _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
@@ -103,7 +126,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     UICollisionBehavior *collision = [[UICollisionBehavior alloc] initWithItems:@[self.fire]];
     collision.translatesReferenceBoundsIntoBoundary = YES;
     
-    UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, screenWidth, screenHeight - 285)];
+    UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, screenWidth, screenHeight - (incenseLocation + 200 * sizeRatio - 15))];
     [collision addBoundaryWithIdentifier:@"barrier" forPath:path];
     collision.collisionMode = UICollisionBehaviorModeBoundaries;
     collision.collisionDelegate = self;
@@ -128,6 +151,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 #pragma mark - LightTheIncense
 
 - (void)lightTheIncense {
+    self.burning = YES;
     self.itemBehavior.resistance = 0;
     [self.animator removeAllBehaviors];
     [self.itemBehavior removeItem:self.fire];
@@ -138,16 +162,18 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     __block AVAudioRecorder *weakRecorder = self.recorder;
     self.incenseView.waver.waverLevelCallback = ^(Waver *waver) {
         [weakRecorder updateMeters];
-        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kWaverVoiceFactor);
+        CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kFireVoiceFactor);
         waver.level = normalizedValue;
     };
-
+    
+    self.fire.alpha = 1.0f;
     [UIView animateWithDuration:3.0 animations:^{
         self.fire.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 1.0f;
         self.incenseView.waver.alpha = 1.0f;
     } completion:^(BOOL finished) {
         if (finished) {
+            NSLog(@"kkk");
             [self.fire removeFromSuperview];
             [self timeFlow];
         }
@@ -155,16 +181,22 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)timeFlow {
+    NSLog(@"start %@", [NSDate date]);
     __block AVAudioRecorder *weakRecorder = self.recorder;
+    
+//    [self.incenseView.waver makeWaveLines];
     
     self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
         [weakRecorder updateMeters];
         CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kFireVoiceFactor);
         incense.brightnessLevel = normalizedValue;
+//        incense.waver.level = normalizedValue;
     };
 }
 
 - (void)incenseDidBurnOff {
+    NSLog(@"End %@", [NSDate date]);
+    self.burning = NO;
     [self.rippleMaker stopWave];
 
     [UIView animateWithDuration:2.0f animations:^{
@@ -176,13 +208,21 @@ static const CGFloat kFireVoiceFactor = 40.0f;
             [UIView animateWithDuration:0.5f animations:^{
                 self.blurView.alpha = 1.0f;
                 self.rippleView.alpha = 0.0f;
-            } completion:^(BOOL finished) {
-
             }];
         
     }];
+    [self.recorder stop];
     [self.incenseView.waver.displaylink invalidate];
     [self.incenseView.displaylink invalidate];
+}
+
+- (void)incenseDidBurnOffForALongTime {
+    [self.rippleMaker stopWaveImmediately:YES];
+    [self.recorder stop];
+    self.blurView.alpha = 1.0f;
+    [self.incenseView.waver.displaylink invalidate];
+    [self.incenseView.displaylink invalidate];
+
 }
 
 #pragma mark - Incense
@@ -211,20 +251,20 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)makeIncense {
     [self.incenseView initialSetup];
 
-    self.incenseView.frame = CGRectMake(0, screenHeight - 300, screenWidth, 200);
+    self.incenseView.frame = CGRectMake(0, screenHeight - incenseLocation - 200, screenWidth, 200 * sizeRatio);
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
     
-    self.incenseShadowView.frame = CGRectMake((screenWidth - 6) / 2, screenHeight - 90, 6, 3);
+    self.incenseShadowView.frame = CGRectMake((screenWidth - 6) / 2, screenHeight - incenseLocation + 10, 6, 3);
     
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
     anim.repeatCount = 1500;
-    anim.values = @[@(screenHeight - 95), @(screenHeight - 100), @(screenHeight - 95)];
+    anim.values = @[@(screenHeight - incenseLocation), @(screenHeight - incenseLocation + 5), @(screenHeight - incenseLocation)];
     anim.duration = 4.0f;
     anim.removedOnCompletion = NO;
     anim.fillMode = kCAFillModeForwards;
-    self.incenseView.layer.position = CGPointMake(0, screenHeight - 100);
+    self.incenseView.layer.position = CGPointMake(0, screenHeight - incenseLocation);
     self.incenseView.layer.anchorPoint = CGPointMake(0, 1);
     [self.incenseView.layer addAnimation:anim forKey:nil];
     
@@ -234,11 +274,11 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     CAKeyframeAnimation *shadowAnim = [CAKeyframeAnimation animation];
     shadowAnim.keyPath = @"bounds";
     shadowAnim.repeatCount = 1500;
-    shadowAnim.values = @[bounds1, bounds2, bounds1];
+    shadowAnim.values = @[bounds2, bounds1, bounds2];
     shadowAnim.duration = 4.0f;
     shadowAnim.removedOnCompletion = NO;
     shadowAnim.fillMode = kCAFillModeForwards;
-    self.incenseShadowView.layer.position = CGPointMake(screenWidth / 2, screenHeight - 90);
+    self.incenseShadowView.layer.position = CGPointMake(screenWidth / 2, screenHeight - incenseLocation + 10);
     self.incenseShadowView.layer.anchorPoint = CGPointMake(0.5, 0.5);
     [self.incenseShadowView.layer addAnimation:shadowAnim forKey:nil];
 }
@@ -270,7 +310,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (UIView *)rippleView {
     if (!_rippleView) {
         UIView *rippleView = [[UIView alloc] init];
-        rippleView.frame = CGRectMake(0, screenHeight - 180, screenWidth, 180);
+        rippleView.frame = CGRectMake(0, screenHeight - incenseLocation - 80, screenWidth, 180);
         rippleView.backgroundColor = [UIColor clearColor];
         [self.view addSubview:rippleView];
         _rippleView = rippleView;
@@ -282,7 +322,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     self.rippleView.alpha = 1.0f;
 
     self.rippleMaker.animationView = self.rippleView;
-    [self.rippleMaker spanWaveContinuallyWithTimeInterval:2.0f];
+    [self.rippleMaker spanWaveContinuallyWithTimeInterval:4.0f];
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
     self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);
 }
@@ -293,7 +333,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         _rippleMaker.spanScale = 100.0f;
         _rippleMaker.originRadius = 0.9f;
         _rippleMaker.waveColor = [UIColor whiteColor];
-        _rippleMaker.animationDuration = 10.0f;
+        _rippleMaker.animationDuration = 20.0f;
         _rippleMaker.wavePathWidth = 1.5f;
     }
     return _rippleMaker;
@@ -314,8 +354,10 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (UIImageView *)blurView {
     if (!_blurView) {
-        UIImage *blurImage = [[self takeSnapshotOfView:self.view] applyBlurWithRadius:10 tintColor:[UIColor colorWithWhite:1.0f alpha:0.7f] saturationDeltaFactor:1.0 maskImage:nil];
-        UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
+//        UIImage *blurImage = [[self takeSnapshotOfView:self.view] applyBlurWithRadius:10 tintColor:[UIColor colorWithWhite:1.0f alpha:0.7f] saturationDeltaFactor:1.0 maskImage:nil];
+//        UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
+        UIImageView *blurView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"境"]];
+        
         blurView.userInteractionEnabled = YES;
         blurView.frame = self.view.frame;
         

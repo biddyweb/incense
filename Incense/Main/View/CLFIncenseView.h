@@ -28,5 +28,7 @@
 @property (nonatomic, weak)   id<CLFIncenseViewDelegate> delegate;
 
 - (void)initialSetup;
+- (CGFloat)timeHaveGone;
+- (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval;
 
 @end

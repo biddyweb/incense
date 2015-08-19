@@ -19,7 +19,9 @@
 @implementation CLFFire
 
 static CGPoint beginPoint;
-static CGFloat kScreenH;
+static CGFloat screenHeight;
+static CGFloat sizeRatio;
+static const CGFloat kIncenseLocation = 200.0f;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -27,6 +29,8 @@ static CGFloat kScreenH;
         self.userInteractionEnabled = YES;
         NSURL *url = [[NSBundle mainBundle] URLForResource:@"Fire" withExtension:@"gif"];
         self.fireImage.image = [UIImage animatedImageWithAnimatedGIFURL:url];
+        screenHeight = [UIScreen mainScreen].bounds.size.height;
+        sizeRatio = screenHeight / 667.0f;
     }
     return self;
 }
@@ -51,7 +55,7 @@ static CGFloat kScreenH;
     }
     UITouch *touch = [touches anyObject];
     beginPoint = [touch locationInView:self];
-    kScreenH = [UIScreen mainScreen].bounds.size.height;
+
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -65,9 +69,11 @@ static CGFloat kScreenH;
     
     CGFloat offsetY = currentPoint.y - beginPoint.y;
     
+    CGFloat floorY = screenHeight - 200 * sizeRatio - kIncenseLocation - 5;
+    
     CGFloat newCenterY;
-    if (self.center.y + offsetY > kScreenH - 305) {
-        newCenterY = kScreenH - 305;
+    if (self.center.y + offsetY > floorY) {
+        newCenterY = floorY;
     } else if (self.center.y + offsetY < 40) {
         newCenterY = 40;
     } else {
@@ -78,8 +84,9 @@ static CGFloat kScreenH;
     
     self.center = CGPointMake(newCenterX, newCenterY);
     
-    if ( (newCenterX > [UIScreen mainScreen].bounds.size.width / 2 - 5 && newCenterX < [UIScreen mainScreen].bounds.size.width / 2 + 5) && newCenterY == kScreenH - 305) {
+    if ( (newCenterX > [UIScreen mainScreen].bounds.size.width / 2 - 5 && newCenterX < [UIScreen mainScreen].bounds.size.width / 2 + 5) && newCenterY == floorY) {
         [self.delegate lightTheIncense];
+        self.dragEnable = NO;
     }
 }
 

@@ -38,7 +38,7 @@
     self.amplitude = 1.0f;
     self.idleAmplitude = 0.04f;
     
-    self.numberOfWaves = 20;
+    self.numberOfWaves = 15;
     self.phaseShift = -0.25f;
     self.density = 1.0f;
     
@@ -61,10 +61,10 @@
     
     for (int i = 0; i < self.numberOfWaves; i++) {
         CAShapeLayer *waveline = [CAShapeLayer layer];
-        waveline.lineCap       = kCALineCapButt;
+        waveline.lineCap       = kCALineCapRound;
         waveline.lineJoin      = kCALineJoinRound;
         waveline.strokeColor   = [[UIColor clearColor] CGColor];
-        waveline.fillColor     = [[UIColor clearColor] CGColor];
+        waveline.fillColor     = [[UIColor clearColor] CGColor]; // 把 fillColor 变为 WhiteColor, 把 waveLines 改为两条, 但效果似乎不太好
         [waveline setLineWidth:(i == 0 ? self.mainWaveWidth : self.decorativeWavesWidth)];
         
         CGFloat progress = 1.0f - (CGFloat)i / self.numberOfWaves; // ??
@@ -100,6 +100,51 @@
         [self.gradientLayers addObject:gradientLayer];
         [self.waves addObject:waveline];
     }
+}
+
+- (void)makeWaveLines {
+    for (int i = 0; i < self.numberOfWaves; i++) {
+        CAShapeLayer *waveline = [CAShapeLayer layer];
+        waveline.lineCap       = kCALineCapRound;
+        waveline.lineJoin      = kCALineJoinRound;
+        waveline.strokeColor   = [[UIColor clearColor] CGColor];
+        waveline.fillColor     = [[UIColor clearColor] CGColor]; // 把 fillColor 变为 WhiteColor, 把 waveLines 改为两条, 但效果似乎不太好
+        [waveline setLineWidth:(i == 0 ? self.mainWaveWidth : self.decorativeWavesWidth)];
+        
+        CGFloat progress = 1.0f - (CGFloat)i / self.numberOfWaves; // ??
+        CGFloat multiplier = MIN(1.0, (progress / 3.0f * 2.0f) + (1.0f / 3.0f)); // ??
+        
+        UIColor *color = [self.waveColor colorWithAlphaComponent:(1.0 * multiplier * 0.4)];
+        waveline.strokeColor = color.CGColor;
+        [self.layer addSublayer:waveline];
+        
+        CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+        gradientLayer.startPoint = CGPointMake(0.0, 0.0);
+        gradientLayer.endPoint = CGPointMake(0.0, 1.0);
+        
+        gradientLayer.frame = CGRectMake(0, 0, 375, [UIScreen mainScreen].bounds.size.height - 300);
+        
+        NSMutableArray *colors = [NSMutableArray array];
+        
+        [colors addObject:(id)[UIColor colorWithRed:245/255.0 green:245/255.0 blue:245/255.0 alpha:0.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.4f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.7f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.8f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:245/255.0 green:245/255.0 blue:245/255.0 alpha:0.4f].CGColor];
+        
+        gradientLayer.colors = colors;
+        
+        gradientLayer.position = CGPointMake(0, 0);
+        gradientLayer.anchorPoint = CGPointMake(0, 0);
+        
+        [gradientLayer setMask:waveline];
+        [self.layer addSublayer:gradientLayer];
+        
+        [self.gradientLayers addObject:gradientLayer];
+        [self.waves addObject:waveline];
+    }
+
 }
 
 -(void)invokeWaveCallback {

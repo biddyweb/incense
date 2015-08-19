@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class CLFIncenseView;
 @interface CLFMainViewController : UIViewController
+
+@property (nonatomic, weak) CLFIncenseView *incenseView;
+@property (nonatomic, assign, getter=isBurning) BOOL burning;
+
+- (void)incenseDidBurnOffForALongTime;
 
 @end
 

@@ -9,7 +9,7 @@
 #import "CLFIncenseView.h"
 #import "Masonry.h"
 #import "Waver.h"
-#import "CLFCATransform3D.h"
+#import <math.h>
 
 @interface CLFIncenseView ()
 
@@ -28,16 +28,21 @@
 
 @implementation CLFIncenseView
 
-static CGFloat headHeight;
+static CGFloat headDustHeight;
 static CGFloat waverHeight;
 static CGFloat smokeHeight;
 static CGFloat incenseHeight;
 static CGFloat screenWidth;
 static CGFloat screenHeight;
+static CGFloat timeHaveGone;
+static CGFloat sizeRatio;
+static CGFloat incenseBurnOffLength;
+static CGFloat incenseStickHeight;
+static CGFloat incenseLocation;
 
 static const CGFloat kIncenseWidth = 5.0f;
 static const CGFloat kIncenseStickWidth = 2.0f;
-static const CGFloat kIncenseStickHeight = 70.0f;
+static const CGFloat kSeconds = 60.0f;
 
 - (instancetype)init
 {
@@ -45,7 +50,11 @@ static const CGFloat kIncenseStickHeight = 70.0f;
     if (self) {
         screenWidth = [UIScreen mainScreen].bounds.size.width;
         screenHeight = [UIScreen mainScreen].bounds.size.height;
-        waverHeight = - [UIScreen mainScreen].bounds.size.height;
+        waverHeight = -[UIScreen mainScreen].bounds.size.height;
+        sizeRatio = screenHeight / 667.0f;
+        incenseBurnOffLength = 64.0f * sizeRatio;
+        incenseStickHeight = 70.0f * sizeRatio;
+        incenseLocation = (screenHeight - 200 * sizeRatio) * 0.5;
     }
     return self;
 }
@@ -69,7 +78,7 @@ static const CGFloat kIncenseStickHeight = 70.0f;
         [self.headDustView addSubview:lightView];
         [lightView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self.headDustView.mas_left).offset(2);
-            make.top.equalTo(self.headDustView.mas_bottom).offset(-14);
+            make.top.equalTo(self.headDustView.mas_bottom).offset(-9);
             make.width.equalTo(@22);
             make.height.equalTo(@22);
         }];
@@ -88,7 +97,7 @@ static const CGFloat kIncenseStickHeight = 70.0f;
             make.width.equalTo(@(kIncenseWidth));
             make.centerX.equalTo(self);
             make.top.equalTo(self);
-            make.height.equalTo(self).offset(-50);
+            make.height.equalTo(self).offset(-40 * sizeRatio);
         }];
 
         _incenseBodyView = incenseBodyView;
@@ -117,13 +126,11 @@ static const CGFloat kIncenseStickHeight = 70.0f;
         UIView *headDustView = [[UIView alloc] init];
         headDustView.backgroundColor = [UIColor clearColor];
         [self.incenseBodyView insertSubview:headDustView aboveSubview:self.waver];
-//        [self.incenseBodyView addSubview:headDustView];
         _headDustView = headDustView;
     }
     return _headDustView;
 }
 
-#warning mark 待修改
 - (CAShapeLayer *)dustLine {
     if (!_dustLine) {
         CAShapeLayer *dustLine = [CAShapeLayer layer];
@@ -135,18 +142,19 @@ static const CGFloat kIncenseStickHeight = 70.0f;
         [self.headDustView.layer addSublayer:dustLine];
         
         CAGradientLayer *dustGradient = [CAGradientLayer layer];
-        dustGradient.startPoint = CGPointMake(0.0, 0.0);
-        dustGradient.endPoint = CGPointMake(0.0, 1.0);
+        dustGradient.startPoint = CGPointMake(0.0f, 0.0f);
+        dustGradient.endPoint = CGPointMake(0.0f, 1.0f);
         dustGradient.frame = self.headDustView.frame;
         
         NSMutableArray *colors = [NSMutableArray array];
-        [colors addObject:(id)[UIColor colorWithRed:155/255.0 green:155/255.0 blue:155/255.0 alpha:1.0f].CGColor];
+        
+        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
         [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor];
-        [colors addObject:(id)[UIColor colorWithRed:155/255.0 green:155/255.0 blue:155/255.0 alpha:1.0f].CGColor];
+
         
         dustGradient.colors = colors;
-        
-        dustGradient.locations = @[@0.05,@0.95, @1.0];
+        dustGradient.locations = @[@0.0f, @0.9f, @1.0f];
         
         dustGradient.position = CGPointMake(0, 0);
         dustGradient.anchorPoint = CGPointMake(0, 0);
@@ -176,7 +184,7 @@ static const CGFloat kIncenseStickHeight = 70.0f;
         [incenseStick mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self);
             make.centerX.equalTo(self);
-            make.height.equalTo(@(kIncenseStickHeight));
+            make.height.equalTo(@(incenseStickHeight));
             make.width.equalTo(@(kIncenseStickWidth));
         }];
         _incenseStick = incenseStick;
@@ -196,20 +204,21 @@ static const CGFloat kIncenseStickHeight = 70.0f;
 }
 
 - (void)layoutSubviews {
-    self.headDustView.frame = CGRectMake(0, -37, 35, 45);
+    self.headDustView.frame = CGRectMake(0, -headDustHeight + 2, 69, headDustHeight);
     
     self.incenseStick.backgroundColor = [UIColor blackColor];
     
-    self.waver.frame = CGRectMake(0, 0, screenWidth, waverHeight);
+    self.waver.frame = CGRectMake(0, -30, screenWidth, waverHeight);
     
-    self.smokeView.frame = CGRectMake(0, - (screenHeight - 460), screenWidth, smokeHeight);
+    self.smokeView.frame = CGRectMake(0, - (screenHeight - (incenseHeight + incenseLocation)) - smokeHeight - 10, screenWidth, smokeHeight);
+    NSLog(@"%@", NSStringFromCGRect(self.smokeView.frame));
 }
 
 - (void)setBrightnessCallback:(void (^)(CLFIncenseView *))brightnessCallback {
     _brightnessCallback = brightnessCallback;
     
     _displaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(invokeBrightnessCallback)];
-    _displaylink.frameInterval = 1;
+    _displaylink.frameInterval = 8;
     [_displaylink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     self.blowing = NO;
 }
@@ -231,69 +240,174 @@ static const CGFloat kIncenseStickHeight = 70.0f;
     [self updateHeightWithBrightnessLevel:brightnessLevel];
 }
 
+- (CGFloat)timeHaveGone {
+    return timeHaveGone;
+}
+
+- (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval {
+    if (timeInterval == -1) { // 已经没用了
+        incenseHeight = incenseBurnOffLength;
+        smokeHeight = -315 * sizeRatio;
+        waverHeight = -703 * sizeRatio;
+        colorLocation = 0.0f;
+    } else {
+        CGFloat tempIncenseHeight = incenseHeight - timeInterval * (135.0f * sizeRatio / kSeconds);
+        if (tempIncenseHeight > incenseBurnOffLength) {
+            incenseHeight = tempIncenseHeight;
+            waverHeight -= timeInterval * (135.0f * sizeRatio / kSeconds);
+            smokeHeight -= timeInterval * (135.0f * sizeRatio / kSeconds);
+            colorLocation -= timeInterval * (1.2 / 100) * (60 / self.displaylink.frameInterval);
+        } else {
+            incenseHeight = incenseBurnOffLength;
+            smokeHeight = -315 * sizeRatio;
+            waverHeight = -703 * sizeRatio;
+            colorLocation = 0.0f;
+        }
+    }
+}
+
+
 static CGFloat x = 2.5f;
 static CGFloat y = 0.0f;
 static CGFloat theta = M_PI;
+static CGFloat colorLocation = 0.8f;
+
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
-    incenseHeight -= 135.0f / 500;
+    CGFloat declineDistance = kSeconds * 60 / self.displaylink.frameInterval;
+//    CGFloat declineDistance = 500;
+    
+    timeHaveGone += 1.0 / (60.0 / self.displaylink.frameInterval);
+    
+    incenseHeight -= 135.0f * sizeRatio / declineDistance;
     self.frame = (CGRect){self.frame.origin, {screenWidth, incenseHeight}};
     
-    waverHeight -= 135.0f / 500;
+    waverHeight -= 135.0f * sizeRatio / declineDistance;
     self.waver.frame = (CGRect) {{0, 0}, {screenWidth, waverHeight}};
     
-    smokeHeight -= 135.0f / 500;
+    smokeHeight -= 135.0f * sizeRatio / declineDistance;
     self.smokeView.frame = (CGRect){self.smokeView.frame.origin, {screenWidth, smokeHeight}};
     
+    colorLocation = colorLocation - 0.5 / 100 > 0 ? colorLocation - 0.5 / 100 : 0.0f;
+    self.dustGradient.locations = @[@0.0f, @(colorLocation), @1.0f];
+    
+    [self drawEulerSpiralDust];
 
-    
-    if (x == 2.5) {
-        y = 37.5;
-        [self.dustPath moveToPoint:CGPointMake(x, y)];
-    } else if (x <= 12.5) {
-        [self.dustPath addLineToPoint:CGPointMake(2.5, 37.5 - x)];
-        // 在两个函数切换时会突然加速= = 因为...函数的增长速率啊啊啊啊擦.
-        // 第一个函数是线性增长,但椭圆不是啊擦 走过同样长度的周长?
-        // 每移动一次, 灰烬的长度增加0.1, 则到了椭圆函数时,要调整 x 的值, 令 椭圆在(x, x + delta x)区间内的周长长度 c = 0.1 (0.1为每次移动后灰烬增加的高度);
-        // --> 方程的解太坑爹...换方法吧
-    } else if (x < 15.5 && x > 12.5) {
-//        CGFloat temp = x - 10;
-//        y = (1 / 6.0) * (135 - 4 * sqrt(-4 * temp * temp + 140 * temp - 325)); // 以(17.5, 22.5)为中心点, a = 15, b = 20 的椭圆.
-//        y = (1 / 2.0) * (35 - sqrt(-4 * temp * temp + 140 * temp - 325));  // 以(17.5, 17.5)为圆心, r = 15 的圆.
-//        CGFloat s = 15 * sqrt(1 - (1 - 400.0 / 225) * sin(x - 10 ));
-//        NSLog(@"%f", s);
-        CGFloat temp = 17.5 + 15 * cos(theta + x); // 椭圆的参数方程形式.
-        y = 25 + 20 * sin(theta + x);
-        
-        [self.dustPath addLineToPoint:CGPointMake(temp, y)];
-    } else {
-        
-    }
-    
-//    NSLog(@"x : %f, y : %f", x, y);
-    if (x <= 12.5) {
-        x += 0.1;
-    } else {
-        x += 0.005; // 要调整
-    }
-    
-    self.dustLine.path = self.dustPath.CGPath;
-    
-    UIGraphicsEndImageContext();
-    
     self.dustGradient.bounds = self.headDustView.bounds;
     
-    if (incenseHeight <= 65.0f) {
+    if (incenseHeight <= incenseBurnOffLength) {
         [self.delegate incenseDidBurnOff];
         self.lightView.alpha = 0.0f;
     }
 }
 
+CGFloat previousM;
+CGFloat previousN;
+CGFloat eulerSpiralLength = 0.0f;
+
+- (void)drawEulerSpiralDust {
+    CGFloat e;
+    CGFloat m;
+    CGFloat n;
+    UIGraphicsBeginImageContextWithOptions(self.headDustView.frame.size, NO, 0.0f);
+    if (x == 2.5) {
+        e = x - 2.5;
+        m = 2.5 + 40 * sizeRatio * integral(fresnelSin, 0, e, 10);
+        n = 40 * sizeRatio * integral(fresnelCos, 0, e, 10);
+        previousM = m;
+        previousN = n;
+        
+        [self.dustPath moveToPoint:CGPointMake(m, headDustHeight - n)];
+    } else if (x < 5.5){
+        e = x - 2.5;
+        m = 2.5 + 40 * sizeRatio * integral(fresnelSin, 0, e, 10);
+        n = 40 * sizeRatio * integral(fresnelCos, 0, e, 10);
+        
+        eulerSpiralLength += distance(previousM, previousN, m, n);
+        previousM = m;
+        previousN = n;
+        
+        [self.dustPath addLineToPoint:CGPointMake(m, headDustHeight - n)];
+    }
+    
+    x += 0.0072f / (kSeconds / 60.0f);
+    self.dustLine.path = self.dustPath.CGPath;
+    
+    UIGraphicsEndImageContext();
+    
+//    NSLog(@"eulerSpiralLength %f, incenseLength %f, totalLength %f", eulerSpiralLength, incenseHeight, eulerSpiralLength + incenseHeight);
+}
+
+CGFloat distance(CGFloat xm, CGFloat xn, CGFloat ym, CGFloat yn) {
+    return sqrt((xm - ym) * (xm - ym) + (xn - yn) * (xn - yn));
+}
+
+CGFloat fresnelSin(CGFloat x) {
+    return sin(x * x / 2.0f);
+}
+
+CGFloat fresnelCos(CGFloat x) {
+    return cos(x * x / 2.0f);
+}
+
+CGFloat integral(CGFloat(*f)(CGFloat x), CGFloat low, CGFloat high, NSInteger n) {
+    CGFloat step = (high - low) / n;
+    CGFloat area = 0.0;
+    CGFloat y = 0;
+    
+    for(NSInteger i = 0; i < n; i++) {
+        y = f(low + i * step) + f(low + (i + 1) * step); // 梯形法
+        area += (y * step)/2.0;
+    }
+    return area;
+}
+
+- (void)drawEllipseDust {
+    UIGraphicsBeginImageContextWithOptions(self.headDustView.frame.size, NO, 0.0f);
+    if (x == 2.5) {
+        y = 37.5;
+        
+        [self.dustPath moveToPoint:CGPointMake(x, y)];
+    } else if (x <= 12.5) {
+        y = 37.5 - x;
+        [self.dustPath addLineToPoint:CGPointMake(2.5, y)];
+        // 在两个函数切换时会突然加速= = 因为...函数的增长速率啊啊啊啊擦.
+        // 第一个函数是线性增长,但椭圆不是啊擦 走过同样长度的周长?
+        // 每移动一次, 灰烬的长度增加0.1, 则到了椭圆函数时,要调整 x 的值, 令 椭圆在(x, x + delta x)区间内的周长长度 c = 0.1 (0.1为每次移动后灰烬增加的高度);
+        // --> 方程的解太坑爹...换方法吧
+    } else if (x < 15.5 && x > 12.1) {
+        //        CGFloat temp = x - 10;
+        //        y = (1 / 6.0) * (135 - 4 * sqrt(-4 * temp * temp + 140 * temp - 325)); // 以(17.5, 22.5)为中心点, a = 15, b = 20 的椭圆.
+        //        y = (1 / 2.0) * (35 - sqrt(-4 * temp * temp + 140 * temp - 325));  // 以(17.5, 17.5)为圆心, r = 15 的圆.
+        //        CGFloat s = 15 * sqrt(1 - (1 - 400.0 / 225) * sin(x - 10 ));
+        //        NSLog(@"%f", s);
+        CGFloat temp = 17.5 + 15 * cos(theta + x); // 椭圆的参数方程形式.
+        y = 25 + 20 * sin(theta + x);
+        
+        [self.dustPath addLineToPoint:CGPointMake(temp, y)];
+    }
+    
+    //    NSLog(@"x : %f, y : %f", x, y);
+    if (x < 12.1) {
+        x += 0.8;
+    } else if (x >= 12.5 && x <= 15.0) {
+        x += 0.06; // 要调整
+    } else {
+        x += 0.04;
+    }
+    self.dustLine.path = self.dustPath.CGPath;
+    
+    UIGraphicsEndImageContext();
+}
+
 - (void)initialSetup {
-    headHeight = -0.0f;
-    smokeHeight = -180.0f;
-    incenseHeight = 200.0f;
+    headDustHeight = 73.0f * sizeRatio;
+    smokeHeight = -118.0f * sizeRatio;
+    incenseHeight = 200.0f * sizeRatio;
     x = 2.5f;
     y = 0.0f;
+    colorLocation = 0.8f;
+    timeHaveGone = 0.0f;
+    eulerSpiralLength = 0.0f;
 }
 
 @end
