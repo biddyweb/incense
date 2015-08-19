@@ -29,9 +29,9 @@
 		3F48CE031B78777F00F889BC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CE021B78777F00F889BC /* Images.xcassets */; };
 		3F48CE121B78777F00F889BC /* IncenseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CE111B78777F00F889BC /* IncenseTests.m */; };
 		3F69D23B1B84673B00DD6B03 /* UIImage+CLF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F69D23A1B84673B00DD6B03 /* UIImage+CLF.m */; };
+		3F69D23E1B846E0A00DD6B03 /* CLFCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */; };
 		3F7F66531B7D91E20045C689 /* Fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66521B7D91E20045C689 /* Fire.gif */; };
 		3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66571B7DFD390045C689 /* LaunchScreen.xib */; };
-		3F8A67341B79A1780073D552 /* CLFFire.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8A67331B79A1780073D552 /* CLFFire.m */; };
 		3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */; };
 		3FF47E411B7CBFDE00AD81C8 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */; };
 /* End PBXBuildFile section */
@@ -95,10 +95,10 @@
 		3F48CE111B78777F00F889BC /* IncenseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IncenseTests.m; sourceTree = "<group>"; };
 		3F69D2391B84673B00DD6B03 /* UIImage+CLF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+CLF.h"; sourceTree = "<group>"; };
 		3F69D23A1B84673B00DD6B03 /* UIImage+CLF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CLF.m"; sourceTree = "<group>"; };
+		3F69D23C1B846E0A00DD6B03 /* CLFCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFCloud.h; sourceTree = "<group>"; };
+		3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFCloud.m; sourceTree = "<group>"; };
 		3F7F66521B7D91E20045C689 /* Fire.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Fire.gif; sourceTree = "<group>"; };
 		3F7F66571B7DFD390045C689 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
-		3F8A67321B79A1780073D552 /* CLFFire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFFire.h; sourceTree = "<group>"; };
-		3F8A67331B79A1780073D552 /* CLFFire.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFFire.m; sourceTree = "<group>"; };
 		3FCF3A521B7B9F2D00B9FFFF /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
 		3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+animatedGIF.m"; sourceTree = "<group>"; };
 		3FF47E3F1B7CBFDE00AD81C8 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
@@ -260,8 +260,8 @@
 			children = (
 				3F1956CB1B78B98F003A5575 /* CLFIncenseView.h */,
 				3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */,
-				3F8A67321B79A1780073D552 /* CLFFire.h */,
-				3F8A67331B79A1780073D552 /* CLFFire.m */,
+				3F69D23C1B846E0A00DD6B03 /* CLFCloud.h */,
+				3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */,
 				3F69D2391B84673B00DD6B03 /* UIImage+CLF.h */,
 				3F69D23A1B84673B00DD6B03 /* UIImage+CLF.m */,
 			);
@@ -411,7 +411,7 @@
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */,
 				3F1956CD1B78B98F003A5575 /* CLFIncenseView.m in Sources */,
-				3F8A67341B79A1780073D552 /* CLFFire.m in Sources */,
+				3F69D23E1B846E0A00DD6B03 /* CLFCloud.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

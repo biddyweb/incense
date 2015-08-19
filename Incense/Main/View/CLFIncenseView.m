@@ -42,7 +42,7 @@ static CGFloat incenseLocation;
 
 static const CGFloat kIncenseWidth = 5.0f;
 static const CGFloat kIncenseStickWidth = 2.0f;
-static const CGFloat kSeconds = 60.0f;
+static const CGFloat kSeconds = 60.0f; 
 
 - (instancetype)init
 {
@@ -77,8 +77,8 @@ static const CGFloat kSeconds = 60.0f;
         lightView.alpha = 0.0f;
         [self.headDustView addSubview:lightView];
         [lightView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(self.headDustView.mas_left).offset(2);
-            make.top.equalTo(self.headDustView.mas_bottom).offset(-9);
+            make.centerX.equalTo(self.headDustView.mas_left).offset(2.5);
+            make.top.equalTo(self.headDustView.mas_bottom).offset(-8);
             make.width.equalTo(@22);
             make.height.equalTo(@22);
         }];
@@ -149,7 +149,7 @@ static const CGFloat kSeconds = 60.0f;
         NSMutableArray *colors = [NSMutableArray array];
         
         [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0f].CGColor];
-        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0f].CGColor];
         [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor];
 
         
@@ -359,44 +359,6 @@ CGFloat integral(CGFloat(*f)(CGFloat x), CGFloat low, CGFloat high, NSInteger n)
         area += (y * step)/2.0;
     }
     return area;
-}
-
-- (void)drawEllipseDust {
-    UIGraphicsBeginImageContextWithOptions(self.headDustView.frame.size, NO, 0.0f);
-    if (x == 2.5) {
-        y = 37.5;
-        
-        [self.dustPath moveToPoint:CGPointMake(x, y)];
-    } else if (x <= 12.5) {
-        y = 37.5 - x;
-        [self.dustPath addLineToPoint:CGPointMake(2.5, y)];
-        // 在两个函数切换时会突然加速= = 因为...函数的增长速率啊啊啊啊擦.
-        // 第一个函数是线性增长,但椭圆不是啊擦 走过同样长度的周长?
-        // 每移动一次, 灰烬的长度增加0.1, 则到了椭圆函数时,要调整 x 的值, 令 椭圆在(x, x + delta x)区间内的周长长度 c = 0.1 (0.1为每次移动后灰烬增加的高度);
-        // --> 方程的解太坑爹...换方法吧
-    } else if (x < 15.5 && x > 12.1) {
-        //        CGFloat temp = x - 10;
-        //        y = (1 / 6.0) * (135 - 4 * sqrt(-4 * temp * temp + 140 * temp - 325)); // 以(17.5, 22.5)为中心点, a = 15, b = 20 的椭圆.
-        //        y = (1 / 2.0) * (35 - sqrt(-4 * temp * temp + 140 * temp - 325));  // 以(17.5, 17.5)为圆心, r = 15 的圆.
-        //        CGFloat s = 15 * sqrt(1 - (1 - 400.0 / 225) * sin(x - 10 ));
-        //        NSLog(@"%f", s);
-        CGFloat temp = 17.5 + 15 * cos(theta + x); // 椭圆的参数方程形式.
-        y = 25 + 20 * sin(theta + x);
-        
-        [self.dustPath addLineToPoint:CGPointMake(temp, y)];
-    }
-    
-    //    NSLog(@"x : %f, y : %f", x, y);
-    if (x < 12.1) {
-        x += 0.8;
-    } else if (x >= 12.5 && x <= 15.0) {
-        x += 0.06; // 要调整
-    } else {
-        x += 0.04;
-    }
-    self.dustLine.path = self.dustPath.CGPath;
-    
-    UIGraphicsEndImageContext();
 }
 
 - (void)initialSetup {

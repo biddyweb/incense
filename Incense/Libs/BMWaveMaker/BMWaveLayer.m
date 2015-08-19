@@ -31,15 +31,18 @@
                                  (__bridge id)self.fromPath.CGPath,
                                  (__bridge id)self.toPath.CGPath
                                 ];
+    keyFrameAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
     
 //    CABasicAnimation * opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
 //    opacityAnimation.fromValue = @0.5;
 //    opacityAnimation.toValue = @0;
+
+//    by GavinCai
     
     CAKeyframeAnimation *opacityAnimation = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
-    opacityAnimation.values = @[@0.0, @0.7, @1.0, @0];
+    opacityAnimation.values = @[@1.0, @0.8, @1.0, @0];
     opacityAnimation.calculationMode = kCAAnimationLinear;
-    opacityAnimation.keyTimes = @[@0.05, @0.1, @0.55, @1.0];
+    opacityAnimation.keyTimes = @[@0.05, @0.3, @0.55, @1.0];
     
     animationGroup.animations = @[keyFrameAnimation, opacityAnimation];
     

@@ -7,30 +7,32 @@
 //
 
 #import "CLFMainViewController.h"
-#import "CLFFire.h"
+#import "CLFCloud.h"
 #import "CLFIncenseView.h"
 #import "Masonry.h"
 #import <AVFoundation/AVFoundation.h>
 #import "BMWaveMaker.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Waver.h"
-#import "UIImage+ImageEffects.h"
+#import "UIImage+animatedGIF.h"
 
-@interface CLFMainViewController () <CLFFireDelegate, CLFIncenseViewDelegate, UICollisionBehaviorDelegate>
+@interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, UICollisionBehaviorDelegate>
 
 @property (nonatomic, weak)   UIImageView           *incenseShadowView;
-@property (nonatomic, weak)   CLFFire               *fire;
+@property (nonatomic, weak)   CLFCloud              *cloud;
+@property (nonatomic, weak)   UIImageView           *smoke;
+@property (nonatomic, weak)   UIImageView           *fire;
 
 @property (nonatomic, strong) AVAudioRecorder       *recorder;
 @property (nonatomic, weak)   UIView                *rippleView;
 @property (nonatomic, strong) BMWaveMaker           *rippleMaker;
 
 @property (nonatomic, weak)   UIImageView           *blurView;
+@property (nonatomic, weak)   UIView                *failureView;
 
 @property (nonatomic, strong) UIDynamicAnimator     *animator;
 @property (nonatomic, weak)   UIDynamicItemBehavior *itemBehavior;
 
-@property (nonatomic, weak)   UIView                *gestureArea;
 
 @end
 
@@ -53,6 +55,10 @@ static CGFloat screenWidth;
 static CGFloat screenHeight;
 static CGFloat sizeRatio;
 static CGFloat incenseLocation;
+
+static CGFloat cloudLocation = -380.0f;
+static CGFloat smokeLocation = -520.0f;
+static CGFloat animationTime = 4.0f;
 
 static const CGFloat kWaverVoiceFactor = 10.0f;
 static const CGFloat kFireVoiceFactor = 40.0f;
@@ -78,8 +84,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     sizeRatio = screenHeight / 667.0f;
     incenseLocation = (screenHeight - 200 * sizeRatio) * 0.5;
     
-    [self makeGestureArea];
     [self makeIncense];
+    [self makeCloud];
     [self makeFire];
     [self makeRipple];
 }
@@ -89,67 +95,10 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     return YES;
 }
 
-- (UIView *)gestureArea {
-    if (!_gestureArea) {
-        UIView *gestureArea = [[UIView alloc] init];
-        gestureArea.frame = CGRectMake(0, 0, screenWidth, 118);
-        [self.view addSubview:gestureArea];
-        _gestureArea = gestureArea;
-    }
-    return _gestureArea;
-}
-
-- (void)makeGestureArea {
-    self.gestureArea.userInteractionEnabled = YES;
-    self.gestureArea.backgroundColor = [UIColor clearColor];
-    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(fireFallDown)];
-    swipe.direction = UISwipeGestureRecognizerDirectionDown;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fireFallDown)];
-    [self.gestureArea addGestureRecognizer:swipe];
-    [self.gestureArea addGestureRecognizer:tap];
-}
-
-- (UIDynamicAnimator *)animator {
-    if (!_animator) {
-        _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-    }
-    return _animator;
-}
-
-- (void)fireFallDown {
-    self.fire.dragEnable = NO;
-    self.gestureArea.userInteractionEnabled = NO;
-    UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[self.fire]];
-    gravity.magnitude = 0.5;
-    
-    UICollisionBehavior *collision = [[UICollisionBehavior alloc] initWithItems:@[self.fire]];
-    collision.translatesReferenceBoundsIntoBoundary = YES;
-    
-    UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, screenWidth, screenHeight - (incenseLocation + 200 * sizeRatio - 15))];
-    [collision addBoundaryWithIdentifier:@"barrier" forPath:path];
-    collision.collisionMode = UICollisionBehaviorModeBoundaries;
-    collision.collisionDelegate = self;
-    
-    UIDynamicItemBehavior *itemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[self.fire]];
-    itemBehavior.elasticity = 0.0f;
-    itemBehavior.allowsRotation = NO;
-    itemBehavior.resistance = 0;
-    self.itemBehavior = itemBehavior;
-    
-    [self.animator addBehavior:gravity];
-    [self.animator addBehavior:collision];
-    [self.animator addBehavior:itemBehavior];
-
-}
-
-- (void)collisionBehavior:(UICollisionBehavior *)behavior beganContactForItem:(id<UIDynamicItem>)item withBoundaryIdentifier:(id<NSCopying>)identifier atPoint:(CGPoint)p {
-    self.itemBehavior.resistance = 100;
-    [self lightTheIncense];
-}
-
 #pragma mark - LightTheIncense
 
 - (void)lightTheIncense {
+    NSLog(@"lightTheIncense");
     self.burning = YES;
     self.itemBehavior.resistance = 0;
     [self.animator removeAllBehaviors];
@@ -165,17 +114,22 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         waver.level = normalizedValue;
     };
     
+    [self timeFlow];
+    
     self.fire.alpha = 1.0f;
-    [UIView animateWithDuration:3.0 animations:^{
-        self.fire.alpha = 0.0f;
+    self.cloud.alpha = 1.0f;
+    [UIView animateWithDuration:4.0f animations:^{
+        self.cloud.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 1.0f;
         self.incenseView.waver.alpha = 1.0f;
+    }];
+    
+
+    [UIView animateWithDuration:5.0f animations:^{
+        self.fire.alpha = 0.0f;
     } completion:^(BOOL finished) {
-        if (finished) {
-            NSLog(@"kkk");
-            [self.fire removeFromSuperview];
-            [self timeFlow];
-        }
+        [self.fire removeFromSuperview];
+
     }];
 }
 
@@ -190,6 +144,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kFireVoiceFactor);
         incense.brightnessLevel = normalizedValue;
 //        incense.waver.level = normalizedValue;
+        smokeLocation += 0.32;
+        self.smoke.frame = CGRectMake(0, smokeLocation, screenWidth, 521);
     };
 }
 
@@ -216,12 +172,55 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)incenseDidBurnOffForALongTime {
-    [self.rippleMaker stopWaveImmediately:YES];
+    [self.rippleMaker stopWave];
+    self.incenseShadowView.alpha = 0.0f;
+    self.incenseView.waver.alpha = 0.0f;
+    self.incenseView.incenseHeadView.alpha = 0.0f;
     [self.recorder stop];
-    self.blurView.alpha = 1.0f;
+//    self.blurView.alpha = 1.0f;
+    [self stopFloating];
+    [self showFailure];
     [self.incenseView.waver.displaylink invalidate];
     [self.incenseView.displaylink invalidate];
 
+}
+
+- (UIView *)failureView {
+    if (!_failureView) {
+        //        UIImage *blurImage = [[self takeSnapshotOfView:self.view] applyBlurWithRadius:10 tintColor:[UIColor colorWithWhite:1.0f alpha:0.7f] saturationDeltaFactor:1.0 maskImage:nil];
+        //        UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
+        NSLog(@"failure");
+        UIView *failureView = [[UIView alloc] init];
+        failureView.backgroundColor = [UIColor clearColor];
+        failureView.frame = self.view.frame;
+        
+        [self.view addSubview:failureView];
+        
+        UIButton *failureButton = [[UIButton alloc] init];
+        [failureView addSubview:failureButton];
+        failureButton.frame = CGRectMake((screenWidth - 22) * 0.5, screenHeight * 0.25 - 44, 22, 44);
+        failureButton.contentMode = UIViewContentModeTop;
+        failureButton.backgroundColor = [UIColor clearColor];
+        [failureButton setImage:[UIImage imageNamed:@"灭"] forState:UIControlStateNormal];
+        
+        
+        UIButton *restartButton = [[UIButton alloc] init];
+        [failureView addSubview:restartButton];
+        restartButton.frame = CGRectMake((screenWidth - 22) * 0.5, screenHeight * 0.875, 23, 23);
+        restartButton.contentMode = UIViewContentModeTop;
+        restartButton.backgroundColor = [UIColor clearColor];
+        [restartButton addTarget:self action:@selector(oneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
+        [restartButton setImage:[UIImage imageNamed:@"否"] forState:UIControlStateNormal];
+
+        
+        _failureView = failureView;
+    }
+    return _failureView;
+}
+
+
+- (void)showFailure {
+    self.failureView.alpha = 1.0f;
 }
 
 #pragma mark - Incense
@@ -256,13 +255,22 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     
     self.incenseShadowView.frame = CGRectMake((screenWidth - 6) / 2, screenHeight - incenseLocation + 10, 6, 3);
     
+    [self floating];
+}
+
+
+#pragma mark - floatingAnimation
+
+- (void)floating {
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
     anim.repeatCount = 1500;
-    anim.values = @[@(screenHeight - incenseLocation), @(screenHeight - incenseLocation + 5), @(screenHeight - incenseLocation)];
-    anim.duration = 4.0f;
+    anim.values = @[@(screenHeight - incenseLocation + 5), @(screenHeight - incenseLocation), @(screenHeight - incenseLocation + 5)];
+    anim.duration = animationTime;
     anim.removedOnCompletion = NO;
     anim.fillMode = kCAFillModeForwards;
+    anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    
     self.incenseView.layer.position = CGPointMake(0, screenHeight - incenseLocation);
     self.incenseView.layer.anchorPoint = CGPointMake(0, 1);
     [self.incenseView.layer addAnimation:anim forKey:nil];
@@ -273,8 +281,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     CAKeyframeAnimation *shadowAnim = [CAKeyframeAnimation animation];
     shadowAnim.keyPath = @"bounds";
     shadowAnim.repeatCount = 1500;
-    shadowAnim.values = @[bounds2, bounds1, bounds2];
-    shadowAnim.duration = 4.0f;
+    shadowAnim.values = @[bounds1, bounds2, bounds1];
+    shadowAnim.duration = animationTime;
     shadowAnim.removedOnCompletion = NO;
     shadowAnim.fillMode = kCAFillModeForwards;
     self.incenseShadowView.layer.position = CGPointMake(screenWidth / 2, screenHeight - incenseLocation + 10);
@@ -282,13 +290,58 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self.incenseShadowView.layer addAnimation:shadowAnim forKey:nil];
 }
 
+- (void)stopFloating {
+    [self.incenseView.layer removeAllAnimations];
+    [self.incenseShadowView.layer removeAllAnimations];
+    
+    self.incenseView.layer.position = CGPointMake(0, screenHeight - incenseLocation);
+    self.incenseView.layer.anchorPoint = CGPointMake(0, 1);
+}
+
+#pragma mark - Smoke
+
+- (UIImageView *)smoke {
+    if (!_smoke) {
+        UIImageView *smoke = [[UIImageView alloc] init];
+        smoke.image = [UIImage imageNamed:@"云雾"];
+        smoke.frame = CGRectMake(0, cloudLocation, screenWidth, 521);
+        [self.view addSubview:smoke];
+        _smoke = smoke;
+    }
+    return _smoke;
+}
+
+#pragma mark - Cloud
+
+- (CLFCloud *)cloud {
+    if (!_cloud) {
+        CLFCloud *cloud = [[CLFCloud alloc] init];
+        cloud.image = [UIImage imageNamed:@"云雾"];
+        cloud.delegate = self;
+        [self.view addSubview:cloud];
+        _cloud = cloud;
+    }
+    return _cloud;
+}
+
+- (void)makeCloud {
+    self.cloud.alpha = 1.0f;
+    self.cloud.dragEnable = YES;
+    self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 521); // 也许要换成1042
+}
+
+- (void)cloudRebound {
+    
+}
+
+
 #pragma mark - Fire
 
-- (CLFFire *)fire {
+- (UIImageView *)fire {
     if (!_fire) {
-        CLFFire *fire = [[CLFFire alloc] init];
-        fire.backgroundColor = [UIColor clearColor];
-        fire.delegate = self;
+        UIImageView *fire = [[UIImageView alloc] init];
+        NSURL *url = [[NSBundle mainBundle] URLForResource:@"Fire" withExtension:@"gif"];
+        fire.image = [UIImage animatedImageWithAnimatedGIFURL:url];
         [self.view addSubview:fire];
         _fire = fire;
     }
@@ -296,12 +349,16 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)makeFire {
-    CGFloat fireW = 40;
-    CGFloat fireH = 40;
+//    CGFloat fireW = 18;
+//    CGFloat fireH = 24;
     self.fire.alpha = 1.0f;
-    self.fire.dragEnable = YES;
-    self.fire.frame = CGRectMake((screenWidth - fireW) / 2, 65, fireW, fireH);
-    
+//    self.fire.frame = CGRectMake((screenWidth - fireW) / 2,  60, fireW, fireH);
+    [self.fire mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.cloud).offset(-50);
+        make.centerX.equalTo(self.cloud);
+        make.height.equalTo(@24);
+        make.width.equalTo(@18);
+    }];
 }
 
 #pragma mark - Ripple
@@ -321,7 +378,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     self.rippleView.alpha = 1.0f;
 
     self.rippleMaker.animationView = self.rippleView;
-    [self.rippleMaker spanWaveContinuallyWithTimeInterval:4.0f];
+    [self.rippleMaker spanWaveContinuallyWithTimeInterval:animationTime];
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
     self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);
 }
@@ -381,11 +438,16 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)oneMoreIncense {
+    smokeLocation = -520.0f;
+    [self.failureView removeFromSuperview];
     [self.blurView removeFromSuperview];
     [self.incenseView removeFromSuperview];
+    [self.smoke removeFromSuperview];
     self.incenseView = nil;
-    [self makeGestureArea];
+    self.incenseShadowView.alpha = 1.0f;
+    
     [self makeIncense];
+    [self makeCloud];
     [self makeFire];
     [self makeRipple];
 }
