@@ -16,6 +16,7 @@
 #import "Waver.h"
 #import "UIImage+animatedGIF.h"
 #import "CLFMathTools.h"
+#import "CLFMusicPlayView.h"
 
 @interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, UICollisionBehaviorDelegate>
 
@@ -31,10 +32,10 @@
 @property (nonatomic, weak)   UIView                *finishedView;
 @property (nonatomic, weak)   UIView                *failureView;
 
-@property (nonatomic, strong) UIDynamicAnimator     *animator;
-@property (nonatomic, weak)   UIDynamicItemBehavior *itemBehavior;
-
 @property (nonatomic, strong) NSArray               *burntIncenseNumberArray;
+
+@property (nonatomic, weak)   CLFMusicPlayView      *musicView;
+@property (nonatomic, strong)   NSTimer             *musicTimer;
 
 @end
 
@@ -90,6 +91,10 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self makeCloud];
     [self makeFire];
     [self makeRipple];
+    [self makeMusicView];
+    
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMusicView)];
+    [self.view addGestureRecognizer:tapRecognizer];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -97,17 +102,45 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     return YES;
 }
 
+//- (NSTimer *)musicTimer {
+//    if (_musicTimer) {
+//
+//        NSLog(@"createTimer");
+//        _musicTimer = musicTimer;
+//    }
+//    return _musicTimer;
+//}
+
+- (CLFMusicPlayView *)musicView {
+    if (!_musicView) {
+        CLFMusicPlayView *musicView = [[CLFMusicPlayView alloc] init];
+        musicView.backgroundColor = [UIColor clearColor];
+        [self.view addSubview:musicView];
+        _musicView = musicView;
+    }
+    return _musicView;
+}
+
+- (void)makeMusicView {
+    self.musicView.frame = CGRectMake(0, screenHeight - 60, screenWidth, 120);
+    self.musicView.show = NO;
+    self.musicView.hidden = NO;
+}
+
+- (void)showMusicView {
+    [self.musicView showMusicButtons];
+    if (self.musicView.show) {
+        self.musicTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showMusicView) userInfo:nil repeats:NO];
+    } else {
+        [self.musicTimer invalidate];
+    }
+}
+
 #pragma mark - LightTheIncense
 
 - (void)lightTheIncense {
     NSLog(@"lightTheIncense");
     self.burning = YES;
-    self.itemBehavior.resistance = 0;
-    [self.animator removeAllBehaviors];
-    [self.itemBehavior removeItem:self.fire];
-    self.animator = nil;
-    self.itemBehavior = nil;
-    
     [self setupRecorder];
     __block AVAudioRecorder *weakRecorder = self.recorder;
     self.incenseView.waver.waverLevelCallback = ^(Waver *waver) {
@@ -167,7 +200,9 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     self.burntIncenseNumberArray = [CLFMathTools digitInInteger:burntIncenseNumber];
     
     self.burning = NO;
-//    [self.rippleMaker stopWave];
+    [self.rippleMaker stopWave]; // shadow 要隐藏
+    
+    [self.musicView stopPlayMusic];
 
     [UIView animateWithDuration:2.0f animations:^{
         self.incenseView.waver.alpha = 0.0f;
@@ -180,6 +215,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 //                self.rippleView.alpha = 0.0f;
             }];
     }];
+    self.musicView.hidden = YES;
     
     [self.recorder stop];
     [self.incenseView.waver.displaylink invalidate];
@@ -187,7 +223,9 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)incenseDidBurnOffForALongTime {
+    self.musicView.hidden = YES;
     [self.rippleMaker stopWave];
+    [self.musicView stopPlayMusic];
     self.incenseShadowView.alpha = 0.0f;
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
@@ -345,18 +383,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)cloudRebound {
-//    [UIView animateWithDuration:1.0f
-//                          delay:0.0f
-//         usingSpringWithDamping:1.0f
-//          initialSpringVelocity:10.0f
-//                        options:UIViewAnimationOptionCurveEaseInOut
-//                     animations:^{
-//                         self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 520);
-//                     }
-//                     completion:^(BOOL finished) {
-//                         
-//                     }];
-    
     [UIView animateKeyframesWithDuration:1.0f delay:0.0f options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
         self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 520);
     } completion:^(BOOL finished) {
@@ -487,7 +513,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         finishedButton.backgroundColor = [UIColor clearColor];
         [finishedButton setImage:[UIImage imageNamed:@"時"] forState:UIControlStateNormal];
         
-        
         UIButton *restartButton = [[UIButton alloc] init];
         [finishedView addSubview:restartButton];
         restartButton.frame = CGRectMake((screenWidth - 22) * 0.5, screenHeight * 0.875, 23, 23);
@@ -505,6 +530,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (void)oneMoreIncense {
     smokeLocation = -520.0f;
+    [self.cloud removeFromSuperview];
     [self.failureView removeFromSuperview];
     [self.finishedView removeFromSuperview];
     [self.incenseView removeFromSuperview];
@@ -512,6 +538,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     self.incenseView = nil;
     self.incenseShadowView.alpha = 1.0f;
     
+    self.musicView.hidden = NO;
     [self makeIncense];
     [self makeCloud];
     [self makeFire];

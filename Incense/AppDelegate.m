@@ -84,6 +84,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    NSLog(@"Did Enter BackGround");
     CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
     if (mainVC.burning) { // 正在燃烧
         CLFIncenseView *incense = mainVC.incenseView;
@@ -168,7 +169,9 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kDisplayStatusLocked"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [application cancelAllLocalNotifications];
-    
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
     if (!firstLaunch) {
         CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
         if (mainVC.burning) {
@@ -181,8 +184,8 @@ static void displayStatusChanged(CFNotificationCenterRef center,
             incense.displaylink.paused = NO;
             
             if (leaveBySwitch && leaveBackInterval > 5) {
-                NSLog(@"叫你不及时回来!!");
-                //                    [incense renewStatusWithTheTimeHaveGone:-1];
+                    NSLog(@"叫你不及时回来!!");
+//                    [incense renewStatusWithTheTimeHaveGone:-1];
                 [mainVC incenseDidBurnOffForALongTime];
             } else {
                 NSLog(@"回来回来啦啦啦");
@@ -195,35 +198,6 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     }
     
     NSLog(@"becomeActive %@", [NSDate date]);
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-//    if (!firstLaunch) {
-//        CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
-//        if (mainVC.burning) {
-//            backTime = [NSDate date];
-//            NSTimeInterval leaveTimeInterval = [leaveTime timeIntervalSince1970];
-//            NSTimeInterval backTimeInterval = [backTime timeIntervalSince1970];
-//            CGFloat leaveBackInterval = backTimeInterval - leaveTimeInterval;
-//            
-//            CLFIncenseView *incense = mainVC.incenseView;
-//            incense.displaylink.paused = NO;
-//            
-//            if (leaveBySwitch && leaveBackInterval > 5) {
-//                    NSLog(@"叫你不及时回来!!");
-////                    [incense renewStatusWithTheTimeHaveGone:-1];
-//                [mainVC incenseDidBurnOffForALongTime];
-//            } else {
-//                NSLog(@"回来回来啦啦啦");
-//                NSLog(@"leaveBackInterval : %f", leaveBackInterval);
-//                [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
-//            }
-//        }
-//    } else {
-//        firstLaunch = NO;
-//    }
-//    
-//    NSLog(@"becomeActive %@", [NSDate date]);
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

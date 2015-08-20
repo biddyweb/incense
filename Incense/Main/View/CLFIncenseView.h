@@ -20,6 +20,7 @@
 
 @property (nonatomic, weak)   UIImageView                *incenseHeadView;
 @property (nonatomic, weak)   Waver                      *waver;
+@property (nonatomic, assign, getter=isBurntOff) BOOL    *burntOff;
 
 @property (nonatomic, assign) CGFloat                    brightnessLevel;
 @property (nonatomic, copy)   void                       (^brightnessCallback)(CLFIncenseView * incense);

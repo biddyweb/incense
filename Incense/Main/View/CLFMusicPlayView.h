@@ -10,4 +10,9 @@
 
 @interface CLFMusicPlayView : UIView
 
+@property (nonatomic, assign, getter=isShown) BOOL show;
+
+- (void)showMusicButtons;
+- (void)stopPlayMusic;
+
 @end

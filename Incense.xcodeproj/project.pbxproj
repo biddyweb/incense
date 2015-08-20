@@ -33,6 +33,10 @@
 		3F7F66531B7D91E20045C689 /* Fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66521B7D91E20045C689 /* Fire.gif */; };
 		3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66571B7DFD390045C689 /* LaunchScreen.xib */; };
 		3FA8695A1B8588E000799E0A /* CLFMusicPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA869591B8588E000799E0A /* CLFMusicPlayView.m */; };
+		3FA8695D1B858C3B00799E0A /* CLFPlayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */; };
+		3FA869611B85C98A00799E0A /* 4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA8695E1B85C98A00799E0A /* 4.mp3 */; };
+		3FA869621B85C98A00799E0A /* 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA8695F1B85C98A00799E0A /* 3.mp3 */; };
+		3FA869631B85C98A00799E0A /* 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA869601B85C98A00799E0A /* 2.mp3 */; };
 		3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */; };
 		3FF47E411B7CBFDE00AD81C8 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */; };
 /* End PBXBuildFile section */
@@ -102,6 +106,11 @@
 		3F7F66571B7DFD390045C689 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		3FA869581B8588E000799E0A /* CLFMusicPlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFMusicPlayView.h; sourceTree = "<group>"; };
 		3FA869591B8588E000799E0A /* CLFMusicPlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFMusicPlayView.m; sourceTree = "<group>"; };
+		3FA8695B1B858C3B00799E0A /* CLFPlayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFPlayButton.h; sourceTree = "<group>"; };
+		3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFPlayButton.m; sourceTree = "<group>"; };
+		3FA8695E1B85C98A00799E0A /* 4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 4.mp3; sourceTree = "<group>"; };
+		3FA8695F1B85C98A00799E0A /* 3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 3.mp3; sourceTree = "<group>"; };
+		3FA869601B85C98A00799E0A /* 2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 2.mp3; sourceTree = "<group>"; };
 		3FCF3A521B7B9F2D00B9FFFF /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
 		3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+animatedGIF.m"; sourceTree = "<group>"; };
 		3FF47E3F1B7CBFDE00AD81C8 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
@@ -230,6 +239,9 @@
 		3F48CDF51B78777F00F889BC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3FA8695E1B85C98A00799E0A /* 4.mp3 */,
+				3FA8695F1B85C98A00799E0A /* 3.mp3 */,
+				3FA869601B85C98A00799E0A /* 2.mp3 */,
 				3F7F66521B7D91E20045C689 /* Fire.gif */,
 				3F48CE021B78777F00F889BC /* Images.xcassets */,
 				3F48CDF91B78777F00F889BC /* AppDelegate.h */,
@@ -277,6 +289,8 @@
 				3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */,
 				3FA869581B8588E000799E0A /* CLFMusicPlayView.h */,
 				3FA869591B8588E000799E0A /* CLFMusicPlayView.m */,
+				3FA8695B1B858C3B00799E0A /* CLFPlayButton.h */,
+				3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -383,8 +397,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */,
+				3FA869621B85C98A00799E0A /* 3.mp3 in Resources */,
 				3F1956C01B78B95A003A5575 /* Info.plist in Resources */,
 				3F48CE011B78777F00F889BC /* Main.storyboard in Resources */,
+				3FA869611B85C98A00799E0A /* 4.mp3 in Resources */,
+				3FA869631B85C98A00799E0A /* 2.mp3 in Resources */,
 				3F7F66531B7D91E20045C689 /* Fire.gif in Resources */,
 				3F48CE031B78777F00F889BC /* Images.xcassets in Resources */,
 			);
@@ -410,6 +427,7 @@
 				3F48CDFB1B78777F00F889BC /* AppDelegate.m in Sources */,
 				3F1956C21B78B95A003A5575 /* MASConstraint.m in Sources */,
 				3F2686F01B84F62500BB6CD8 /* CLFMathTools.m in Sources */,
+				3FA8695D1B858C3B00799E0A /* CLFPlayButton.m in Sources */,
 				3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */,
 				3F1956C41B78B95A003A5575 /* MASLayoutConstraint.m in Sources */,
 				3F1956C71B78B95A003A5575 /* NSArray+MASAdditions.m in Sources */,
