@@ -211,7 +211,7 @@ static const CGFloat kSeconds = 60.0f;
     
     self.incenseStick.backgroundColor = [UIColor blackColor];
     
-    self.waver.frame = CGRectMake(0, -30, screenWidth, waverHeight);
+    self.waver.frame = CGRectMake(0, 0, screenWidth, waverHeight);
     
 //    self.smokeView.frame = CGRectMake(0, - (screenHeight - (incenseHeight + incenseLocation)) - smokeHeight - 10, screenWidth, smokeHeight);
 }

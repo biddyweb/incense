@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "CLFMainViewController.h"
+#import "CLFNewFeatureController.h"
 #import "CLFIncenseView.h"
 
 @interface AppDelegate ()
@@ -35,6 +36,13 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self.window makeKeyAndVisible];
+    
+    self.window.rootViewController = [[CLFNewFeatureController alloc] init];
+//    self.window.rootViewController = [[CLFMainViewController alloc] init];
+    
+    
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
         [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
     }

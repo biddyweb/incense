@@ -70,6 +70,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 {
     self = [super init];
     if (self) {
+        self.view.backgroundColor = [UIColor colorWithRed:231 / 255.0f green:231 / 255.0f blue:231 / 255.0f alpha:1.0f];
         self.burning = NO;
         if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
             [self prefersStatusBarHidden];
@@ -81,7 +82,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     screenWidth = [UIScreen mainScreen].bounds.size.width;
     screenHeight = [UIScreen mainScreen].bounds.size.height;
     sizeRatio = screenHeight / 667.0f;
@@ -95,6 +96,11 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMusicView)];
     [self.view addGestureRecognizer:tapRecognizer];
+    
+    self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
+    [UIView animateWithDuration:3.0f animations:^{
+        self.smoke.frame = CGRectMake(0, smokeLocation, screenWidth, 520);
+    }];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -357,7 +363,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     if (!_smoke) {
         UIImageView *smoke = [[UIImageView alloc] init];
         smoke.image = [UIImage imageNamed:@"云雾"];
-        smoke.frame = CGRectMake(0, cloudLocation, screenWidth, 520);
+        smoke.frame = CGRectMake(0, smokeLocation, screenWidth, 520);
         [self.view addSubview:smoke];
         _smoke = smoke;
     }
@@ -410,13 +416,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     CGFloat fireH = 24;
     self.fire.alpha = 1.0f;
     self.fire.frame = CGRectMake((screenWidth - fireW) / 2, (CGRectGetHeight(self.cloud.frame) - 80), fireW, fireH);
-    
-//    [self.fire mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.bottom.equalTo(self.cloud).offset(-50);
-//        make.centerX.equalTo(self.cloud);
-//        make.height.equalTo(@24);
-//        make.width.equalTo(@18);
-//    }];
 }
 
 #pragma mark - Ripple
@@ -470,7 +469,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 //    if (!_blurView) {
 ////        UIImage *blurImage = [[self takeSnapshotOfView:self.view] applyBlurWithRadius:10 tintColor:[UIColor colorWithWhite:1.0f alpha:0.7f] saturationDeltaFactor:1.0 maskImage:nil];
 ////        UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
-//        UIImageView *blurView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"境"]];
+//        UIImageView *blurView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background"]];
 //        
 //        blurView.userInteractionEnabled = YES;
 //        blurView.frame = self.view.frame;
@@ -529,20 +528,35 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 
 - (void)oneMoreIncense {
-    smokeLocation = -520.0f;
-    [self.cloud removeFromSuperview];
-    [self.failureView removeFromSuperview];
-    [self.finishedView removeFromSuperview];
-    [self.incenseView removeFromSuperview];
-    [self.smoke removeFromSuperview];
-    self.incenseView = nil;
-    self.incenseShadowView.alpha = 1.0f;
+    [UIView animateWithDuration:3.0f animations:^{
+        self.smoke.frame = self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
+        if (self.finishedView) {
+            self.finishedView.alpha = 0.0f;
+        } else {
+            self.failureView.alpha = 0.0f;
+        }
     
-    self.musicView.hidden = NO;
-    [self makeIncense];
-    [self makeCloud];
-    [self makeFire];
-    [self makeRipple];
+    } completion:^(BOOL finished) {
+        smokeLocation = -520.0f;
+        [self.cloud removeFromSuperview];
+        [self.failureView removeFromSuperview];
+        [self.finishedView removeFromSuperview];
+        [self.incenseView removeFromSuperview];
+        self.incenseView = nil;
+        self.incenseShadowView.alpha = 1.0f;
+        
+        self.musicView.hidden = NO;
+        [self makeIncense];
+        [self makeCloud];
+        [self makeFire];
+        [self makeRipple];
+        
+        [UIView animateWithDuration:3.0f animations:^{
+            self.smoke.frame = CGRectMake(0, smokeLocation, screenWidth, 520);
+        } completion:^(BOOL finished) {
+
+        }];
+    } ];
 }
 
 #pragma mark - Recorder
