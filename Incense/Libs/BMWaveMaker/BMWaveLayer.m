@@ -40,9 +40,9 @@
 //    by GavinCai
     
     CAKeyframeAnimation *opacityAnimation = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
-    opacityAnimation.values = @[@1.0, @0.8, @1.0, @0];
+    opacityAnimation.values = @[@0.8, @1.0, @1.0, @0];
     opacityAnimation.calculationMode = kCAAnimationLinear;
-    opacityAnimation.keyTimes = @[@0.05, @0.3, @0.55, @1.0];
+    opacityAnimation.keyTimes = @[@0.00, @0.3, @0.55, @1.0];
     
     animationGroup.animations = @[keyFrameAnimation, opacityAnimation];
     

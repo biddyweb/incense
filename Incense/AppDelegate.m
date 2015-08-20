@@ -50,10 +50,39 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
+    CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
+    if (mainVC.burning) { // 正在燃烧
+        CLFIncenseView *incense = mainVC.incenseView;
+        timeHaveGone = [incense timeHaveGone];
+        incense.displaylink.paused = YES; // 暂停动画
+        NSLog(@"Resign TimeHaveGone %f", timeHaveGone);
+        leaveTime = [NSDate date];
+        //    NSLog(@"enterBackground %@", [NSDate date]);
+        
+//        UIApplicationState state = application.applicationState;
+//        
+//        if (state == UIApplicationStateInactive) {
+//            // 锁屏
+//            NSLog(@"Sent to background by locking screen");
+//            [self addFinishedNotificationWithTimeHaveGone:timeHaveGone];
+//            leaveBySwitch = NO;
+//            
+//        } else if (state == UIApplicationStateBackground) { // 进入后台
+//            if (![[NSUserDefaults standardUserDefaults] boolForKey:@"kDisplayStatusLocked"]) {
+//                [self addAlertNotification];
+//                NSLog(@"switch");
+//                leaveBySwitch = YES;
+//            } else {
+//                NSLog(@"kkkk Sent to background by locking screen");
+//                leaveBySwitch = NO;
+//                [self addFinishedNotificationWithTimeHaveGone:timeHaveGone];
+//            }
+//        }
+    }
 }
 
 
-static UIBackgroundTaskIdentifier taskID;
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
     if (mainVC.burning) { // 正在燃烧
@@ -75,32 +104,8 @@ static UIBackgroundTaskIdentifier taskID;
         } else if (state == UIApplicationStateBackground) { // 进入后台
             if (![[NSUserDefaults standardUserDefaults] boolForKey:@"kDisplayStatusLocked"]) {
                 [self addAlertNotification];
-                
                 NSLog(@"switch");
                 leaveBySwitch = YES;
-
-                taskID = [application beginBackgroundTaskWithExpirationHandler:^{
-                    [application endBackgroundTask:taskID];
-                    taskID = UIBackgroundTaskInvalid;
-                }];
-                
-                NSLog(@"starting background task");
-                
-#warning - 此处待解决. 如何在本地通知没有被点击的情况下灭掉香? remaining
-//                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ // 死锁???
-//                    // Do the work associated with the task.
-//                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                        NSLog(@"finishing background task");
-//                        [application endBackgroundTask:taskID];
-//                        taskID = UIBackgroundTaskInvalid;
-//                    });
-//                });
-                
-                
-                NSLog(@"Finish background task");
-                [[UIApplication sharedApplication] endBackgroundTask:taskID];
-                taskID = UIBackgroundTaskInvalid;
-                
             } else {
                 NSLog(@"kkkk Sent to background by locking screen");
                 leaveBySwitch = NO;
@@ -128,7 +133,7 @@ static UIBackgroundTaskIdentifier taskID;
         notification.userInfo = @{@"identifier" : @"finishNotification"};
         
         // 通知提示音 使用默认的
-        //        notification.soundName= UILocalNotificationDefaultSoundName;
+                notification.soundName= UILocalNotificationDefaultSoundName;
         
         // 将通知添加到系统中
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
@@ -150,7 +155,7 @@ static UIBackgroundTaskIdentifier taskID;
         notification.userInfo = @{@"identifier" : @"switchNotification"};
         
         // 通知提示音 使用默认的
-        //        notification.soundName= UILocalNotificationDefaultSoundName;
+//        notification.soundName= UILocalNotificationDefaultSoundName;
         
         // 将通知添加到系统中
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
@@ -158,28 +163,12 @@ static UIBackgroundTaskIdentifier taskID;
     }
 }
 
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
-    if ([notification.userInfo[@"identifier"] isEqualToString:@"switchNotification"]) {
-        NSLog(@"乖乖回来就对啦");
-
-    } else if ([notification.userInfo[@"identifier"] isEqualToString:@"finishNotification"]) {
-        NSLog(@"烧完啦烧完啦烧完啦");
-//        [mainVC incenseDidBurnOff];
-    }
-}
-
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kDisplayStatusLocked"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [application endBackgroundTask:taskID];
-    taskID = UIBackgroundTaskInvalid;
     [application cancelAllLocalNotifications];
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-
+    
     if (!firstLaunch) {
         CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
         if (mainVC.burning) {
@@ -191,39 +180,50 @@ static UIBackgroundTaskIdentifier taskID;
             CLFIncenseView *incense = mainVC.incenseView;
             incense.displaylink.paused = NO;
             
-            
-            
-            
             if (leaveBySwitch && leaveBackInterval > 5) {
-                    NSLog(@"叫你不及时回来!!");
-//                    [incense renewStatusWithTheTimeHaveGone:-1];
-                [mainVC incenseDidBurnOffForALongTime];
-            } else if ((leaveBackInterval > 60 - timeHaveGone)) { // 这个条件永远不会用到??
-                NSLog(@"超时啦啦啦啦啦啦啦啦啦");
-//                  [incense renewStatusWithTheTimeHaveGone:-1];
+                NSLog(@"叫你不及时回来!!");
+                //                    [incense renewStatusWithTheTimeHaveGone:-1];
                 [mainVC incenseDidBurnOffForALongTime];
             } else {
                 NSLog(@"回来回来啦啦啦");
+                NSLog(@"leaveBackInterval : %f", leaveBackInterval);
                 [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
             }
-            
-//            if ((leaveBySwitch && leaveBackInterval > 5) || (leaveBackInterval > 10 - timeHaveGone)) {
-//                NSLog(@"超时啦啦啦啦啦啦啦啦啦");
-//                [incense renewStatusWithTheTimeHaveGone:-1];
-//            } else {
-//                [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
-//            }
-            
-            
-        
-            
         }
     } else {
         firstLaunch = NO;
     }
     
-    
     NSLog(@"becomeActive %@", [NSDate date]);
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+//    if (!firstLaunch) {
+//        CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
+//        if (mainVC.burning) {
+//            backTime = [NSDate date];
+//            NSTimeInterval leaveTimeInterval = [leaveTime timeIntervalSince1970];
+//            NSTimeInterval backTimeInterval = [backTime timeIntervalSince1970];
+//            CGFloat leaveBackInterval = backTimeInterval - leaveTimeInterval;
+//            
+//            CLFIncenseView *incense = mainVC.incenseView;
+//            incense.displaylink.paused = NO;
+//            
+//            if (leaveBySwitch && leaveBackInterval > 5) {
+//                    NSLog(@"叫你不及时回来!!");
+////                    [incense renewStatusWithTheTimeHaveGone:-1];
+//                [mainVC incenseDidBurnOffForALongTime];
+//            } else {
+//                NSLog(@"回来回来啦啦啦");
+//                NSLog(@"leaveBackInterval : %f", leaveBackInterval);
+//                [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
+//            }
+//        }
+//    } else {
+//        firstLaunch = NO;
+//    }
+//    
+//    NSLog(@"becomeActive %@", [NSDate date]);
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

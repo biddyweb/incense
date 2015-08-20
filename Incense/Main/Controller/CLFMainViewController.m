@@ -15,6 +15,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Waver.h"
 #import "UIImage+animatedGIF.h"
+#import "CLFMathTools.h"
 
 @interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, UICollisionBehaviorDelegate>
 
@@ -27,12 +28,13 @@
 @property (nonatomic, weak)   UIView                *rippleView;
 @property (nonatomic, strong) BMWaveMaker           *rippleMaker;
 
-@property (nonatomic, weak)   UIImageView           *blurView;
+@property (nonatomic, weak)   UIView                *finishedView;
 @property (nonatomic, weak)   UIView                *failureView;
 
 @property (nonatomic, strong) UIDynamicAnimator     *animator;
 @property (nonatomic, weak)   UIDynamicItemBehavior *itemBehavior;
 
+@property (nonatomic, strong) NSArray               *burntIncenseNumberArray;
 
 @end
 
@@ -51,14 +53,14 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 
 @implementation CLFMainViewController
 
-static CGFloat screenWidth;
-static CGFloat screenHeight;
-static CGFloat sizeRatio;
-static CGFloat incenseLocation;
+static CGFloat   screenWidth;
+static CGFloat   screenHeight;
+static CGFloat   sizeRatio;
+static CGFloat   incenseLocation;
 
-static CGFloat cloudLocation = -380.0f;
-static CGFloat smokeLocation = -520.0f;
-static CGFloat animationTime = 4.0f;
+static CGFloat   cloudLocation = -380.0f;
+static CGFloat   smokeLocation = -520.0f;
+static CGFloat   animationTime = 4.0f;
 
 static const CGFloat kWaverVoiceFactor = 10.0f;
 static const CGFloat kFireVoiceFactor = 40.0f;
@@ -82,7 +84,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     screenWidth = [UIScreen mainScreen].bounds.size.width;
     screenHeight = [UIScreen mainScreen].bounds.size.height;
     sizeRatio = screenHeight / 667.0f;
-    incenseLocation = (screenHeight - 200 * sizeRatio) * 0.5;
+    incenseLocation = (screenHeight - 200 * sizeRatio) * 0.3;
     
     [self makeIncense];
     [self makeCloud];
@@ -117,13 +119,12 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self timeFlow];
     
     self.fire.alpha = 1.0f;
-    self.cloud.alpha = 1.0f;
+    self.cloud.cloudImageView.alpha = 1.0f;
     [UIView animateWithDuration:4.0f animations:^{
-        self.cloud.alpha = 0.0f;
+        self.cloud.cloudImageView.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 1.0f;
         self.incenseView.waver.alpha = 1.0f;
     }];
-    
 
     [UIView animateWithDuration:5.0f animations:^{
         self.fire.alpha = 0.0f;
@@ -144,28 +145,42 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kFireVoiceFactor);
         incense.brightnessLevel = normalizedValue;
 //        incense.waver.level = normalizedValue;
-        smokeLocation += 0.32;
-        self.smoke.frame = CGRectMake(0, smokeLocation, screenWidth, 521);
+        smokeLocation += 0.32 * sizeRatio;
+        self.smoke.frame = CGRectMake(0, smokeLocation, screenWidth, 520);
     };
 }
 
 - (void)incenseDidBurnOff {
     NSLog(@"End %@", [NSDate date]);
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger burntIncenseNumber = [defaults integerForKey:@"burntIncenseNumber"];
+    
+    if (burntIncenseNumber) {
+        burntIncenseNumber++;
+    } else {
+        burntIncenseNumber = 1;
+    }
+    
+    [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
+    
+    self.burntIncenseNumberArray = [CLFMathTools digitInInteger:burntIncenseNumber];
+    
     self.burning = NO;
-    [self.rippleMaker stopWave];
+//    [self.rippleMaker stopWave];
 
     [UIView animateWithDuration:2.0f animations:^{
         self.incenseView.waver.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 0.0f;
-        self.rippleView.alpha = 0.3f;
+//        self.rippleView.alpha = 0.3f;
     } completion:^(BOOL finished) {
-        self.blurView.alpha = 0.0f;
+        self.finishedView.alpha = 0.0f;
             [UIView animateWithDuration:0.5f animations:^{
-                self.blurView.alpha = 1.0f;
-                self.rippleView.alpha = 0.0f;
+                self.finishedView.alpha = 1.0f;
+//                self.rippleView.alpha = 0.0f;
             }];
-        
     }];
+    
     [self.recorder stop];
     [self.incenseView.waver.displaylink invalidate];
     [self.incenseView.displaylink invalidate];
@@ -304,7 +319,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     if (!_smoke) {
         UIImageView *smoke = [[UIImageView alloc] init];
         smoke.image = [UIImage imageNamed:@"云雾"];
-        smoke.frame = CGRectMake(0, cloudLocation, screenWidth, 521);
+        smoke.frame = CGRectMake(0, cloudLocation, screenWidth, 520);
         [self.view addSubview:smoke];
         _smoke = smoke;
     }
@@ -316,7 +331,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (CLFCloud *)cloud {
     if (!_cloud) {
         CLFCloud *cloud = [[CLFCloud alloc] init];
-        cloud.image = [UIImage imageNamed:@"云雾"];
         cloud.delegate = self;
         [self.view addSubview:cloud];
         _cloud = cloud;
@@ -327,11 +341,27 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)makeCloud {
     self.cloud.alpha = 1.0f;
     self.cloud.dragEnable = YES;
-    self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 521); // 也许要换成1042
+    self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 520); // 也许要换成1042
 }
 
 - (void)cloudRebound {
+//    [UIView animateWithDuration:1.0f
+//                          delay:0.0f
+//         usingSpringWithDamping:1.0f
+//          initialSpringVelocity:10.0f
+//                        options:UIViewAnimationOptionCurveEaseInOut
+//                     animations:^{
+//                         self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 520);
+//                     }
+//                     completion:^(BOOL finished) {
+//                         
+//                     }];
     
+    [UIView animateKeyframesWithDuration:1.0f delay:0.0f options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
+        self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 520);
+    } completion:^(BOOL finished) {
+        
+    }];
 }
 
 
@@ -342,23 +372,25 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         UIImageView *fire = [[UIImageView alloc] init];
         NSURL *url = [[NSBundle mainBundle] URLForResource:@"Fire" withExtension:@"gif"];
         fire.image = [UIImage animatedImageWithAnimatedGIFURL:url];
-        [self.view addSubview:fire];
+        self.cloud.cloudImageView.alpha = 1.0f;
+        [self.cloud addSubview:fire];
         _fire = fire;
     }
     return _fire;
 }
 
 - (void)makeFire {
-//    CGFloat fireW = 18;
-//    CGFloat fireH = 24;
+    CGFloat fireW = 18;
+    CGFloat fireH = 24;
     self.fire.alpha = 1.0f;
-//    self.fire.frame = CGRectMake((screenWidth - fireW) / 2,  60, fireW, fireH);
-    [self.fire mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.cloud).offset(-50);
-        make.centerX.equalTo(self.cloud);
-        make.height.equalTo(@24);
-        make.width.equalTo(@18);
-    }];
+    self.fire.frame = CGRectMake((screenWidth - fireW) / 2, (CGRectGetHeight(self.cloud.frame) - 80), fireW, fireH);
+    
+//    [self.fire mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.equalTo(self.cloud).offset(-50);
+//        make.centerX.equalTo(self.cloud);
+//        make.height.equalTo(@24);
+//        make.width.equalTo(@18);
+//    }];
 }
 
 #pragma mark - Ripple
@@ -386,7 +418,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (BMWaveMaker *)rippleMaker {
     if (!_rippleMaker) {
         _rippleMaker = [[BMWaveMaker alloc] init];
-        _rippleMaker.spanScale = 100.0f;
+        _rippleMaker.spanScale = 80.0f;
         _rippleMaker.originRadius = 0.9f;
         _rippleMaker.waveColor = [UIColor whiteColor];
         _rippleMaker.animationDuration = 20.0f;
@@ -408,39 +440,73 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     return image;
 }
 
-- (UIImageView *)blurView {
-    if (!_blurView) {
-//        UIImage *blurImage = [[self takeSnapshotOfView:self.view] applyBlurWithRadius:10 tintColor:[UIColor colorWithWhite:1.0f alpha:0.7f] saturationDeltaFactor:1.0 maskImage:nil];
-//        UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
-        UIImageView *blurView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"境"]];
+//- (UIImageView *)blurView {
+//    if (!_blurView) {
+////        UIImage *blurImage = [[self takeSnapshotOfView:self.view] applyBlurWithRadius:10 tintColor:[UIColor colorWithWhite:1.0f alpha:0.7f] saturationDeltaFactor:1.0 maskImage:nil];
+////        UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
+//        UIImageView *blurView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"境"]];
+//        
+//        blurView.userInteractionEnabled = YES;
+//        blurView.frame = self.view.frame;
+//        
+//        [self.view addSubview:blurView];
+//        
+//        UIButton *restartButton = [[UIButton alloc] init];
+//        [blurView addSubview:restartButton];
+//        restartButton.frame = self.view.frame;
+//        restartButton.imageView.bounds = CGRectMake(0, 0, 22, 110);
+//        restartButton.contentMode = UIViewContentModeTop;
+//        [restartButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
+//        [restartButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
+//        [restartButton setImageEdgeInsets:UIEdgeInsetsMake(CGRectGetHeight(restartButton.frame) * 1.0 / 3, 0, 0, 0)];
+//        
+//        restartButton.backgroundColor = [UIColor clearColor];
+//        [restartButton addTarget:self action:@selector(oneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
+//        [restartButton setImage:[UIImage imageNamed:@"時"] forState:UIControlStateNormal];
+//        
+//        _blurView = blurView;
+//    }
+//    return _blurView;
+//}
+
+- (UIView *)finishedView {  // 可以和 failureView 合并
+    if (!_finishedView) {
+        //        UIImage *blurImage = [[self takeSnapshotOfView:self.view] applyBlurWithRadius:10 tintColor:[UIColor colorWithWhite:1.0f alpha:0.7f] saturationDeltaFactor:1.0 maskImage:nil];
+        //        UIImageView *blurView = [[UIImageView alloc] initWithImage:blurImage];
+        NSLog(@"failure");
+        UIView *finishedView = [[UIView alloc] init];
+        finishedView.backgroundColor = [UIColor clearColor];
+        finishedView.frame = self.view.frame;
         
-        blurView.userInteractionEnabled = YES;
-        blurView.frame = self.view.frame;
+        [self.view addSubview:finishedView];
         
-        [self.view addSubview:blurView];
+        UIButton *finishedButton = [[UIButton alloc] init];
+        [finishedView addSubview:finishedButton];
+        finishedButton.frame = CGRectMake((screenWidth - 22) * 0.5, screenHeight * 0.25 - 44, 22, 120);
+        finishedButton.contentMode = UIViewContentModeTop;
+        finishedButton.backgroundColor = [UIColor clearColor];
+        [finishedButton setImage:[UIImage imageNamed:@"時"] forState:UIControlStateNormal];
+        
         
         UIButton *restartButton = [[UIButton alloc] init];
-        [blurView addSubview:restartButton];
-        restartButton.frame = self.view.frame;
-        restartButton.imageView.bounds = CGRectMake(0, 0, 22, 110);
+        [finishedView addSubview:restartButton];
+        restartButton.frame = CGRectMake((screenWidth - 22) * 0.5, screenHeight * 0.875, 23, 23);
         restartButton.contentMode = UIViewContentModeTop;
-        [restartButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
-        [restartButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
-        [restartButton setImageEdgeInsets:UIEdgeInsetsMake(CGRectGetHeight(restartButton.frame) * 1.0 / 3, 0, 0, 0)];
-        
         restartButton.backgroundColor = [UIColor clearColor];
         [restartButton addTarget:self action:@selector(oneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
-        [restartButton setImage:[UIImage imageNamed:@"時"] forState:UIControlStateNormal];
+        [restartButton setImage:[UIImage imageNamed:@"否"] forState:UIControlStateNormal];
         
-        _blurView = blurView;
+        
+        _finishedView = finishedView;
     }
-    return _blurView;
+    return _finishedView;
 }
+
 
 - (void)oneMoreIncense {
     smokeLocation = -520.0f;
     [self.failureView removeFromSuperview];
-    [self.blurView removeFromSuperview];
+    [self.finishedView removeFromSuperview];
     [self.incenseView removeFromSuperview];
     [self.smoke removeFromSuperview];
     self.incenseView = nil;

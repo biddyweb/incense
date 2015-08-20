@@ -54,7 +54,7 @@ static const CGFloat kSeconds = 60.0f;
         sizeRatio = screenHeight / 667.0f;
         incenseBurnOffLength = 64.0f * sizeRatio;
         incenseStickHeight = 70.0f * sizeRatio;
-        incenseLocation = (screenHeight - 200 * sizeRatio) * 0.5;
+        incenseLocation = (screenHeight - 200 * sizeRatio) * 0.3;
     }
     return self;
 }
@@ -78,7 +78,7 @@ static const CGFloat kSeconds = 60.0f;
         [self.headDustView addSubview:lightView];
         [lightView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self.headDustView.mas_left).offset(2.5);
-            make.top.equalTo(self.headDustView.mas_bottom).offset(-8);
+            make.top.equalTo(self.headDustView.mas_bottom).offset(-10.5);
             make.width.equalTo(@22);
             make.height.equalTo(@22);
         }];
@@ -97,7 +97,7 @@ static const CGFloat kSeconds = 60.0f;
             make.width.equalTo(@(kIncenseWidth));
             make.centerX.equalTo(self);
             make.top.equalTo(self);
-            make.height.equalTo(self).offset(-40 * sizeRatio);
+            make.height.equalTo(self).offset(-50 * sizeRatio);
         }];
 
         _incenseBodyView = incenseBodyView;
@@ -149,7 +149,9 @@ static const CGFloat kSeconds = 60.0f;
         NSMutableArray *colors = [NSMutableArray array];
         
         [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0f].CGColor];
-        [colors addObject:(id)[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0f].CGColor];
+//        [colors addObject:(id)[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
+
         [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor];
 
         
@@ -205,7 +207,7 @@ static const CGFloat kSeconds = 60.0f;
 //}
 
 - (void)layoutSubviews {
-    self.headDustView.frame = CGRectMake(0, -headDustHeight + 2, 69, headDustHeight);
+    self.headDustView.frame = CGRectMake(0, -headDustHeight + 4, 69, headDustHeight);
     
     self.incenseStick.backgroundColor = [UIColor blackColor];
     
@@ -244,7 +246,10 @@ static const CGFloat kSeconds = 60.0f;
     return timeHaveGone;
 }
 
+static BOOL modifyDust = NO;
+
 - (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval {
+    modifyDust = YES;
     if (timeInterval == -1) { // 已经没用了
         incenseHeight = incenseBurnOffLength;
         smokeHeight = -315 * sizeRatio;
@@ -257,11 +262,13 @@ static const CGFloat kSeconds = 60.0f;
             waverHeight -= timeInterval * (135.0f * sizeRatio / kSeconds);
             smokeHeight -= timeInterval * (135.0f * sizeRatio / kSeconds);
             colorLocation -= timeInterval * (1.2 / 100) * (60 / self.displaylink.frameInterval);
+            x += timeInterval * 0.0072f * (60 / self.displaylink.frameInterval);
         } else {
             incenseHeight = incenseBurnOffLength;
             smokeHeight = -315 * sizeRatio;
             waverHeight = -703 * sizeRatio;
             colorLocation = 0.0f;
+            x = 5.5;
         }
     }
 }
@@ -269,7 +276,6 @@ static const CGFloat kSeconds = 60.0f;
 
 static CGFloat x = 2.5f;
 static CGFloat y = 0.0f;
-static CGFloat theta = M_PI;
 static CGFloat colorLocation = 0.8f;
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
@@ -290,8 +296,18 @@ static CGFloat colorLocation = 0.8f;
     colorLocation = colorLocation - 0.5 / 100 > 0 ? colorLocation - 0.5 / 100 : 0.0f;
     self.dustGradient.locations = @[@0.0f, @(colorLocation), @1.0f];
     
-    [self drawEulerSpiralDust];
-
+    
+    if (!modifyDust) {
+        [self drawEulerSpiralDust];
+    } else {
+        CGFloat tempX = x;
+        x = 2.5;
+        while (x < tempX) {
+            [self drawEulerSpiralDust];
+        }
+        modifyDust = NO;
+    }
+    
     self.dustGradient.bounds = self.headDustView.bounds;
     
     if (incenseHeight <= incenseBurnOffLength) {
@@ -308,11 +324,11 @@ CGFloat eulerSpiralLength = 0.0f;
     CGFloat e;
     CGFloat m;
     CGFloat n;
-    UIGraphicsBeginImageContextWithOptions(self.headDustView.frame.size, NO, 0.0f);
+    UIGraphicsBeginImageContextWithOptions(self.headDustView.frame.size, NO, 0.0f);  // 位置换掉??
     if (x == 2.5) {
         e = x - 2.5;
         m = 2.5 + 40 * sizeRatio * integral(fresnelSin, 0, e, 10);
-        n = 40 * sizeRatio * integral(fresnelCos, 0, e, 10);
+        n = 3.5 + 40 * sizeRatio * integral(fresnelCos, 0, e, 10);
         previousM = m;
         previousN = n;
         
@@ -320,7 +336,7 @@ CGFloat eulerSpiralLength = 0.0f;
     } else if (x < 5.5){
         e = x - 2.5;
         m = 2.5 + 40 * sizeRatio * integral(fresnelSin, 0, e, 10);
-        n = 40 * sizeRatio * integral(fresnelCos, 0, e, 10);
+        n = 3.5 + 40 * sizeRatio * integral(fresnelCos, 0, e, 10);
         
         eulerSpiralLength += distance(previousM, previousN, m, n);
         previousM = m;

@@ -10,7 +10,7 @@
 
 @interface CLFCloud ()
 
-@property (nonatomic, weak) UIImageView *fireImage;
+@property (nonatomic, weak) UIView *fireImage;
 
 @end
 
@@ -25,13 +25,27 @@ static CGFloat incenseLocation = 200.0f;
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.userInteractionEnabled = YES;
         screenHeight = [UIScreen mainScreen].bounds.size.height;
         sizeRatio = screenHeight / 667.0f;
         self.dragEnable = YES;
-        incenseLocation = (screenHeight - 200 * sizeRatio) * 0.5;
+        incenseLocation = (screenHeight - 200 * sizeRatio) * 0.3;
     }
     return self;
+}
+
+- (UIImageView *)cloudImageView {
+    if (!_cloudImageView) {
+        UIImageView *cloudImageView = [[UIImageView alloc] init];
+        cloudImageView.image = [UIImage imageNamed:@"云雾"];
+        [self addSubview:cloudImageView];
+        _cloudImageView = cloudImageView;
+    }
+    return _cloudImageView;
+}
+
+
+- (void)layoutSubviews {
+    self.cloudImageView.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -60,10 +74,10 @@ static CGFloat incenseLocation = 200.0f;
     
     CGFloat newCenterY = self.center.y + offsetY;
     CGFloat distance = newCenterY - beginCenterY;
-    NSLog(@"distance %f floorY %f offsetY %f", distance, floorY, offsetY);
+//    NSLog(@"distance %f floorY %f offsetY %f", distance, floorY, offsetY);
     
-    if (distance > floorY - 60) {
-        newCenterY = beginCenterY + floorY - 60;
+    if (distance > floorY - 57) {
+        newCenterY = beginCenterY + floorY - 57;
         self.dragEnable = NO;
         [self.delegate lightTheIncense];
     }
@@ -94,9 +108,15 @@ static CGFloat incenseLocation = 200.0f;
         return;
     }
     
+    
+    
+    
+    
     if (self.center.y < 180) {
         [self.delegate cloudRebound];
     }
+    
+    
 }
 
 @end
