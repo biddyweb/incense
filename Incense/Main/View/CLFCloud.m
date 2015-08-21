@@ -82,25 +82,7 @@ static CGFloat incenseLocation = 200.0f;
         [self.delegate lightTheIncense];
     }
     
-    self.center = CGPointMake(self.center.x, newCenterY);
-    
-//    CGFloat newCenterY;
-//    if (self.center.y + offsetY > floorY) {
-//        newCenterY = floorY;
-//    } else if (self.center.y + offsetY < 40) {
-//        newCenterY = 40;
-//    } else {
-//        newCenterY = self.center.y + offsetY;
-//    }
-    
-//    CGFloat newCenterX = self.center.x;
-//    
-//    self.center = CGPointMake(newCenterX, newCenterY);
-//    
-//    if ( (newCenterX > [UIScreen mainScreen].bounds.size.width / 2 - 5 && newCenterX < [UIScreen mainScreen].bounds.size.width / 2 + 5) && newCenterY == floorY) {
-//        [self.delegate lightTheIncense];
-//        self.dragEnable = NO;
-//    }
+    self.center = CGPointMake(self.center.x, newCenterY);    
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {

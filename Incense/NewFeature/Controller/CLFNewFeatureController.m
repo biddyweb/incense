@@ -88,7 +88,7 @@ static const NSInteger NewFeaturePages = 4;
     imageView.userInteractionEnabled = YES;
     
     UIButton *startButton = [[UIButton alloc] init];
-    [startButton setBackgroundImage:[UIImage imageNamed:@"1"] forState:UIControlStateNormal];
+    [startButton setBackgroundImage:[UIImage imageNamed:@"PlayButton1"] forState:UIControlStateNormal];
     [startButton addTarget:self action:@selector(start) forControlEvents:UIControlEventTouchUpInside];
     [imageView addSubview:startButton];
     
@@ -98,8 +98,6 @@ static const NSInteger NewFeaturePages = 4;
         make.centerX.equalTo(imageView);
         make.centerY.equalTo(imageView).multipliedBy(2).offset(-100);
     }];
-    
-
 }
 
 - (void)start {
@@ -128,8 +126,8 @@ static const NSInteger NewFeaturePages = 4;
     
     pageControl.userInteractionEnabled = NO;
     
-    pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:253/255.0 green:98/255.0 blue:42/255.0 alpha:1.0];
-    pageControl.pageIndicatorTintColor = [UIColor colorWithRed:189/255.0 green:189/255.0 blue:189/255.0 alpha:1.0];
+    pageControl.currentPageIndicatorTintColor = [UIColor redColor];
+    pageControl.pageIndicatorTintColor = [UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0];
 
     self.pageControl = pageControl;
 }

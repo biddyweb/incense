@@ -37,6 +37,7 @@
 		3FA869611B85C98A00799E0A /* 4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA8695E1B85C98A00799E0A /* 4.mp3 */; };
 		3FA869621B85C98A00799E0A /* 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA8695F1B85C98A00799E0A /* 3.mp3 */; };
 		3FA869631B85C98A00799E0A /* 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA869601B85C98A00799E0A /* 2.mp3 */; };
+		3FCB4CF51B86C33B00B854E4 /* CLFEndView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCB4CF41B86C33B00B854E4 /* CLFEndView.m */; };
 		3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */; };
 		3FF47E411B7CBFDE00AD81C8 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */; };
 /* End PBXBuildFile section */
@@ -112,6 +113,8 @@
 		3FA8695E1B85C98A00799E0A /* 4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 4.mp3; sourceTree = "<group>"; };
 		3FA8695F1B85C98A00799E0A /* 3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 3.mp3; sourceTree = "<group>"; };
 		3FA869601B85C98A00799E0A /* 2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 2.mp3; sourceTree = "<group>"; };
+		3FCB4CF31B86C33B00B854E4 /* CLFEndView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFEndView.h; sourceTree = "<group>"; };
+		3FCB4CF41B86C33B00B854E4 /* CLFEndView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFEndView.m; sourceTree = "<group>"; };
 		3FCF3A521B7B9F2D00B9FFFF /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
 		3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+animatedGIF.m"; sourceTree = "<group>"; };
 		3FF47E3F1B7CBFDE00AD81C8 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
@@ -318,6 +321,8 @@
 				3FA869591B8588E000799E0A /* CLFMusicPlayView.m */,
 				3FA8695B1B858C3B00799E0A /* CLFPlayButton.h */,
 				3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */,
+				3FCB4CF31B86C33B00B854E4 /* CLFEndView.h */,
+				3FCB4CF41B86C33B00B854E4 /* CLFEndView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -466,6 +471,7 @@
 				3F55A5B51B862BA0000FAE56 /* CLFMathTools.m in Sources */,
 				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
+				3FCB4CF51B86C33B00B854E4 /* CLFEndView.m in Sources */,
 				3FA8695A1B8588E000799E0A /* CLFMusicPlayView.m in Sources */,
 				3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */,
 				3F1956CD1B78B98F003A5575 /* CLFIncenseView.m in Sources */,

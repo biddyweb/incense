@@ -42,7 +42,7 @@ static CGFloat incenseLocation;
 
 static const CGFloat kIncenseWidth = 5.0f;
 static const CGFloat kIncenseStickWidth = 2.0f;
-static const CGFloat kSeconds = 60.0f; 
+static const CGFloat kSeconds = 10.0f;
 
 - (instancetype)init
 {

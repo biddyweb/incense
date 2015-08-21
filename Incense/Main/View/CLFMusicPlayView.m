@@ -32,24 +32,24 @@ static CGFloat selfWidth;
 - (instancetype)init {
     if (self = [super init]) {
         CLFPlayButton *rainButton = [[CLFPlayButton alloc] init];
-        [rainButton setBackgroundImage:[UIImage imageNamed:@"2"] forState:UIControlStateNormal];
-        [rainButton setBackgroundImage:[UIImage imageNamed:@"6"] forState:UIControlStateSelected];
+        [rainButton setBackgroundImage:[UIImage imageNamed:@"PlayButton2"] forState:UIControlStateNormal];
+        [rainButton setBackgroundImage:[UIImage imageNamed:@"PlayButton6"] forState:UIControlStateSelected];
         rainButton.name = @"2";
         [rainButton addTarget:self action:@selector(playMusicWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:rainButton];
         _rainButton = rainButton;
         
         CLFPlayButton *dewButton = [[CLFPlayButton alloc] init];
-        [dewButton setBackgroundImage:[UIImage imageNamed:@"3"] forState:UIControlStateNormal];
-        [dewButton setBackgroundImage:[UIImage imageNamed:@"6"] forState:UIControlStateSelected];
+        [dewButton setBackgroundImage:[UIImage imageNamed:@"PlayButton3"] forState:UIControlStateNormal];
+        [dewButton setBackgroundImage:[UIImage imageNamed:@"PlayButton6"] forState:UIControlStateSelected];
         dewButton.name = @"3";
         [dewButton addTarget:self action:@selector(playMusicWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:dewButton];
         _dewButton = dewButton;
         
         CLFPlayButton *chirpButton = [[CLFPlayButton alloc] init];
-        [chirpButton setBackgroundImage:[UIImage imageNamed:@"4"] forState:UIControlStateNormal];
-        [chirpButton setBackgroundImage:[UIImage imageNamed:@"6"] forState:UIControlStateSelected];
+        [chirpButton setBackgroundImage:[UIImage imageNamed:@"PlayButton4"] forState:UIControlStateNormal];
+        [chirpButton setBackgroundImage:[UIImage imageNamed:@"PlayButton6"] forState:UIControlStateSelected];
         chirpButton.name = @"4";
         [chirpButton addTarget:self action:@selector(playMusicWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:chirpButton];
@@ -139,9 +139,6 @@ static CGFloat selfWidth;
         [self.musicPlayer stop];
     }
 }
-
-
-
 
 - (void)audioPlayerEndInterruption:(AVAudioPlayer *)player {
     [self.musicPlayer play];
