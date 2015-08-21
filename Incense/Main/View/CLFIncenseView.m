@@ -30,7 +30,6 @@
 
 static CGFloat headDustHeight;
 static CGFloat waverHeight;
-static CGFloat smokeHeight;
 static CGFloat incenseHeight;
 static CGFloat screenWidth;
 static CGFloat screenHeight;
@@ -42,10 +41,9 @@ static CGFloat incenseLocation;
 
 static const CGFloat kIncenseWidth = 5.0f;
 static const CGFloat kIncenseStickWidth = 2.0f;
-static const CGFloat kSeconds = 10.0f;
+static const CGFloat kSeconds = 60.0f;
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     if (self) {
         screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -149,9 +147,8 @@ static const CGFloat kSeconds = 10.0f;
         NSMutableArray *colors = [NSMutableArray array];
         
         [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0f].CGColor];
-//        [colors addObject:(id)[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0f].CGColor];
-        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
-
+        [colors addObject:(id)[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0f].CGColor];
+//        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
         [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor];
 
         
@@ -194,26 +191,12 @@ static const CGFloat kSeconds = 10.0f;
     return _incenseStick;
 }
 
-//- (UIImageView *)smokeView {
-//    if (!_smokeView) {
-//        UIImageView *smokeView = [[UIImageView alloc] init];
-//        smokeView.image = [UIImage imageNamed:@"云"];
-////        smokeView.backgroundColor = [UIColor blackColor];
-//        [self addSubview:smokeView];
-//        [self bringSubviewToFront:smokeView];
-//        _smokeView = smokeView;
-//    }
-//    return _smokeView;
-//}
-
 - (void)layoutSubviews {
     self.headDustView.frame = CGRectMake(0, -headDustHeight + 4, 69, headDustHeight);
     
     self.incenseStick.backgroundColor = [UIColor blackColor];
     
     self.waver.frame = CGRectMake(0, 0, screenWidth, waverHeight);
-    
-//    self.smokeView.frame = CGRectMake(0, - (screenHeight - (incenseHeight + incenseLocation)) - smokeHeight - 10, screenWidth, smokeHeight);
 }
 
 - (void)setBrightnessCallback:(void (^)(CLFIncenseView *))brightnessCallback {
@@ -250,29 +233,19 @@ static BOOL modifyDust = NO;
 
 - (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval {
     modifyDust = YES;
-    if (timeInterval == -1) { // 已经没用了
+    CGFloat tempIncenseHeight = incenseHeight - timeInterval * (135.0f * sizeRatio / kSeconds);
+    if (tempIncenseHeight > incenseBurnOffLength) {
+        incenseHeight = tempIncenseHeight;
+        waverHeight -= timeInterval * (135.0f * sizeRatio / kSeconds);
+        colorLocation -= timeInterval * (1.2 / 100) * (60 / self.displaylink.frameInterval);
+        x += timeInterval * 0.0072f * (60 / self.displaylink.frameInterval);
+    } else {
         incenseHeight = incenseBurnOffLength;
-        smokeHeight = -315 * sizeRatio;
         waverHeight = -703 * sizeRatio;
         colorLocation = 0.0f;
-    } else {
-        CGFloat tempIncenseHeight = incenseHeight - timeInterval * (135.0f * sizeRatio / kSeconds);
-        if (tempIncenseHeight > incenseBurnOffLength) {
-            incenseHeight = tempIncenseHeight;
-            waverHeight -= timeInterval * (135.0f * sizeRatio / kSeconds);
-            smokeHeight -= timeInterval * (135.0f * sizeRatio / kSeconds);
-            colorLocation -= timeInterval * (1.2 / 100) * (60 / self.displaylink.frameInterval);
-            x += timeInterval * 0.0072f * (60 / self.displaylink.frameInterval);
-        } else {
-            incenseHeight = incenseBurnOffLength;
-            smokeHeight = -315 * sizeRatio;
-            waverHeight = -703 * sizeRatio;
-            colorLocation = 0.0f;
-            x = 5.5;
-        }
+        x = 5.5;
     }
 }
-
 
 static CGFloat x = 2.5f;
 static CGFloat y = 0.0f;
@@ -280,8 +253,7 @@ static CGFloat colorLocation = 0.8f;
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
     CGFloat declineDistance = kSeconds * 60 / self.displaylink.frameInterval;
-//    CGFloat declineDistance = 500;
-    
+
     timeHaveGone += 1.0 / (60.0 / self.displaylink.frameInterval);
     
     incenseHeight -= 135.0f * sizeRatio / declineDistance;
@@ -290,12 +262,8 @@ static CGFloat colorLocation = 0.8f;
     waverHeight -= 135.0f * sizeRatio / declineDistance;
     self.waver.frame = (CGRect) {{0, 0}, {screenWidth, waverHeight}};
     
-    smokeHeight -= 135.0f * sizeRatio / declineDistance;
-    self.smokeView.frame = (CGRect){self.smokeView.frame.origin, {screenWidth, smokeHeight}};
-    
     colorLocation = colorLocation - 0.5 / 100 > 0 ? colorLocation - 0.5 / 100 : 0.0f;
     self.dustGradient.locations = @[@0.0f, @(colorLocation), @1.0f];
-    
     
     if (!modifyDust) {
         [self drawEulerSpiralDust];
@@ -349,7 +317,6 @@ CGFloat eulerSpiralLength = 0.0f;
     self.dustLine.path = self.dustPath.CGPath;
     
     UIGraphicsEndImageContext();
-    
 //    NSLog(@"eulerSpiralLength %f, incenseLength %f, totalLength %f", eulerSpiralLength, incenseHeight, eulerSpiralLength + incenseHeight);
 }
 
@@ -379,7 +346,6 @@ CGFloat integral(CGFloat(*f)(CGFloat x), CGFloat low, CGFloat high, NSInteger n)
 
 - (void)initialSetup {
     headDustHeight = 73.0f * sizeRatio;
-    smokeHeight = - 118.0f * sizeRatio;
     incenseHeight = 200.0f * sizeRatio;
     x = 2.5f;
     y = 0.0f;

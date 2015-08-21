@@ -26,7 +26,6 @@ static const NSInteger NewFeaturePages = 4;
     self = [super init];
     if (self) {
         self.view.backgroundColor = [UIColor whiteColor];
-//        self.view.backgroundColor = [UIColor colorWithRed:231 / 255.0f green:231 / 255.0f blue:231 / 255.0f alpha:1.0f];
         if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
             [self prefersStatusBarHidden];
             [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
@@ -70,7 +69,6 @@ static const NSInteger NewFeaturePages = 4;
         [scrollView addSubview:imageView];
         
         if (NewFeaturePages - 1 == i) {
-            NSLog(@"kkkkkkkkk");
             [self setupLastImageView:imageView];
         }
     }
@@ -104,7 +102,6 @@ static const NSInteger NewFeaturePages = 4;
     [UIView animateWithDuration:2.0f animations:^{
         self.scrollView.alpha = 0.0f;
         self.pageControl.alpha = 0.0f;
-//        self.view.alpha = 0.0f;
     } completion:^(BOOL finished) {
         if (finished) {
             self.view.window.rootViewController = [[CLFMainViewController alloc] init];

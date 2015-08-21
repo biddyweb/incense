@@ -15,6 +15,7 @@
 @property (nonatomic, assign, getter=isBurning) BOOL burning;
 
 - (void)incenseDidBurnOffForALongTime;
+- (void)renewSmokeStatusWithTimeHaveGone:(CGFloat)leaveBackInterval;
 
 @end
 

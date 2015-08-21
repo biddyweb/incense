@@ -69,13 +69,11 @@ static CGFloat incenseLocation = 200.0f;
     
     CGFloat offsetY = currentPoint.y - beginPoint.y;
 
-    
     CGFloat floorY = screenHeight - 200 * sizeRatio - incenseLocation;
     
     CGFloat newCenterY = self.center.y + offsetY;
     CGFloat distance = newCenterY - beginCenterY;
-//    NSLog(@"distance %f floorY %f offsetY %f", distance, floorY, offsetY);
-    
+
     if (distance > floorY - 57) {
         newCenterY = beginCenterY + floorY - 57;
         self.dragEnable = NO;
@@ -89,16 +87,9 @@ static CGFloat incenseLocation = 200.0f;
     if (!self.isDragEnable) {
         return;
     }
-    
-    
-    
-    
-    
     if (self.center.y < 180) {
         [self.delegate cloudRebound];
     }
-    
-    
 }
 
 @end

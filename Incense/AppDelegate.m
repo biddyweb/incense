@@ -35,13 +35,23 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window makeKeyAndVisible];
     
-    self.window.rootViewController = [[CLFNewFeatureController alloc] init];
-//    self.window.rootViewController = [[CLFMainViewController alloc] init];
+    NSString *key = (NSString *)kCFBundleVersionKey;
+    NSString *version = [NSBundle mainBundle].infoDictionary[key];
+    NSString *oldVersion = [[NSUserDefaults standardUserDefaults] valueForKey:@"firstLaunch"];
     
+    NSLog(@"version %@, oldVersion %@", version, oldVersion);
+    
+    if ([version isEqualToString:oldVersion]) {
+        NSLog(@"dududududud");
+        self.window.rootViewController = [[CLFMainViewController alloc] init];
+    } else {
+        self.window.rootViewController = [[CLFNewFeatureController alloc] init];
+        [[NSUserDefaults standardUserDefaults] setValue:version forKey:@"firstLaunch"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
         [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
@@ -65,31 +75,8 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         incense.displaylink.paused = YES; // 暂停动画
         NSLog(@"Resign TimeHaveGone %f", timeHaveGone);
         leaveTime = [NSDate date];
-        //    NSLog(@"enterBackground %@", [NSDate date]);
-        
-//        UIApplicationState state = application.applicationState;
-//        
-//        if (state == UIApplicationStateInactive) {
-//            // 锁屏
-//            NSLog(@"Sent to background by locking screen");
-//            [self addFinishedNotificationWithTimeHaveGone:timeHaveGone];
-//            leaveBySwitch = NO;
-//            
-//        } else if (state == UIApplicationStateBackground) { // 进入后台
-//            if (![[NSUserDefaults standardUserDefaults] boolForKey:@"kDisplayStatusLocked"]) {
-//                [self addAlertNotification];
-//                NSLog(@"switch");
-//                leaveBySwitch = YES;
-//            } else {
-//                NSLog(@"kkkk Sent to background by locking screen");
-//                leaveBySwitch = NO;
-//                [self addFinishedNotificationWithTimeHaveGone:timeHaveGone];
-//            }
-//        }
     }
 }
-
-
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     NSLog(@"Did Enter BackGround");
@@ -100,8 +87,6 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         incense.displaylink.paused = YES; // 暂停动画
         NSLog(@"time have gone %f", timeHaveGone);
         leaveTime = [NSDate date];
-        //    NSLog(@"enterBackground %@", [NSDate date]);
-        
         UIApplicationState state = application.applicationState;
         
         if (state == UIApplicationStateInactive) {
@@ -129,7 +114,6 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     if (notification) {
-        // 设置通知的提醒时间
         NSDate *currentDate   = [NSDate date];
         notification.timeZone = [NSTimeZone defaultTimeZone]; // 使用本地时区
         notification.fireDate = [currentDate dateByAddingTimeInterval:notificationTimeInterval];
@@ -140,11 +124,9 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         notification.alertAction = @"一炷香";
         
         notification.userInfo = @{@"identifier" : @"finishNotification"};
-        
-        // 通知提示音 使用默认的
-                notification.soundName= UILocalNotificationDefaultSoundName;
-        
-        // 将通知添加到系统中
+    
+        notification.soundName= UILocalNotificationDefaultSoundName;
+    
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
 }
@@ -152,9 +134,8 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 - (void)addAlertNotification {
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     if (notification) {
-        // 设置通知的提醒时间
         NSDate *currentDate   = [NSDate date];
-        notification.timeZone = [NSTimeZone defaultTimeZone]; // 使用本地时区
+        notification.timeZone = [NSTimeZone defaultTimeZone];
         notification.fireDate = [currentDate dateByAddingTimeInterval:1.0];
         
         notification.repeatInterval = 0;
@@ -163,17 +144,14 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         
         notification.userInfo = @{@"identifier" : @"switchNotification"};
         
-        // 通知提示音 使用默认的
-//        notification.soundName= UILocalNotificationDefaultSoundName;
+        notification.soundName= UILocalNotificationDefaultSoundName;
         
-        // 将通知添加到系统中
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
     }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kDisplayStatusLocked"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [application cancelAllLocalNotifications];
@@ -192,13 +170,12 @@ static void displayStatusChanged(CFNotificationCenterRef center,
             incense.displaylink.paused = NO;
             
             if (leaveBySwitch && leaveBackInterval > 5) {
-                    NSLog(@"叫你不及时回来!!");
-//                    [incense renewStatusWithTheTimeHaveGone:-1];
                 [mainVC incenseDidBurnOffForALongTime];
             } else {
                 NSLog(@"回来回来啦啦啦");
                 NSLog(@"leaveBackInterval : %f", leaveBackInterval);
                 [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
+                [mainVC renewSmokeStatusWithTimeHaveGone:leaveBackInterval];
             }
         }
     } else {
@@ -209,7 +186,6 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
 @end

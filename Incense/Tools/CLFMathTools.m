@@ -19,13 +19,12 @@
     NSMutableString *resultStr = [NSMutableString string];
     
     NSArray *digitArray = @[@"万", @"千", @"百", @"十"];
-//    NSArray *numArray = @[@"零", @"壹", @"贰", @"叁", @"肆", @"伍", @"陆", @"柒", @"捌", @"玖"];
     NSArray *numArray = @[@"零", @"一", @"二", @"三", @"四", @"五", @"六", @"七", @"八", @"九"];
     
     NSInteger temp;
     while (integer) {
         temp = integer % 10;
-        digitStr = [NSMutableString stringWithFormat:@"%ld%@", temp, digitStr];
+        digitStr = [NSMutableString stringWithFormat:@"%ld%@", (long)temp, digitStr];
         integer /= 10;
     }
     

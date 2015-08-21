@@ -15,13 +15,13 @@
 
 @property (nonatomic, strong) AVAudioPlayer *musicPlayer;
 
-@property (nonatomic, weak) CLFPlayButton *rainButton;
-@property (nonatomic, weak) CLFPlayButton *dewButton;
-@property (nonatomic, weak) CLFPlayButton *chirpButton;
+@property (nonatomic, weak)   CLFPlayButton *rainButton;
+@property (nonatomic, weak)   CLFPlayButton *dewButton;
+@property (nonatomic, weak)   CLFPlayButton *chirpButton;
 
-@property (nonatomic, weak) CLFPlayButton *playingButton;
+@property (nonatomic, weak)   CLFPlayButton *playingButton;
 
-@property (nonatomic, strong) NSTimer     *musicTimer;
+@property (nonatomic, strong) NSTimer       *musicTimer;
 
 @end
 
@@ -32,24 +32,25 @@ static CGFloat selfWidth;
 - (instancetype)init {
     if (self = [super init]) {
         CLFPlayButton *rainButton = [[CLFPlayButton alloc] init];
-        [rainButton setBackgroundImage:[UIImage imageNamed:@"PlayButton2"] forState:UIControlStateNormal];
-        [rainButton setBackgroundImage:[UIImage imageNamed:@"PlayButton6"] forState:UIControlStateSelected];
+        [rainButton setImage:[UIImage imageNamed:@"PlayButton2"] forState:UIControlStateNormal];
+        [rainButton setImage:[UIImage imageNamed:@"PlayButton6"] forState:UIControlStateSelected];
+        
         rainButton.name = @"2";
         [rainButton addTarget:self action:@selector(playMusicWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:rainButton];
         _rainButton = rainButton;
         
         CLFPlayButton *dewButton = [[CLFPlayButton alloc] init];
-        [dewButton setBackgroundImage:[UIImage imageNamed:@"PlayButton3"] forState:UIControlStateNormal];
-        [dewButton setBackgroundImage:[UIImage imageNamed:@"PlayButton6"] forState:UIControlStateSelected];
+        [dewButton setImage:[UIImage imageNamed:@"PlayButton3"] forState:UIControlStateNormal];
+        [dewButton setImage:[UIImage imageNamed:@"PlayButton6"] forState:UIControlStateSelected];
         dewButton.name = @"3";
         [dewButton addTarget:self action:@selector(playMusicWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:dewButton];
         _dewButton = dewButton;
         
         CLFPlayButton *chirpButton = [[CLFPlayButton alloc] init];
-        [chirpButton setBackgroundImage:[UIImage imageNamed:@"PlayButton4"] forState:UIControlStateNormal];
-        [chirpButton setBackgroundImage:[UIImage imageNamed:@"PlayButton6"] forState:UIControlStateSelected];
+        [chirpButton setImage:[UIImage imageNamed:@"PlayButton4"] forState:UIControlStateNormal];
+        [chirpButton setImage:[UIImage imageNamed:@"PlayButton6"] forState:UIControlStateSelected];
         chirpButton.name = @"4";
         [chirpButton addTarget:self action:@selector(playMusicWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:chirpButton];
@@ -61,37 +62,43 @@ static CGFloat selfWidth;
     return self;
 }
 
-//- (CLFPlayButton *)createPlayButtonWithName:(NSString *)buttonName {
-//    CLFPlayButton *button = [[CLFPlayButton alloc] init];
-//    [button setBackgroundImage:[UIImage imageNamed:buttonName] forState:UIControlStateNormal];
-//    [button setBackgroundImage:[UIImage imageNamed:@"6"] forState:UIControlStateSelected];
-//    button.name = buttonName;
-//    [button addTarget:self action:@selector(playMusicWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
-//    return button;
-//}
-
 - (void)layoutSubviews {
     selfWidth = CGRectGetWidth(self.frame);
     
-    self.dewButton.frame = CGRectMake(selfWidth * 0.5 - 11, 70, 22, 22);
+    self.dewButton.frame = CGRectMake(selfWidth * 0.5 - 11, 70, 44, 44);
     
-    self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - 11, 70, 22, 22);
+    self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - 11, 70, 44, 44);
     
-    self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - 11, 70, 22, 22);
+    self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - 11, 70, 44, 44);
 }
 
 - (void)showMusicButtons {
+    self.rainButton.imageView.bounds = CGRectMake(0, 0, 22, 22);
+    [self.rainButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
+    [self.rainButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
+    [self.rainButton setImageEdgeInsets:UIEdgeInsetsMake(5, 11, 17, 11)];
+    
+    self.dewButton.imageView.bounds = CGRectMake(0, 0, 22, 22);
+    [self.dewButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
+    [self.dewButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
+    [self.dewButton setImageEdgeInsets:UIEdgeInsetsMake(5, 11, 17, 11)];
+    
+    self.chirpButton.imageView.bounds = CGRectMake(0, 0, 22, 22);
+    [self.chirpButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
+    [self.chirpButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
+    [self.chirpButton setImageEdgeInsets:UIEdgeInsetsMake(5, 11, 17, 11)];
+    
     CGFloat location = self.isShown ? 70 : 10;
     [UIView animateWithDuration:0.5f delay:0.1f usingSpringWithDamping:0.6 initialSpringVelocity:10.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.dewButton.frame = CGRectMake(selfWidth * 0.5 - 11, location, 22, 22);
+        self.dewButton.frame = CGRectMake(selfWidth * 0.5 - 22, location, 44, 44);
     } completion:nil];
     
     [UIView animateWithDuration:0.5f delay:0.0f usingSpringWithDamping:0.6 initialSpringVelocity:10.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - 11, location, 22, 22);
+        self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - 22, location, 44, 44);
     } completion:nil];
     
     [UIView animateWithDuration:0.5f delay:0.2f usingSpringWithDamping:0.6 initialSpringVelocity:10.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - 11, location, 22, 22);
+        self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - 22, location, 44, 44);
     } completion:nil];
     self.show = !self.show;
 }
@@ -106,7 +113,6 @@ static CGFloat selfWidth;
         [self.musicPlayer pause];
         return;
     }
-    
     
     NSString *musicPath = [[NSBundle mainBundle] pathForResource:namedButton.name ofType:@"mp3"];
     NSURL *musicURL = [[NSURL alloc] initFileURLWithPath:musicPath];

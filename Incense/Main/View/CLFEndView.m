@@ -43,6 +43,10 @@ static CGFloat   screenHeight;
         
         UIButton *restartButton = [[UIButton alloc] init];
         [finishedView addSubview:restartButton];
+        restartButton.imageView.bounds = CGRectMake(0, 0, 24, 24);
+        [restartButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
+        [restartButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
+        [restartButton setImageEdgeInsets:UIEdgeInsetsMake(5, 11, 17, 11)];
         restartButton.contentMode = UIViewContentModeTop;
         restartButton.backgroundColor = [UIColor clearColor];
         [restartButton setImage:[UIImage imageNamed:@"否"] forState:UIControlStateNormal];
@@ -79,10 +83,9 @@ static CGFloat   screenHeight;
     return _blurView;
 }
 
-
 - (void)layoutSubviews {
     self.finishView.frame = self.frame;
-    self.restartButton.frame = CGRectMake((screenWidth - 22) * 0.5, screenHeight * 0.875, 23, 23);
+    self.restartButton.frame = CGRectMake((screenWidth - 48) * 0.5, screenHeight * 0.875, 48, 48);
 
 }
 
@@ -108,8 +111,6 @@ static CGFloat   screenHeight;
         }
         [self.finishImageView addSubview:digitImageView];
     }
-    
-
 }
 
 - (void)setupWithFailure {
@@ -119,15 +120,13 @@ static CGFloat   screenHeight;
 }
 
 - (void)showFinishView {
-    [UIView animateWithDuration:2.0f animations:^{
+    [UIView animateWithDuration:1.0f animations:^{
         self.blurView.alpha = 0.0f;
     }];
 }
 
 - (void)wantOneMoreIncense {
-    NSLog(@"wantOneMoreIncense");
     if ([self.delegate respondsToSelector:@selector(oneMoreIncense)]) {
-        NSLog(@"delegate responded");
         [self.delegate oneMoreIncense];
     }
 }
