@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 CaiGavin. All rights reserved.
 //
 
+#import "CLFIncenseCommonHeader.h"
 #import "CLFCloud.h"
 
 @interface CLFCloud ()
@@ -17,21 +18,13 @@
 @implementation CLFCloud
 
 static CGPoint beginPoint;
-
-static CGFloat screenHeight;
-static CGFloat sizeRatio;
-static CGFloat incenseLocation = 200.0f;
-
 static CGFloat beginCenterY = -140.0f;
 
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        screenHeight = [UIScreen mainScreen].bounds.size.height;
-        sizeRatio = screenHeight / 667.0f;
         self.dragEnable = YES;
-        incenseLocation = (screenHeight - 200 * sizeRatio) * 0.3;
     }
     return self;
 }
@@ -72,13 +65,13 @@ static CGFloat beginCenterY = -140.0f;
     
     CGFloat offsetY = currentPoint.y - beginPoint.y;
 
-    CGFloat floorY = screenHeight - 200 * sizeRatio - incenseLocation;
+    CGFloat floorY = Incense_Screen_Height - 200 * Size_Ratio_To_iPhone6 - Incense_Location;
     
     CGFloat newCenterY = self.center.y + offsetY;
     CGFloat distance = newCenterY - beginCenterY;
 
-    if (distance > floorY - 57 * sizeRatio) {
-        newCenterY = beginCenterY + floorY - 57 * sizeRatio;
+    if (distance > floorY - 57 * Size_Ratio_To_iPhone6) {
+        newCenterY = beginCenterY + floorY - 57 * Size_Ratio_To_iPhone6;
         self.dragEnable = NO;
         [self.delegate lightTheIncense];
     }

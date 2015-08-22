@@ -7,6 +7,7 @@
 //
 
 #import "CLFIncenseView.h"
+#import "CLFIncenseCommonHeader.h"
 #import "Masonry.h"
 #import "Waver.h"
 #import <math.h>
@@ -32,12 +33,6 @@ static CGFloat headDustHeight;
 static CGFloat waverHeight;
 static CGFloat incenseHeight;
 
-static CGFloat screenWidth;
-static CGFloat screenHeight;
-static CGFloat incenseLocation;
-static CGFloat sizeRatio;
-static const CGFloat kSeconds = 30.0f;
-
 static CGFloat timeHaveGone;
 static CGFloat incenseBurnOffLength;
 static CGFloat incenseStickHeight;
@@ -49,13 +44,9 @@ static const CGFloat kIncenseStickWidth = 2.0f;
 - (instancetype)init {
     self = [super init];
     if (self) {
-        screenWidth = [UIScreen mainScreen].bounds.size.width;
-        screenHeight = [UIScreen mainScreen].bounds.size.height;
         waverHeight = -[UIScreen mainScreen].bounds.size.height;
-        sizeRatio = screenHeight / 667.0f;
-        incenseBurnOffLength = 64.0f * sizeRatio;
-        incenseStickHeight = 70.0f * sizeRatio;
-        incenseLocation = (screenHeight - 200 * sizeRatio) * 0.3;
+        incenseBurnOffLength = 64.0f * Size_Ratio_To_iPhone6;
+        incenseStickHeight = 70.0f * Size_Ratio_To_iPhone6;
     }
     return self;
 }
@@ -98,7 +89,7 @@ static const CGFloat kIncenseStickWidth = 2.0f;
             make.width.equalTo(@(kIncenseWidth));
             make.centerX.equalTo(self);
             make.top.equalTo(self);
-            make.height.equalTo(self).offset(-50 * sizeRatio);
+            make.height.equalTo(self).offset(-50 * Size_Ratio_To_iPhone6);
         }];
 
         _incenseBodyView = incenseBodyView;
@@ -199,7 +190,7 @@ static const CGFloat kIncenseStickWidth = 2.0f;
     
     self.incenseStick.backgroundColor = [UIColor blackColor];
     
-    self.waver.frame = CGRectMake(0, 0, screenWidth, waverHeight);
+    self.waver.frame = CGRectMake(0, 0, Incense_Screen_Width, waverHeight);
 }
 
 - (void)setBrightnessCallback:(void (^)(CLFIncenseView *))brightnessCallback {
@@ -236,15 +227,15 @@ static BOOL modifyDust = NO;
 
 - (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval {
     modifyDust = YES;
-    CGFloat tempIncenseHeight = incenseHeight - timeInterval * (135.0f * sizeRatio / kSeconds);
+    CGFloat tempIncenseHeight = incenseHeight - timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
     if (tempIncenseHeight > incenseBurnOffLength) {
         incenseHeight = tempIncenseHeight;
-        waverHeight -= timeInterval * (135.0f * sizeRatio / kSeconds);
+        waverHeight -= timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
         colorLocation -= timeInterval * (1.2 / 100) * (60 / self.displaylink.frameInterval);
         x += timeInterval * 0.0072f * (60 / self.displaylink.frameInterval);
     } else {
         incenseHeight = incenseBurnOffLength;
-        waverHeight = -703 * sizeRatio;
+        waverHeight = -703 * Size_Ratio_To_iPhone6;
         colorLocation = 0.0f;
         x = 5.5;
     }
@@ -255,15 +246,15 @@ static CGFloat y = 0.0f;
 static CGFloat colorLocation = 0.8f;
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
-    CGFloat declineDistance = kSeconds * 60 / self.displaylink.frameInterval;
+    CGFloat declineDistance = Incense_Burn_Off_Time * 60 / self.displaylink.frameInterval;
 
     timeHaveGone += 1.0 / (60.0 / self.displaylink.frameInterval);
     
-    incenseHeight -= 135.0f * sizeRatio / declineDistance;
-    self.frame = (CGRect){self.frame.origin, {screenWidth, incenseHeight}};
+    incenseHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
+    self.frame = (CGRect){self.frame.origin, {Incense_Screen_Width, incenseHeight}};
     
-    waverHeight -= 135.0f * sizeRatio / declineDistance;
-    self.waver.frame = (CGRect) {{0, 0}, {screenWidth, waverHeight}};
+    waverHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
+    self.waver.frame = (CGRect) {{0, 0}, {Incense_Screen_Width, waverHeight}};
     
     colorLocation = colorLocation - 0.5 / 100 > 0 ? colorLocation - 0.5 / 100 : 0.0f;
     self.dustGradient.locations = @[@0.0f, @(colorLocation), @1.0f];
@@ -295,19 +286,21 @@ CGFloat eulerSpiralLength = 0.0f;
     CGFloat e;
     CGFloat m;
     CGFloat n;
-    UIGraphicsBeginImageContextWithOptions(self.headDustView.frame.size, NO, 0.0f);  // 位置换掉??
+    
+#warning - TODO: 位置换掉??
+    UIGraphicsBeginImageContextWithOptions(self.headDustView.frame.size, NO, 0.0f);
     if (x == 2.5) {
         e = x - 2.5;
-        m = 2.5 + 40 * sizeRatio * integral(fresnelSin, 0, e, 10);
-        n = 3.5 + 40 * sizeRatio * integral(fresnelCos, 0, e, 10);
+        m = 2.5 + 40 * Size_Ratio_To_iPhone6 * integral(fresnelSin, 0, e, 10);
+        n = 3.5 + 40 * Size_Ratio_To_iPhone6 * integral(fresnelCos, 0, e, 10);
         previousM = m;
         previousN = n;
         
         [self.dustPath moveToPoint:CGPointMake(m, headDustHeight - n)];
     } else if (x < 5.5){
         e = x - 2.5;
-        m = 2.5 + 40 * sizeRatio * integral(fresnelSin, 0, e, 10);
-        n = 3.5 + 40 * sizeRatio * integral(fresnelCos, 0, e, 10);
+        m = 2.5 + 40 * Size_Ratio_To_iPhone6 * integral(fresnelSin, 0, e, 10);
+        n = 3.5 + 40 * Size_Ratio_To_iPhone6 * integral(fresnelCos, 0, e, 10);
         
         eulerSpiralLength += distance(previousM, previousN, m, n);
         previousM = m;
@@ -316,7 +309,7 @@ CGFloat eulerSpiralLength = 0.0f;
         [self.dustPath addLineToPoint:CGPointMake(m, headDustHeight - n)];
     }
     
-    x += 0.0072f / (kSeconds / 60.0f);
+    x += 0.0072f / (Incense_Burn_Off_Time / 60.0f);
     self.dustLine.path = self.dustPath.CGPath;
     
     UIGraphicsEndImageContext();
@@ -348,8 +341,8 @@ CGFloat integral(CGFloat(*f)(CGFloat x), CGFloat low, CGFloat high, NSInteger n)
 }
 
 - (void)initialSetup {
-    headDustHeight = 73.0f * sizeRatio;
-    incenseHeight = 200.0f * sizeRatio;
+    headDustHeight = 73.0f * Size_Ratio_To_iPhone6;
+    incenseHeight = 200.0f * Size_Ratio_To_iPhone6;
     x = 2.5f;
     y = 0.0f;
     colorLocation = 0.8f;

@@ -40,6 +40,7 @@
 		3FCB4CF51B86C33B00B854E4 /* CLFEndView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCB4CF41B86C33B00B854E4 /* CLFEndView.m */; };
 		3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */; };
 		3FE6F4941B887B6000D06810 /* CLFPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6F4931B887B6000D06810 /* CLFPageControl.m */; };
+		3FE6F4981B88A05A00D06810 /* CLFAudioPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6F4971B88A05A00D06810 /* CLFAudioPlayView.m */; };
 		3FF47E411B7CBFDE00AD81C8 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */; };
 /* End PBXBuildFile section */
 
@@ -121,6 +122,8 @@
 		3FE6F4921B887B6000D06810 /* CLFPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFPageControl.h; sourceTree = "<group>"; };
 		3FE6F4931B887B6000D06810 /* CLFPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFPageControl.m; sourceTree = "<group>"; };
 		3FE6F4951B8890F800D06810 /* CLFIncenseCommonHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFIncenseCommonHeader.h; sourceTree = "<group>"; };
+		3FE6F4961B88A05A00D06810 /* CLFAudioPlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFAudioPlayView.h; sourceTree = "<group>"; };
+		3FE6F4971B88A05A00D06810 /* CLFAudioPlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFAudioPlayView.m; sourceTree = "<group>"; };
 		3FF47E3F1B7CBFDE00AD81C8 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -324,6 +327,8 @@
 				3F1956CC1B78B98F003A5575 /* CLFIncenseView.m */,
 				3F69D23C1B846E0A00DD6B03 /* CLFCloud.h */,
 				3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */,
+				3FE6F4961B88A05A00D06810 /* CLFAudioPlayView.h */,
+				3FE6F4971B88A05A00D06810 /* CLFAudioPlayView.m */,
 				3FA869581B8588E000799E0A /* CLFMusicPlayView.h */,
 				3FA869591B8588E000799E0A /* CLFMusicPlayView.m */,
 				3FA8695B1B858C3B00799E0A /* CLFPlayButton.h */,
@@ -476,6 +481,7 @@
 				3F48CDF81B78777F00F889BC /* main.m in Sources */,
 				3F1956A41B789BE7003A5575 /* Waver.m in Sources */,
 				3F1956C11B78B95A003A5575 /* MASCompositeConstraint.m in Sources */,
+				3FE6F4981B88A05A00D06810 /* CLFAudioPlayView.m in Sources */,
 				3F55A5B51B862BA0000FAE56 /* CLFMathTools.m in Sources */,
 				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,

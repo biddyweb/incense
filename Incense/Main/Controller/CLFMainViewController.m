@@ -11,10 +11,11 @@
 #warning - TODO: 音频修改
 #warning - TODO: 文案修改
 #warning - TODO: appid 修改
+#warning - TODO: 测试来电中断/短信中断等
 
 #warning - TODO: MusicList 显示方式修改
-#warning - TODO: 统一下...用宏
 
+// #warning - DONE: 统一下...用宏?
 // #warning - DONE: 添加了评分功能?
 // #warning - DONE: Intro 页面修改
 // #warning - DONE: pageControl 也许需要自定义,以修改小点的图片为句号
@@ -32,7 +33,9 @@
 #import "UIImage+animatedGIF.h"
 #import "CLFMathTools.h"
 #import "CLFMusicPlayView.h"
+#import "CLFAudioPlayView.h"
 #import "CLFEndView.h"
+#import "CLFIncenseCommonHeader.h"
 
 @interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, CLFEndViewDelegate, UICollisionBehaviorDelegate>
 
@@ -46,6 +49,7 @@
 
 @property (nonatomic, weak)   CLFEndView             *endView;
 
+@property (nonatomic, weak)   CLFAudioPlayView       *audioView;
 @property (nonatomic, weak)   CLFMusicPlayView       *musicView;
 @property (nonatomic, strong) NSTimer                *musicTimer;
 
@@ -67,11 +71,6 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 
 
 @implementation CLFMainViewController
-
-static CGFloat   screenWidth;
-static CGFloat   screenHeight;
-static CGFloat   sizeRatio;
-static CGFloat   incenseLocation;
 
 static CGFloat   cloudLocation = -380.0f;
 static CGFloat   smokeLocation = -520.0f;
@@ -95,17 +94,13 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    screenWidth = [UIScreen mainScreen].bounds.size.width;
-    screenHeight = [UIScreen mainScreen].bounds.size.height;
-    sizeRatio = screenHeight / 667.0f;
-    incenseLocation = (screenHeight - 200 * sizeRatio) * 0.3;
     
     [self makeIncense];
     [self makeCloud];
 
     [self makeRipple];
-    [self makeMusicView];
+//    [self makeMusicView];
+    [self makeAudioView];
     
     self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
     [self fireAppearInSky];
@@ -165,8 +160,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kFireVoiceFactor);
         incense.brightnessLevel = normalizedValue;
         //        incense.waver.level = normalizedValue;
-        smokeLocation += 0.64 * sizeRatio;
-        self.smoke.frame = CGRectMake(0, smokeLocation, screenWidth, 520);
+        smokeLocation += 0.64 * Size_Ratio_To_iPhone6;
+        self.smoke.frame = CGRectMake(0, smokeLocation, Incense_Screen_Width, 520);
     };
 }
 
@@ -298,11 +293,11 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)makeIncense {
     [self.incenseView initialSetup];
 
-    self.incenseView.frame = CGRectMake(0, screenHeight - incenseLocation - 200, screenWidth, 200 * sizeRatio);
+    self.incenseView.frame = CGRectMake(0, Incense_Screen_Height - Incense_Location - 200, Incense_Screen_Width, 200 * Size_Ratio_To_iPhone6);
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
     
-    self.incenseShadowView.frame = CGRectMake((screenWidth - 6) / 2, screenHeight - incenseLocation + 10, 6, 3);
+    self.incenseShadowView.frame = CGRectMake((Incense_Screen_Width - 6) / 2, Incense_Screen_Height - Incense_Location + 10, 6, 3);
     
     [self floating];
 }
@@ -314,13 +309,13 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
     anim.repeatCount = 1500;
-    anim.values = @[@(screenHeight - incenseLocation + 5), @(screenHeight - incenseLocation), @(screenHeight - incenseLocation + 5)];
+    anim.values = @[@(Incense_Screen_Height - Incense_Location + 5), @(Incense_Screen_Height - Incense_Location), @(Incense_Screen_Height - Incense_Location + 5)];
     anim.duration = animationTime;
     anim.removedOnCompletion = NO;
     anim.fillMode = kCAFillModeForwards;
     anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
-    self.incenseView.layer.position = CGPointMake(0, screenHeight - incenseLocation);
+    self.incenseView.layer.position = CGPointMake(0, Incense_Screen_Height - Incense_Location);
     self.incenseView.layer.anchorPoint = CGPointMake(0, 1);
     [self.incenseView.layer addAnimation:anim forKey:nil];
     
@@ -336,7 +331,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     shadowAnim.fillMode = kCAFillModeForwards;
     anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
-    self.incenseShadowView.layer.position = CGPointMake(screenWidth * 0.5, screenHeight - incenseLocation + 10);
+    self.incenseShadowView.layer.position = CGPointMake(Incense_Screen_Width * 0.5, Incense_Screen_Height - Incense_Location + 10);
     self.incenseShadowView.layer.anchorPoint = CGPointMake(0.5, 0.5);
     [self.incenseShadowView.layer addAnimation:shadowAnim forKey:nil];
 }
@@ -345,7 +340,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self.incenseView.layer removeAllAnimations];
     [self.incenseShadowView.layer removeAllAnimations];
     
-    self.incenseView.layer.position = CGPointMake(0, screenHeight - incenseLocation);
+    self.incenseView.layer.position = CGPointMake(0, Incense_Screen_Height - Incense_Location);
     self.incenseView.layer.anchorPoint = CGPointMake(0, 1);
 }
 
@@ -356,15 +351,16 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         UIImageView *smoke = [[UIImageView alloc] init];
         smoke.image = [UIImage imageNamed:@"云雾"];
         smoke.alpha = 1.0f;
-        smoke.frame = CGRectMake(0, smokeLocation, screenWidth, 520);
+        smoke.frame = CGRectMake(0, smokeLocation, Incense_Screen_Width, 520);
         [self.view addSubview:smoke];
         _smoke = smoke;
     }
     return _smoke;
 }
 
+#warning - 补偿高度要怎么算?
 - (void)renewSmokeStatusWithTimeHaveGone:(CGFloat)leaveBackInterval {
-    smokeLocation += 0.32 * sizeRatio * leaveBackInterval * 7.5;
+    smokeLocation += 0.32 * Size_Ratio_To_iPhone6 * leaveBackInterval * 7.5;
 }
 
 #pragma mark - Cloud
@@ -383,12 +379,12 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)makeCloud {
     self.cloud.alpha = 1.0f;
     self.cloud.dragEnable = YES;
-    self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 380 + 140 * sizeRatio); // 也许要换成1042
+    self.cloud.frame = CGRectMake(0, cloudLocation, Incense_Screen_Width, 380 + 140 * Size_Ratio_To_iPhone6); // 也许要换成1042
 }
 
 - (void)cloudRebound {
     [UIView animateKeyframesWithDuration:1.0f delay:0.0f options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
-        self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 380 + 140 * sizeRatio);
+        self.cloud.frame = CGRectMake(0, cloudLocation, Incense_Screen_Width, 380 + 140 * Size_Ratio_To_iPhone6);
     } completion:^(BOOL finished) {
         
     }];
@@ -412,7 +408,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     CGFloat fireW = 18;
     CGFloat fireH = 24;
     self.fire.alpha = 0.0f;
-    self.fire.frame = CGRectMake((screenWidth - fireW) / 2, (CGRectGetHeight(self.cloud.frame) - 80), fireW, fireH);
+    self.fire.frame = CGRectMake((Incense_Screen_Width - fireW) / 2, (CGRectGetHeight(self.cloud.frame) - 80), fireW, fireH);
     [UIView animateWithDuration:0.5f animations:^{
         self.fire.alpha = 1.0f;
     } completion:^(BOOL finished) {
@@ -422,10 +418,10 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (void)fireAppearInSky {
     [UIView animateWithDuration:2.0f animations:^{
-        self.smoke.frame = CGRectMake(0, -440 , screenWidth, 520); // 用 -440 是为了让火焰的出现更自然
+        self.smoke.frame = CGRectMake(0, -440 , Incense_Screen_Width, 520); // 用 -440 是为了让火焰的出现更自然
     } completion:^(BOOL finished) {
         [self makeFire];
-        self.smoke.frame = CGRectMake(0, smokeLocation , screenWidth, 520);
+        self.smoke.frame = CGRectMake(0, smokeLocation , Incense_Screen_Width, 520);
     }];
 }
 
@@ -434,7 +430,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (UIView *)rippleView {
     if (!_rippleView) {
         UIView *rippleView = [[UIView alloc] init];
-        rippleView.frame = CGRectMake(0, screenHeight - incenseLocation - 80, screenWidth, 180);
+        rippleView.frame = CGRectMake(0, Incense_Screen_Height - Incense_Location - 80, Incense_Screen_Width, 180);
         rippleView.backgroundColor = [UIColor clearColor];
         [self.view addSubview:rippleView];
         _rippleView = rippleView;
@@ -465,6 +461,22 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 #pragma mark - About Audio
 
+- (CLFAudioPlayView *)audioView {
+    if (!_audioView) {
+        CLFAudioPlayView *audioView = [[CLFAudioPlayView alloc] init];
+//        audioView.backgroundColor = [UIColor yellowColor];
+        [self.view addSubview:audioView];
+        _audioView = audioView;
+    }
+    return _audioView;
+}
+
+- (void)makeAudioView {
+    self.audioView.frame = CGRectMake(0, Incense_Screen_Height - 100, Incense_Screen_Width, 40);
+    self.audioView.show = NO;
+    self.audioView.hidden = NO;
+}
+
 - (CLFMusicPlayView *)musicView {
     if (!_musicView) {
         CLFMusicPlayView *musicView = [[CLFMusicPlayView alloc] init];
@@ -476,18 +488,26 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)makeMusicView {
-    self.musicView.frame = CGRectMake(0, screenHeight - 60, screenWidth, 120);
+    self.musicView.frame = CGRectMake(0, Incense_Screen_Height - 60, Incense_Screen_Width, 120);
     self.musicView.show = NO;
     self.musicView.hidden = NO;
 }
 
 - (void)showMusicView {
-    [self.musicView showMusicButtons];
-    if (self.musicView.show) {
+//    [self.musicView showMusicButtons];
+//    if (self.musicView.show) {
+//        self.musicTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showMusicView) userInfo:nil repeats:NO];
+//    } else {
+//        [self.musicTimer invalidate];
+//    }
+    
+    [self.audioView showAudioButtons];
+    if (self.audioView.show) {
         self.musicTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showMusicView) userInfo:nil repeats:NO];
     } else {
         [self.musicTimer invalidate];
     }
+
 }
 
 - (void)setupRecorder {

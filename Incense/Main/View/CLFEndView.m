@@ -7,6 +7,7 @@
 //
 
 #import "CLFEndView.h"
+#import "CLFIncenseCommonHeader.h"
 
 @interface CLFEndView ()
 
@@ -20,15 +21,9 @@
 
 @implementation CLFEndView
 
-static CGFloat   screenWidth;
-static CGFloat   screenHeight;
-
 - (instancetype)init {
     if (self = [super init]) {
         self.userInteractionEnabled = YES;
-        
-        screenWidth = [UIScreen mainScreen].bounds.size.width;
-        screenHeight = [UIScreen mainScreen].bounds.size.height;
         
         UIView *finishedView = [[UIView alloc] init];
         finishedView.backgroundColor = [UIColor clearColor];
@@ -85,17 +80,21 @@ static CGFloat   screenHeight;
 
 - (void)layoutSubviews {
     self.finishView.frame = self.frame;
-    self.restartButton.frame = CGRectMake((screenWidth - 48) * 0.5, screenHeight * 0.875, 48, 48);
+    CGFloat restartButtonW = 48;
+    CGFloat restartButtonH = restartButtonW;
+    
+    self.restartButton.frame = CGRectMake((Incense_Screen_Width - restartButtonW) * 0.5, Incense_Screen_Height * 0.875, restartButtonW, restartButtonH);
 
 }
 
 - (void)setupWithBurntOffNumber:(NSString *)numberString {
+    CGFloat digitW = 22 * Size_Ratio_To_iPhone6;
+    CGFloat digitH = digitW;
     self.blurView.alpha = 1.0f;
-    self.finishImageView.frame = CGRectMake((screenWidth - 22) * 0.5, screenHeight * 0.25, 22, 300);
+    self.finishImageView.frame = CGRectMake((Incense_Screen_Width - digitW) * 0.5, Incense_Screen_Height * 0.25, digitW, 300);
     
     NSInteger totalNumber = numberString.length;
-    CGFloat digitW = 22;
-    CGFloat digitH = 22;
+
     CGFloat digitX = 0;
     for (NSInteger i = 0; i <= totalNumber; i++) {
         CGFloat digitY = i * (digitH + 10);
@@ -115,7 +114,9 @@ static CGFloat   screenHeight;
 
 - (void)setupWithFailure {
     self.blurView.alpha = 0.0f;
-    self.finishImageView.frame = CGRectMake((screenWidth - 22) * 0.5, screenHeight * 0.25 - 44, 22, 44);
+    CGFloat finishViewW = 22 * Size_Ratio_To_iPhone6;
+    CGFloat finishViewH = 44 * Size_Ratio_To_iPhone6;
+    self.finishImageView.frame = CGRectMake((Incense_Screen_Width - finishViewW) * 0.5, Incense_Screen_Height * 0.25 - finishViewH, finishViewW, finishViewH);
     self.finishImageView.image = [UIImage imageNamed:@"灭"];
 }
 

@@ -10,6 +10,7 @@
 #import "CLFMainViewController.h"
 #import "CLFNewFeatureController.h"
 #import "CLFIncenseView.h"
+#import "CLFIncenseCommonHeader.h"
 
 @interface AppDelegate () <UIAlertViewDelegate>
 
@@ -46,7 +47,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     
     if ([version isEqualToString:oldVersion]) {
         NSLog(@"dududududud");
-        self.window.rootViewController = [[CLFNewFeatureController alloc] init];
+        self.window.rootViewController = [[CLFMainViewController alloc] init];
     } else {
         self.window.rootViewController = [[CLFNewFeatureController alloc] init];
         [[NSUserDefaults standardUserDefaults] setValue:version forKey:@"firstLaunch"];
@@ -120,7 +121,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 }
 
 - (void)addFinishedNotificationWithTimeHaveGone:(CGFloat)timeHaveGone; {
-    CGFloat notificationTimeInterval = 30.0f - timeHaveGone;
+    CGFloat notificationTimeInterval = Incense_Burn_Off_Time - timeHaveGone;
     
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     if (notification) {
