@@ -8,15 +8,25 @@
 
 
 
-#warning - TODO: pageControl 也许需要自定义,以修改小点的图片为句号
-#warning - TODO: Intro 页面修改
-#warning - TODO: 替换音频
+#warning - TODO: 音频修改
+#warning - TODO: 文案修改
+#warning - TODO: appid 修改
+
 #warning - TODO: MusicList 显示方式修改
+#warning - TODO: 统一下...用宏
+
+// #warning - DONE: 添加了评分功能?
+// #warning - DONE: Intro 页面修改
+// #warning - DONE: pageControl 也许需要自定义,以修改小点的图片为句号
+// #warning - DONE: 燃烧支数的位置要调整
+// #warning - DONE: 不同设备 cloud 的高度
+// #warning - DONE: 第一次进入程序 锁屏等会出问题
+// #warning - DONE: 进入后台关闭录音/ 似乎录音和本地通知有冲突...后台录音本地通知就没声音?
+// #warning - DONE: 在 Intro 页面切到后台会崩溃
 
 #import "CLFMainViewController.h"
 #import "CLFCloud.h"
 #import "CLFIncenseView.h"
-#import <AVFoundation/AVFoundation.h>
 #import "BMWaveMaker.h"
 #import "Waver.h"
 #import "UIImage+animatedGIF.h"
@@ -31,7 +41,6 @@
 @property (nonatomic, weak)   UIImageView            *smoke;
 @property (nonatomic, weak)   UIImageView            *fire;
 
-@property (nonatomic, strong) AVAudioRecorder        *recorder;
 @property (nonatomic, weak)   UIView                 *rippleView;
 @property (nonatomic, strong) BMWaveMaker            *rippleMaker;
 
@@ -156,7 +165,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kFireVoiceFactor);
         incense.brightnessLevel = normalizedValue;
         //        incense.waver.level = normalizedValue;
-        smokeLocation += 0.32 * sizeRatio;
+        smokeLocation += 0.64 * sizeRatio;
         self.smoke.frame = CGRectMake(0, smokeLocation, screenWidth, 520);
     };
 }
@@ -207,7 +216,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (void)incenseDidBurnOffForALongTime {
     [self.view removeGestureRecognizer:self.tap];
-    
+    self.burning = NO;
     self.musicView.hidden = YES;
     [self.rippleMaker stopWave];
     [self.musicView stopPlayMusic];
@@ -374,12 +383,12 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)makeCloud {
     self.cloud.alpha = 1.0f;
     self.cloud.dragEnable = YES;
-    self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 520); // 也许要换成1042
+    self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 380 + 140 * sizeRatio); // 也许要换成1042
 }
 
 - (void)cloudRebound {
     [UIView animateKeyframesWithDuration:1.0f delay:0.0f options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
-        self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 520);
+        self.cloud.frame = CGRectMake(0, cloudLocation, screenWidth, 380 + 140 * sizeRatio);
     } completion:^(BOOL finished) {
         
     }];

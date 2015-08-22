@@ -11,7 +11,7 @@
 #import "CLFNewFeatureController.h"
 #import "CLFIncenseView.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <UIAlertViewDelegate>
 
 @end
 
@@ -46,7 +46,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     
     if ([version isEqualToString:oldVersion]) {
         NSLog(@"dududududud");
-        self.window.rootViewController = [[CLFMainViewController alloc] init];
+        self.window.rootViewController = [[CLFNewFeatureController alloc] init];
     } else {
         self.window.rootViewController = [[CLFNewFeatureController alloc] init];
         [[NSUserDefaults standardUserDefaults] setValue:version forKey:@"firstLaunch"];
@@ -64,12 +64,18 @@ static void displayStatusChanged(CFNotificationCenterRef center,
                                     NULL,
                                     CFNotificationSuspensionBehaviorDeliverImmediately);
     
+    [self appLaunchTimes];
+    
     return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
+    if (![application.keyWindow.rootViewController isKindOfClass:[CLFMainViewController class]]) {
+        return;
+    }
     CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
     if (mainVC.burning) { // 正在燃烧
+        [mainVC.recorder pause];
         CLFIncenseView *incense = mainVC.incenseView;
         timeHaveGone = [incense timeHaveGone];
         incense.displaylink.paused = YES; // 暂停动画
@@ -80,8 +86,12 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     NSLog(@"Did Enter BackGround");
+    if (![application.keyWindow.rootViewController isKindOfClass:[CLFMainViewController class]]) {
+        return;
+    }
     CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
     if (mainVC.burning) { // 正在燃烧
+        [mainVC.recorder pause];
         CLFIncenseView *incense = mainVC.incenseView;
         timeHaveGone = [incense timeHaveGone];
         incense.displaylink.paused = YES; // 暂停动画
@@ -110,14 +120,13 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 }
 
 - (void)addFinishedNotificationWithTimeHaveGone:(CGFloat)timeHaveGone; {
-    CGFloat notificationTimeInterval = 60.0f - timeHaveGone;
+    CGFloat notificationTimeInterval = 30.0f - timeHaveGone;
     
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     if (notification) {
         NSDate *currentDate   = [NSDate date];
         notification.timeZone = [NSTimeZone defaultTimeZone]; // 使用本地时区
         notification.fireDate = [currentDate dateByAddingTimeInterval:notificationTimeInterval];
-        
         notification.repeatInterval = 0;
         
         notification.alertBody = @"施主,香已烧尽...";
@@ -125,7 +134,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         
         notification.userInfo = @{@"identifier" : @"finishNotification"};
     
-        notification.soundName= UILocalNotificationDefaultSoundName;
+        notification.soundName = UILocalNotificationDefaultSoundName;
     
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
@@ -137,30 +146,44 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         NSDate *currentDate   = [NSDate date];
         notification.timeZone = [NSTimeZone defaultTimeZone];
         notification.fireDate = [currentDate dateByAddingTimeInterval:1.0];
-        
         notification.repeatInterval = 0;
         
         notification.alertBody = @"烧香要虔诚懂不懂啊白痴!";
         
         notification.userInfo = @{@"identifier" : @"switchNotification"};
         
-        notification.soundName= UILocalNotificationDefaultSoundName;
-        
+        notification.soundName = UILocalNotificationDefaultSoundName;
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-        
     }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kDisplayStatusLocked"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+//    for (UILocalNotification *noti in application.scheduledLocalNotifications) {
+//        noti.applicationIconBadgeNumber = 0;
+//        [application scheduleLocalNotification:noti];
+//    }
+    
     [application cancelAllLocalNotifications];
+    
+    [self appLaunchTimes];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+
+    if (![application.keyWindow.rootViewController isKindOfClass:[CLFMainViewController class]]) { //
+        firstLaunch = NO;
+        return;
+    }
+    
+    
     if (!firstLaunch) {
+        
+        NSLog(@"enterHere...jiongjiongjiong...");
         CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
         if (mainVC.burning) {
+            [mainVC.recorder record];
             backTime = [NSDate date];
             NSTimeInterval leaveTimeInterval = [leaveTime timeIntervalSince1970];
             NSTimeInterval backTimeInterval = [backTime timeIntervalSince1970];
@@ -183,6 +206,48 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     }
     
     NSLog(@"becomeActive %@", [NSDate date]);
+}
+
+- (void)appLaunchTimes {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger launchTime = [defaults integerForKey:@"launchTime"];
+    
+    if (launchTime) {
+        launchTime ++;
+    } else {
+        launchTime = 1;
+    }
+
+    if (33 == launchTime) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"喜欢 一炷香 吗?"
+                                                        message:@"亲~赏个好评吧~O(∩_∩)O~~"
+                                                       delegate:self
+                                              cancelButtonTitle:@"再看看"
+                                              otherButtonTitles:@"准了!", nil];
+        [alert show];
+        launchTime = 0;
+    }
+    [defaults setInteger:launchTime forKey:@"launchTime"];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0: {
+            break;
+        }
+        case 1: {
+            NSString *appid = @"1021176188";
+            NSString *str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/cn/app/id%@?mt=8", appid];
+            NSURL *url = [NSURL URLWithString:str];
+            [[UIApplication sharedApplication] openURL:url];
+            
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSInteger launchTime = [defaults integerForKey:@"launchTime"];
+            launchTime = -666666;
+            [defaults setInteger:launchTime forKey:@"launchTime"];
+            break;
+        }
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

@@ -17,10 +17,13 @@
 @implementation CLFCloud
 
 static CGPoint beginPoint;
+
 static CGFloat screenHeight;
 static CGFloat sizeRatio;
-static CGFloat beginCenterY = -140.0f;
 static CGFloat incenseLocation = 200.0f;
+
+static CGFloat beginCenterY = -140.0f;
+
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -74,8 +77,8 @@ static CGFloat incenseLocation = 200.0f;
     CGFloat newCenterY = self.center.y + offsetY;
     CGFloat distance = newCenterY - beginCenterY;
 
-    if (distance > floorY - 57) {
-        newCenterY = beginCenterY + floorY - 57;
+    if (distance > floorY - 57 * sizeRatio) {
+        newCenterY = beginCenterY + floorY - 57 * sizeRatio;
         self.dragEnable = NO;
         [self.delegate lightTheIncense];
     }

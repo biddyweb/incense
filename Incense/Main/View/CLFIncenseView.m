@@ -31,17 +31,20 @@
 static CGFloat headDustHeight;
 static CGFloat waverHeight;
 static CGFloat incenseHeight;
+
 static CGFloat screenWidth;
 static CGFloat screenHeight;
-static CGFloat timeHaveGone;
+static CGFloat incenseLocation;
 static CGFloat sizeRatio;
+static const CGFloat kSeconds = 30.0f;
+
+static CGFloat timeHaveGone;
 static CGFloat incenseBurnOffLength;
 static CGFloat incenseStickHeight;
-static CGFloat incenseLocation;
 
 static const CGFloat kIncenseWidth = 5.0f;
 static const CGFloat kIncenseStickWidth = 2.0f;
-static const CGFloat kSeconds = 60.0f;
+
 
 - (instancetype)init {
     self = [super init];

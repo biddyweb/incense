@@ -8,18 +8,19 @@
 
 #import "CLFNewFeatureController.h"
 #import "CLFMainViewController.h"
+#import "CLFPageControl.h"
 #import "Masonry.h"
 
 @interface CLFNewFeatureController () <UIScrollViewDelegate>
 
 @property (nonatomic, weak) UIScrollView  *scrollView;
-@property (nonatomic, weak) UIPageControl *pageControl;
+@property (nonatomic, weak) CLFPageControl *pageControl;
 
 @end
 
 @implementation CLFNewFeatureController
 
-static const NSInteger NewFeaturePages = 4;
+static const NSInteger NewFeaturePages = 5;
 
 - (instancetype)init
 {
@@ -86,15 +87,13 @@ static const NSInteger NewFeaturePages = 4;
     imageView.userInteractionEnabled = YES;
     
     UIButton *startButton = [[UIButton alloc] init];
-    [startButton setBackgroundImage:[UIImage imageNamed:@"PlayButton1"] forState:UIControlStateNormal];
     [startButton addTarget:self action:@selector(start) forControlEvents:UIControlEventTouchUpInside];
     [imageView addSubview:startButton];
     
     [startButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(@22);
-        make.height.equalTo(@22);
+        make.width.equalTo(imageView);
+        make.height.equalTo(imageView);
         make.centerX.equalTo(imageView);
-        make.centerY.equalTo(imageView).multipliedBy(2).offset(-100);
     }];
 }
 
@@ -110,7 +109,7 @@ static const NSInteger NewFeaturePages = 4;
 }
 
 - (void)setupPageControl {
-    UIPageControl *pageControl = [[UIPageControl alloc] init];
+    CLFPageControl *pageControl = [[CLFPageControl alloc] init];
     pageControl.numberOfPages = NewFeaturePages;
     [self.view addSubview:pageControl];
     
@@ -123,8 +122,8 @@ static const NSInteger NewFeaturePages = 4;
     
     pageControl.userInteractionEnabled = NO;
     
-    pageControl.currentPageIndicatorTintColor = [UIColor redColor];
-    pageControl.pageIndicatorTintColor = [UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0];
+//    pageControl.currentPageIndicatorTintColor = [UIColor redColor];
+//    pageControl.pageIndicatorTintColor = [UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0];
 
     self.pageControl = pageControl;
 }
@@ -134,6 +133,11 @@ static const NSInteger NewFeaturePages = 4;
     
     NSInteger page = (offsetX + 0.5 * CGRectGetWidth(scrollView.frame)) / CGRectGetWidth(scrollView.frame);
     self.pageControl.currentPage = page;
+//    if (page == 4) {
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [self start];
+//        });
+//    }
 }
 
 @end

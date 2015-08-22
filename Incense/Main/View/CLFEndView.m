@@ -91,7 +91,7 @@ static CGFloat   screenHeight;
 
 - (void)setupWithBurntOffNumber:(NSString *)numberString {
     self.blurView.alpha = 1.0f;
-    self.finishImageView.frame = CGRectMake((screenWidth - 22) * 0.5, screenHeight * 0.25 - 44, 22, 300);
+    self.finishImageView.frame = CGRectMake((screenWidth - 22) * 0.5, screenHeight * 0.25, 22, 300);
     
     NSInteger totalNumber = numberString.length;
     CGFloat digitW = 22;

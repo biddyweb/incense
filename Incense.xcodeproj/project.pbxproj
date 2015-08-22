@@ -39,6 +39,7 @@
 		3FA869631B85C98A00799E0A /* 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA869601B85C98A00799E0A /* 2.mp3 */; };
 		3FCB4CF51B86C33B00B854E4 /* CLFEndView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCB4CF41B86C33B00B854E4 /* CLFEndView.m */; };
 		3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */; };
+		3FE6F4941B887B6000D06810 /* CLFPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6F4931B887B6000D06810 /* CLFPageControl.m */; };
 		3FF47E411B7CBFDE00AD81C8 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */; };
 /* End PBXBuildFile section */
 
@@ -117,6 +118,9 @@
 		3FCB4CF41B86C33B00B854E4 /* CLFEndView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFEndView.m; sourceTree = "<group>"; };
 		3FCF3A521B7B9F2D00B9FFFF /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
 		3FCF3A531B7B9F2D00B9FFFF /* UIImage+animatedGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+animatedGIF.m"; sourceTree = "<group>"; };
+		3FE6F4921B887B6000D06810 /* CLFPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFPageControl.h; sourceTree = "<group>"; };
+		3FE6F4931B887B6000D06810 /* CLFPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFPageControl.m; sourceTree = "<group>"; };
+		3FE6F4951B8890F800D06810 /* CLFIncenseCommonHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFIncenseCommonHeader.h; sourceTree = "<group>"; };
 		3FF47E3F1B7CBFDE00AD81C8 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		3FF47E401B7CBFDE00AD81C8 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -236,6 +240,7 @@
 		3F48CDF51B78777F00F889BC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3FE6F4951B8890F800D06810 /* CLFIncenseCommonHeader.h */,
 				3FA8695E1B85C98A00799E0A /* 4.mp3 */,
 				3FA8695F1B85C98A00799E0A /* 3.mp3 */,
 				3FA869601B85C98A00799E0A /* 2.mp3 */,
@@ -288,6 +293,8 @@
 		3F55A5B11B862ABB000FAE56 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				3FE6F4921B887B6000D06810 /* CLFPageControl.h */,
+				3FE6F4931B887B6000D06810 /* CLFPageControl.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -459,6 +466,7 @@
 				3FA8695D1B858C3B00799E0A /* CLFPlayButton.m in Sources */,
 				3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */,
 				3F1956C41B78B95A003A5575 /* MASLayoutConstraint.m in Sources */,
+				3FE6F4941B887B6000D06810 /* CLFPageControl.m in Sources */,
 				3F1956C71B78B95A003A5575 /* NSArray+MASAdditions.m in Sources */,
 				3F3AA2B81B7B0BFD00DD9E84 /* BMWaveMaker.m in Sources */,
 				3F1956C61B78B95A003A5575 /* MASViewConstraint.m in Sources */,
