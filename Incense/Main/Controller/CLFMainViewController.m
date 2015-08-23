@@ -12,9 +12,10 @@
 #warning - TODO: 文案修改
 #warning - TODO: appid 修改
 #warning - TODO: 测试来电中断/短信中断等
+#warning - TODO: Music List 鸟字 有一点会露出来 图片要重做
 
-#warning - TODO: MusicList 显示方式修改
-
+// #warning - DONE: 瑕疵:Music List 应该改为在用户不再点击之后 5s 收起, 而非在 List 出现 5s 后收起
+// #warning - DONE: MusicList 显示方式修改
 // #warning - DONE: 统一下...用宏?
 // #warning - DONE: 添加了评分功能?
 // #warning - DONE: Intro 页面修改
@@ -78,6 +79,7 @@ static CGFloat   animationTime = 4.0f;
 
 static const CGFloat kWaverVoiceFactor = 10.0f;
 static const CGFloat kFireVoiceFactor = 40.0f;
+static const CGFloat kMusicListStyle = 0;
 
 - (instancetype)init {
     self = [super init];
@@ -99,15 +101,18 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self makeCloud];
 
     [self makeRipple];
-//    [self makeMusicView];
-    [self makeAudioView];
+    
+    if (!kMusicListStyle) {
+        [self makeMusicView];
+    } else {
+        [self makeAudioView];
+    }
     
     self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
     [self fireAppearInSky];
 }
 
-- (BOOL)prefersStatusBarHidden
-{
+- (BOOL)prefersStatusBarHidden {
     return YES;
 }
 
@@ -115,9 +120,16 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (void)lightTheIncense {
     NSLog(@"lightTheIncense");
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMusicView)];
+    
+    
+    UITapGestureRecognizer *tapRecognizer = kMusicListStyle ? [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAudioView)] : [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMusicView)];
     [self.view addGestureRecognizer:tapRecognizer];
     self.tap = tapRecognizer;
+    
+    if (kMusicListStyle) {
+        self.audioView.userInteractionEnabled = YES;
+    }
+    
     
     self.burning = YES;
     [self setupRecorder];
@@ -153,13 +165,10 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     NSLog(@"start %@", [NSDate date]);
     __block AVAudioRecorder *weakRecorder = self.recorder;
     
-    //    [self.incenseView.waver makeWaveLines]; delete
-    
     self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
         [weakRecorder updateMeters];
         CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kFireVoiceFactor);
         incense.brightnessLevel = normalizedValue;
-        //        incense.waver.level = normalizedValue;
         smokeLocation += 0.64 * Size_Ratio_To_iPhone6;
         self.smoke.frame = CGRectMake(0, smokeLocation, Incense_Screen_Width, 520);
     };
@@ -185,10 +194,17 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     self.burning = NO;
     [self.rippleMaker stopWave]; // shadow 要隐藏
     
-    [self.musicView stopPlayMusic];
-    
-    if (self.musicView.show) {
-        [self showMusicView];
+    if (!kMusicListStyle) {
+        [self.musicView stopPlayMusic];
+        if (self.musicView.show) {
+            [self showMusicView];
+        }
+    } else {
+        [self.audioView stopPlayAudio];
+        self.audioView.userInteractionEnabled = NO;
+        if (self.audioView.show) {
+            [self showAudioView];
+        }
     }
 
     [UIView animateWithDuration:2.0f animations:^{
@@ -200,7 +216,13 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         [UIView animateWithDuration:0.5f animations:^{
             self.endView.alpha = 1.0f;
             self.rippleView.alpha = 0.0f;
-            self.musicView.hidden = YES;
+            
+            if (!kMusicListStyle) {
+                self.musicView.hidden = YES;
+            } else {
+//                self.audioView.hidden = YES;
+            }
+
         }];
     }];
     
@@ -212,9 +234,17 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)incenseDidBurnOffForALongTime {
     [self.view removeGestureRecognizer:self.tap];
     self.burning = NO;
-    self.musicView.hidden = YES;
+    
+    if (!kMusicListStyle) {
+        self.musicView.hidden = YES;
+        [self.musicView stopPlayMusic];
+    } else {
+//        self.audioView.hidden = YES;
+        self.audioView.userInteractionEnabled = NO;
+        [self.audioView stopPlayAudio];
+    }
+    
     [self.rippleMaker stopWave];
-    [self.musicView stopPlayMusic];
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
     [self.recorder stop];
@@ -245,12 +275,15 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (void)oneMoreIncense {
     NSLog(@"oneMoreIncense");
+    
+
+    [self.view bringSubviewToFront:self.smoke];
+    [self.view bringSubviewToFront:self.endView];
     smokeLocation = -520.0f;
     cloudLocation = -380.0f;
     [UIView animateWithDuration:3.0f animations:^{
         self.smoke.frame = self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
         self.endView.alpha = 0.0f;
-        
     } completion:^(BOOL finished) {
         
         [self.endView removeFromSuperview];
@@ -258,7 +291,12 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         self.incenseView = nil;
         self.incenseShadowView.alpha = 1.0f;
         
-        self.musicView.hidden = NO;
+        if (!kMusicListStyle) {
+            self.musicView.hidden = NO;
+        } else {
+            self.audioView.hidden = NO;
+        }
+        
         [self makeIncense];
         [self makeCloud];
         [self makeRipple];
@@ -472,6 +510,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)makeAudioView {
+    self.audioView.userInteractionEnabled = NO;
     self.audioView.frame = CGRectMake(0, Incense_Screen_Height - 100, Incense_Screen_Width, 40);
     self.audioView.show = NO;
     self.audioView.hidden = NO;
@@ -494,20 +533,11 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)showMusicView {
-//    [self.musicView showMusicButtons];
-//    if (self.musicView.show) {
-//        self.musicTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showMusicView) userInfo:nil repeats:NO];
-//    } else {
-//        [self.musicTimer invalidate];
-//    }
-    
-    [self.audioView showAudioButtons];
-    if (self.audioView.show) {
-        self.musicTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showMusicView) userInfo:nil repeats:NO];
-    } else {
-        [self.musicTimer invalidate];
-    }
+    [self.musicView showMusicButtons];
+}
 
+- (void)showAudioView {
+    [self.audioView showAudioButtons];
 }
 
 - (void)setupRecorder {
@@ -540,7 +570,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

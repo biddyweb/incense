@@ -13,7 +13,7 @@
 
 @interface CLFNewFeatureController () <UIScrollViewDelegate>
 
-@property (nonatomic, weak) UIScrollView  *scrollView;
+@property (nonatomic, weak) UIScrollView   *scrollView;
 @property (nonatomic, weak) CLFPageControl *pageControl;
 
 @end

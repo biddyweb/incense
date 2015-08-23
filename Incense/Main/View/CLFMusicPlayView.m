@@ -22,6 +22,7 @@
 @property (nonatomic, weak)   CLFPlayButton *playingButton;
 
 @property (nonatomic, strong) NSTimer       *musicTimer;
+@property (nonatomic, strong) NSTimer       *switchTimer;
 
 @end
 
@@ -101,12 +102,23 @@ static CGFloat selfWidth;
         self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - 22, location, 44, 44);
     } completion:nil];
     self.show = !self.show;
+    
+    if (self.show) {
+        self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showMusicButtons) userInfo:nil repeats:NO];
+    } else {
+        [self.switchTimer invalidate];
+    }
+
 }
 
 - (void)showMusicList {
 }
 
 - (void)playMusicWithNamedButton:(CLFPlayButton *)namedButton {
+    [self.switchTimer invalidate];
+    self.switchTimer = nil;
+    self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showMusicButtons) userInfo:nil repeats:NO];
+    
     if ([self.playingButton isEqual:namedButton]) {
         namedButton.selected = NO;
         self.playingButton = nil;
@@ -121,7 +133,6 @@ static CGFloat selfWidth;
         [self.musicPlayer prepareToPlay];
         self.musicPlayer.numberOfLoops = -1;
         self.musicPlayer.volume = 0.5f;
-        NSLog(@"播放");
         [self.musicPlayer play];
         
         namedButton.selected = YES;

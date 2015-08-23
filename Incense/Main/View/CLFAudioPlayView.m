@@ -13,20 +13,20 @@
 
 @interface CLFAudioPlayView () <AVAudioPlayerDelegate>
 
-@property (nonatomic, strong) AVAudioPlayer *AudioPlayer;
+@property (nonatomic, strong) AVAudioPlayer   *audioPlayer;
 
 @property (nonatomic, strong) CAGradientLayer *maskLayer;
 
-@property (nonatomic, weak)   UIImageView   *topMaskView;
-@property (nonatomic, weak)   UIImageView   *bottomMaskView;
+@property (nonatomic, weak)   CLFPlayButton   *rainButton;
+@property (nonatomic, weak)   CLFPlayButton   *dewButton;
+@property (nonatomic, weak)   CLFPlayButton   *chirpButton;
 
-@property (nonatomic, weak)   CLFPlayButton *rainButton;
-@property (nonatomic, weak)   CLFPlayButton *dewButton;
-@property (nonatomic, weak)   CLFPlayButton *chirpButton;
+@property (nonatomic, weak)   CLFPlayButton   *playingButton;
 
-@property (nonatomic, weak)   CLFPlayButton *playingButton;
+@property (nonatomic, strong) NSTimer         *audioTimer;
+@property (nonatomic, strong) NSTimer         *switchTimer;
 
-@property (nonatomic, strong) NSTimer       *AudioTimer;
+@property (nonatomic, strong) NSArray         *statusLocationArray;
 
 @end
 
@@ -36,11 +36,12 @@ static CGFloat selfWidth;
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.backgroundColor = [UIColor greenColor];
+        self.statusLocationArray = @[@(-51), @(-23)];
         
         CLFPlayButton *rainButton = [[CLFPlayButton alloc] init];
         [rainButton setImage:[UIImage imageNamed:@"RainButton"] forState:UIControlStateNormal];
         rainButton.name = @"2";
+        rainButton.status = 0;
         [rainButton addTarget:self action:@selector(playAudioWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:rainButton];
         _rainButton = rainButton;
@@ -48,6 +49,7 @@ static CGFloat selfWidth;
         CLFPlayButton *dewButton = [[CLFPlayButton alloc] init];
         [dewButton setImage:[UIImage imageNamed:@"DewButton"] forState:UIControlStateNormal];
         dewButton.name = @"3";
+        dewButton.status = 0;
         [dewButton addTarget:self action:@selector(playAudioWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:dewButton];
         _dewButton = dewButton;
@@ -55,7 +57,8 @@ static CGFloat selfWidth;
         CLFPlayButton *chirpButton = [[CLFPlayButton alloc] init];
         [chirpButton setImage:[UIImage imageNamed:@"ChirpButton"] forState:UIControlStateNormal];
         chirpButton.name = @"4";
-//        chirpButton.backgroundColor = [UIColor grayColor];
+        chirpButton.status = 0;
+
         [chirpButton addTarget:self action:@selector(playAudioWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:chirpButton];
         _chirpButton = chirpButton;
@@ -82,7 +85,7 @@ static CGFloat selfWidth;
         [colors addObject:(id)[UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1.0f].CGColor];
         
         maskLayer.colors = colors;
-        maskLayer.locations = @[@0.0f, @0.3f, @0.7f, @1.0f];
+        maskLayer.locations = @[@0.0f, @0.3f, @0.6f, @1.0f];
         
         maskLayer.position = CGPointMake(0, 0);
         maskLayer.anchorPoint = CGPointMake(0, 0);
@@ -97,45 +100,103 @@ static CGFloat selfWidth;
     
     selfWidth = CGRectGetWidth(self.frame);
     
-    // -23 停 // -51 鸟雨露 // -77 o
     self.dewButton.frame = CGRectMake(selfWidth * 0.5 - 18, -77, 36, 132);
-    
     self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - 18, -77, 36, 132);
-    
     self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - 18, -77, 36, 132);
 }
 
 - (void)showAudioButtons {
+    CGFloat dewLocation = 0.0f;
+    CGFloat rainLocation = 0.0f;
+    CGFloat chirpLocation = 0.0f;
+    if (self.show) {
+        dewLocation = -77;
+        rainLocation = dewLocation;
+        chirpLocation = rainLocation;
+        self.show = NO;
+    } else {
+        dewLocation = [self.statusLocationArray[self.dewButton.status] floatValue];
+        rainLocation = [self.statusLocationArray[self.rainButton.status] floatValue];
+        chirpLocation = [self.statusLocationArray[self.chirpButton.status] floatValue];
+        self.show = YES;
+    }
+    
     [UIView animateWithDuration:0.5f animations:^{
-        self.dewButton.frame = CGRectMake(selfWidth * 0.5 - 18, -51, 36, 132);
-        
-        self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - 18, -51, 36, 132);
-        
-        self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - 18, -51, 36, 132);
+        self.dewButton.frame = CGRectMake(selfWidth * 0.5 - 18, dewLocation, 36, 132);
+        self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - 18, rainLocation, 36, 132);
+        self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - 18, chirpLocation, 36, 132);
     }];
+
+    if (self.show) {
+        self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showAudioButtons) userInfo:nil repeats:NO];
+    } else {
+        [self.switchTimer invalidate];
+    }
 }
 
-//  状态1 .......2............3..............1
-//  o o o --> 鸟 雨 露 --> 鸟 停 露 --> 几秒后 o o o
 - (void)playAudioWithNamedButton:(CLFPlayButton *)namedButton {
+    [self.switchTimer invalidate];
+    self.switchTimer = nil;
+    self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showAudioButtons) userInfo:nil repeats:NO];
     
-    
-    
-    
+    if (self.show) {
+        namedButton.status = !namedButton.status;
+        CGFloat namedButtonY = [self.statusLocationArray[namedButton.status] floatValue];
+        CGFloat namedButtonX = namedButton.frame.origin.x;
+        [UIView animateWithDuration:0.5f animations:^{
+            namedButton.frame = CGRectMake(namedButtonX, namedButtonY, 36, 132);
+        } completion:^(BOOL finished) {
+            
+        }];
+        
+        if (![self.playingButton isEqual:namedButton]) {
+            self.playingButton.status = 0;
+            CGFloat playingButtonX = self.playingButton.frame.origin.x;
+            CGFloat playingButtonY = -51;
+            [UIView animateWithDuration:0.5f animations:^{
+                self.playingButton.frame = CGRectMake(playingButtonX, playingButtonY, 36, 132);
+            } completion:^(BOOL finished) {
+                self.playingButton = namedButton;
+            }];
+        }
+        
+        if (namedButton.status) {
+            NSString *musicPath = [[NSBundle mainBundle] pathForResource:namedButton.name ofType:@"mp3"];
+            NSURL *musicURL = [[NSURL alloc] initFileURLWithPath:musicPath];
+            if (musicPath) {
+                self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:musicURL error:nil];
+                [self.audioPlayer prepareToPlay];
+                self.audioPlayer.numberOfLoops = -1;
+                self.audioPlayer.volume = 0.5f;
+                [self.audioPlayer play];
+            }
+        } else {
+            [self.audioPlayer pause];
+        }
+        
+    } else {
+        [self showAudioButtons];
+    }
 }
 
 - (void)stopPlayAudio {
-    
+    NSTimer *audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reduceVolume) userInfo:nil repeats:YES];
+    self.audioTimer = audioTimer;
 }
 
 - (void)reduceVolume {
-    
+    if (self.audioPlayer.volume > 0.0f) {
+        self.audioPlayer.volume -= 0.05f;
+    } else {
+        self.playingButton.status = !self.playingButton.status;
+        self.playingButton = nil;
+        [self.audioTimer invalidate];
+        [self.audioPlayer stop];
+    }
 }
 
 - (void)audioPlayerEndInterruption:(AVAudioPlayer *)player {
-    
+    [self.audioPlayer play];
 }
-
-
 
 @end

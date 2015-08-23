@@ -12,9 +12,9 @@
 @class CLFIncenseView;
 @interface CLFMainViewController : UIViewController
 
-@property (nonatomic, weak) CLFIncenseView *incenseView;
-@property (nonatomic, assign, getter=isBurning) BOOL burning;
-@property (nonatomic, strong) AVAudioRecorder        *recorder;
+@property (nonatomic, weak)                     CLFIncenseView  *incenseView;
+@property (nonatomic, assign, getter=isBurning) BOOL            burning;
+@property (nonatomic, strong)                   AVAudioRecorder *recorder;
 
 - (void)incenseDidBurnOffForALongTime;
 - (void)renewSmokeStatusWithTimeHaveGone:(CGFloat)leaveBackInterval;

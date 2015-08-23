@@ -10,7 +10,7 @@
 
 @interface CLFPlayButton : UIButton
 
-@property (nonatomic, copy) NSString* name;
-@property (nonatomic, assign) NSInteger *status;
+@property (nonatomic, copy)   NSString  *name;
+@property (nonatomic, assign) NSInteger status;
 
 @end
