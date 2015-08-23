@@ -178,7 +178,6 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         return;
     }
     
-    
     if (!firstLaunch) {
         
         NSLog(@"enterHere...jiongjiongjiong...");
@@ -189,6 +188,10 @@ static void displayStatusChanged(CFNotificationCenterRef center,
             NSTimeInterval leaveTimeInterval = [leaveTime timeIntervalSince1970];
             NSTimeInterval backTimeInterval = [backTime timeIntervalSince1970];
             CGFloat leaveBackInterval = backTimeInterval - leaveTimeInterval;
+            
+            if (leaveBackInterval > Incense_Burn_Off_Time - timeHaveGone) {
+                leaveBackInterval = Incense_Burn_Off_Time - timeHaveGone;
+            }
             
             CLFIncenseView *incense = mainVC.incenseView;
             incense.displaylink.paused = NO;
@@ -219,7 +222,12 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         launchTime = 1;
     }
 
-    if (33 == launchTime) {
+    if ([[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[CLFNewFeatureController class]]) {
+        return;
+    }
+    
+    CLFMainViewController *mainVC = (CLFMainViewController *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    if (33 <= launchTime && !mainVC.burning) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"喜欢 一炷香 吗?"
                                                         message:@"亲~赏个好评吧~O(∩_∩)O~~"
                                                        delegate:self

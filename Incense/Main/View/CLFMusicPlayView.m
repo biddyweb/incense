@@ -32,6 +32,21 @@ static CGFloat selfWidth;
 
 - (instancetype)init {
     if (self = [super init]) {
+        AVAudioSession *aSession = [AVAudioSession sharedInstance];
+        NSError *error = nil;
+        
+        [aSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+        
+        if (error) {
+            NSLog(@"Error setting category: %@", [error description]);
+        }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleAudioSessionInterruption:)
+                                                     name:AVAudioSessionInterruptionNotification
+                                                   object:aSession];
+        
+        
         CLFPlayButton *rainButton = [[CLFPlayButton alloc] init];
         [rainButton setImage:[UIImage imageNamed:@"PlayButton2"] forState:UIControlStateNormal];
         [rainButton setImage:[UIImage imageNamed:@"PlayButton6"] forState:UIControlStateSelected];
@@ -107,6 +122,7 @@ static CGFloat selfWidth;
         self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showMusicButtons) userInfo:nil repeats:NO];
     } else {
         [self.switchTimer invalidate];
+        self.switchTimer = nil;
     }
 
 }
@@ -157,8 +173,25 @@ static CGFloat selfWidth;
     }
 }
 
-- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player {
-    [self.musicPlayer play];
+- (void)handleAudioSessionInterruption:(NSNotification*)notification {
+    
+    NSNumber *interruptionType = [[notification userInfo] objectForKey:AVAudioSessionInterruptionTypeKey];
+    NSNumber *interruptionOption = [[notification userInfo] objectForKey:AVAudioSessionInterruptionOptionKey];
+    
+    switch (interruptionType.unsignedIntegerValue) {
+        case AVAudioSessionInterruptionTypeBegan:{
+            break;
+        }
+        case AVAudioSessionInterruptionTypeEnded:{
+            if (interruptionOption.unsignedIntegerValue == AVAudioSessionInterruptionOptionShouldResume) {
+                [self.musicPlayer play];
+            }
+            break;
+        }
+        default:
+            break;
+    }
 }
+
 
 @end

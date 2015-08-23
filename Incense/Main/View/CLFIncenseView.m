@@ -15,7 +15,6 @@
 @interface CLFIncenseView ()
 
 @property (nonatomic, assign, getter=isBlowing)   BOOL            blowing;
-@property (nonatomic, weak)                       UIImageView     *lightView;
 @property (nonatomic, weak)                       UIView          *incenseStick;
 @property (nonatomic, weak)                       UIView          *incenseBodyView;
 @property (nonatomic, weak)                       UIView          *headDustView;
@@ -141,8 +140,8 @@ static const CGFloat kIncenseStickWidth = 2.0f;
         NSMutableArray *colors = [NSMutableArray array];
         
         [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0f].CGColor];
-        [colors addObject:(id)[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0f].CGColor];
-//        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
+//        [colors addObject:(id)[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
         [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor];
 
         
@@ -228,17 +227,19 @@ static BOOL modifyDust = NO;
 - (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval {
     modifyDust = YES;
     CGFloat tempIncenseHeight = incenseHeight - timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
-    if (tempIncenseHeight > incenseBurnOffLength) {
-        incenseHeight = tempIncenseHeight;
-        waverHeight -= timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
-        colorLocation -= timeInterval * (1.2 / 100) * (60 / self.displaylink.frameInterval);
-        x += timeInterval * 0.0072f * (60 / self.displaylink.frameInterval);
-    } else {
-        incenseHeight = incenseBurnOffLength;
-        waverHeight = -703 * Size_Ratio_To_iPhone6;
-        colorLocation = 0.0f;
-        x = 5.5;
-    }
+//    if (tempIncenseHeight > incenseBurnOffLength) {
+    incenseHeight = tempIncenseHeight;
+    waverHeight -= timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
+    colorLocation -= timeInterval * (1.2 / 100) * (60 / self.displaylink.frameInterval);
+    x += timeInterval * 0.0072f * (60 / self.displaylink.frameInterval);
+//    } else {
+//        incenseHeight = incenseBurnOffLength;
+//        waverHeight = -703 * Size_Ratio_To_iPhone6;
+//        colorLocation = 0.0f;
+//        x = 5.5;
+//        
+//        NSLog(@"Else timeInterval %f, incenseHeight %f", timeInterval, incenseHeight);
+//    }
 }
 
 static CGFloat x = 2.5f;

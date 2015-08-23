@@ -33,12 +33,30 @@
 @implementation CLFAudioPlayView
 
 static CGFloat selfWidth;
+static CGFloat audioButtonWidth = 50.0f;
 
 - (instancetype)init {
     if (self = [super init]) {
+        NSLog(@"initialPlayerView");
+        AVAudioSession *aSession = [AVAudioSession sharedInstance];
+        NSError *error = nil;
+        
+        [aSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+        
+        if (error) {
+            NSLog(@"Error setting category: %@", [error description]);
+        }
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleAudioSessionInterruption:)
+                                                     name:AVAudioSessionInterruptionNotification
+                                                   object:aSession];
+        
+        
         self.statusLocationArray = @[@(-51), @(-23)];
         
         CLFPlayButton *rainButton = [[CLFPlayButton alloc] init];
+        
         [rainButton setImage:[UIImage imageNamed:@"RainButton"] forState:UIControlStateNormal];
         rainButton.name = @"2";
         rainButton.status = 0;
@@ -66,8 +84,30 @@ static CGFloat selfWidth;
         self.show = NO;
         
         self.layer.masksToBounds = YES;
+        
+//        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     }
     return self;
+}
+
+- (void)handleAudioSessionInterruption:(NSNotification*)notification {
+    
+    NSNumber *interruptionType = [[notification userInfo] objectForKey:AVAudioSessionInterruptionTypeKey];
+    NSNumber *interruptionOption = [[notification userInfo] objectForKey:AVAudioSessionInterruptionOptionKey];
+    
+    switch (interruptionType.unsignedIntegerValue) {
+        case AVAudioSessionInterruptionTypeBegan:{
+            break;
+        }
+        case AVAudioSessionInterruptionTypeEnded:{
+            if (interruptionOption.unsignedIntegerValue == AVAudioSessionInterruptionOptionShouldResume) {
+                [self.audioPlayer play];
+            }
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 - (CAGradientLayer *)maskLayer {
@@ -100,15 +140,16 @@ static CGFloat selfWidth;
     
     selfWidth = CGRectGetWidth(self.frame);
     
-    self.dewButton.frame = CGRectMake(selfWidth * 0.5 - 18, -77, 36, 132);
-    self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - 18, -77, 36, 132);
-    self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - 18, -77, 36, 132);
+    self.dewButton.frame = CGRectMake(selfWidth * 0.5 - audioButtonWidth * 0.5, -77, audioButtonWidth, 132);
+    self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - audioButtonWidth * 0.5, -77, audioButtonWidth, 132);
+    self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - audioButtonWidth * 0.5, -77, audioButtonWidth, 132);
 }
 
 - (void)showAudioButtons {
     CGFloat dewLocation = 0.0f;
     CGFloat rainLocation = 0.0f;
     CGFloat chirpLocation = 0.0f;
+    
     if (self.show) {
         dewLocation = -77;
         rainLocation = dewLocation;
@@ -122,15 +163,16 @@ static CGFloat selfWidth;
     }
     
     [UIView animateWithDuration:0.5f animations:^{
-        self.dewButton.frame = CGRectMake(selfWidth * 0.5 - 18, dewLocation, 36, 132);
-        self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - 18, rainLocation, 36, 132);
-        self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - 18, chirpLocation, 36, 132);
+        self.dewButton.frame = CGRectMake(selfWidth * 0.5 - audioButtonWidth * 0.5, dewLocation, audioButtonWidth, 132);
+        self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - audioButtonWidth * 0.5, rainLocation, audioButtonWidth, 132);
+        self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - audioButtonWidth * 0.5, chirpLocation, audioButtonWidth, 132);
     }];
 
     if (self.show) {
         self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showAudioButtons) userInfo:nil repeats:NO];
     } else {
         [self.switchTimer invalidate];
+        self.switchTimer = nil;
     }
 }
 
@@ -144,7 +186,7 @@ static CGFloat selfWidth;
         CGFloat namedButtonY = [self.statusLocationArray[namedButton.status] floatValue];
         CGFloat namedButtonX = namedButton.frame.origin.x;
         [UIView animateWithDuration:0.5f animations:^{
-            namedButton.frame = CGRectMake(namedButtonX, namedButtonY, 36, 132);
+            namedButton.frame = CGRectMake(namedButtonX, namedButtonY, audioButtonWidth, 132);
         } completion:^(BOOL finished) {
             
         }];
@@ -154,7 +196,7 @@ static CGFloat selfWidth;
             CGFloat playingButtonX = self.playingButton.frame.origin.x;
             CGFloat playingButtonY = -51;
             [UIView animateWithDuration:0.5f animations:^{
-                self.playingButton.frame = CGRectMake(playingButtonX, playingButtonY, 36, 132);
+                self.playingButton.frame = CGRectMake(playingButtonX, playingButtonY, audioButtonWidth, 132);
             } completion:^(BOOL finished) {
                 self.playingButton = namedButton;
             }];
@@ -195,8 +237,6 @@ static CGFloat selfWidth;
     }
 }
 
-- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player {
-    [self.audioPlayer play];
-}
+
 
 @end

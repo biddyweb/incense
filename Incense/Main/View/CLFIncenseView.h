@@ -19,6 +19,7 @@
 @interface CLFIncenseView : UIView
 
 @property (nonatomic, weak)   UIImageView                *incenseHeadView;
+@property (nonatomic, weak)   UIImageView                *lightView;
 @property (nonatomic, weak)   Waver                      *waver;
 @property (nonatomic, assign, getter=isBurntOff) BOOL    *burntOff;
 

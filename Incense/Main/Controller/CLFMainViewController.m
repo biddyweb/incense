@@ -11,13 +11,23 @@
 #warning - TODO: 音频修改
 #warning - TODO: 文案修改
 #warning - TODO: appid 修改
-#warning - TODO: 测试来电中断/短信中断等
+
 #warning - TODO: Music List 鸟字 有一点会露出来 图片要重做
 
+#warning - TODO: 重来按钮和 Music List 的位置要调整 --> 不要重来按钮?
+#warning - TODO: 烟雾还是太敏感 --> 干脆不然烟雾响应声音?还是说弄成一条的?
+
+// #warning - TODO: 点燃时的效果微调
+// #warning - TODO: 会被 AlertView 打断? --> AlertView 出现后 CADisplayLink 会被打断... 所以设定了让它在非 burning 状态弹出. 至于如何打断的呢??....待解决
+// #warning - DONE: 来电/短信中断音乐的播放后恢复
+// #warning - DONE: 瑕疵:"灭"之后火光应该消失
+// #warning - DONE: Cloud 的高度调整
+// #warning - DONE: Music List 按钮太小, 要调整
 // #warning - DONE: 瑕疵:Music List 应该改为在用户不再点击之后 5s 收起, 而非在 List 出现 5s 后收起
+
 // #warning - DONE: MusicList 显示方式修改
 // #warning - DONE: 统一下...用宏?
-// #warning - DONE: 添加了评分功能?
+// #warning - DONE: 添加评分功能
 // #warning - DONE: Intro 页面修改
 // #warning - DONE: pageControl 也许需要自定义,以修改小点的图片为句号
 // #warning - DONE: 燃烧支数的位置要调整
@@ -76,10 +86,11 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 static CGFloat   cloudLocation = -380.0f;
 static CGFloat   smokeLocation = -520.0f;
 static CGFloat   animationTime = 4.0f;
+static CGFloat   smokeChangeRate = 0.0f;
 
 static const CGFloat kWaverVoiceFactor = 10.0f;
 static const CGFloat kFireVoiceFactor = 40.0f;
-static const CGFloat kMusicListStyle = 0;
+static const CGFloat kMusicListStyle = 1;
 
 - (instancetype)init {
     self = [super init];
@@ -96,6 +107,8 @@ static const CGFloat kMusicListStyle = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 8.0f)));
     
     [self makeIncense];
     [self makeCloud];
@@ -121,7 +134,6 @@ static const CGFloat kMusicListStyle = 0;
 - (void)lightTheIncense {
     NSLog(@"lightTheIncense");
     
-    
     UITapGestureRecognizer *tapRecognizer = kMusicListStyle ? [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAudioView)] : [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMusicView)];
     [self.view addGestureRecognizer:tapRecognizer];
     self.tap = tapRecognizer;
@@ -129,8 +141,7 @@ static const CGFloat kMusicListStyle = 0;
     if (kMusicListStyle) {
         self.audioView.userInteractionEnabled = YES;
     }
-    
-    
+
     self.burning = YES;
     [self setupRecorder];
     __block AVAudioRecorder *weakRecorder = self.recorder;
@@ -169,7 +180,7 @@ static const CGFloat kMusicListStyle = 0;
         [weakRecorder updateMeters];
         CGFloat normalizedValue = pow (10, [weakRecorder averagePowerForChannel:0] / kFireVoiceFactor);
         incense.brightnessLevel = normalizedValue;
-        smokeLocation += 0.64 * Size_Ratio_To_iPhone6;
+        smokeLocation += smokeChangeRate * Size_Ratio_To_iPhone6;
         self.smoke.frame = CGRectMake(0, smokeLocation, Incense_Screen_Width, 520);
     };
 }
@@ -192,7 +203,7 @@ static const CGFloat kMusicListStyle = 0;
     [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber]];
     
     self.burning = NO;
-    [self.rippleMaker stopWave]; // shadow 要隐藏
+    [self.rippleMaker stopWave];
     
     if (!kMusicListStyle) {
         [self.musicView stopPlayMusic];
@@ -247,6 +258,7 @@ static const CGFloat kMusicListStyle = 0;
     [self.rippleMaker stopWave];
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
+    self.incenseView.lightView.alpha = 0.0f;
     [self.recorder stop];
     [self stopFloating];
     [self showFailure];
@@ -276,7 +288,6 @@ static const CGFloat kMusicListStyle = 0;
 - (void)oneMoreIncense {
     NSLog(@"oneMoreIncense");
     
-
     [self.view bringSubviewToFront:self.smoke];
     [self.view bringSubviewToFront:self.endView];
     smokeLocation = -520.0f;
@@ -398,7 +409,7 @@ static const CGFloat kMusicListStyle = 0;
 
 #warning - 补偿高度要怎么算?
 - (void)renewSmokeStatusWithTimeHaveGone:(CGFloat)leaveBackInterval {
-    smokeLocation += 0.32 * Size_Ratio_To_iPhone6 * leaveBackInterval * 7.5;
+    smokeLocation += smokeChangeRate * Size_Ratio_To_iPhone6 * leaveBackInterval * 7.5;
 }
 
 #pragma mark - Cloud
@@ -502,7 +513,6 @@ static const CGFloat kMusicListStyle = 0;
 - (CLFAudioPlayView *)audioView {
     if (!_audioView) {
         CLFAudioPlayView *audioView = [[CLFAudioPlayView alloc] init];
-//        audioView.backgroundColor = [UIColor yellowColor];
         [self.view addSubview:audioView];
         _audioView = audioView;
     }
@@ -511,7 +521,7 @@ static const CGFloat kMusicListStyle = 0;
 
 - (void)makeAudioView {
     self.audioView.userInteractionEnabled = NO;
-    self.audioView.frame = CGRectMake(0, Incense_Screen_Height - 100, Incense_Screen_Width, 40);
+    self.audioView.frame = CGRectMake(0, Incense_Screen_Height - 60, Incense_Screen_Width, 40);
     self.audioView.show = NO;
     self.audioView.hidden = NO;
 }
@@ -541,13 +551,14 @@ static const CGFloat kMusicListStyle = 0;
 }
 
 - (void)setupRecorder {
+    NSLog(@"setupRecorder");
     NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
     
     NSDictionary *settings = @{AVSampleRateKey:          [NSNumber numberWithFloat: 44100.0],
                                AVFormatIDKey:            [NSNumber numberWithInt: kAudioFormatAppleLossless],
                                AVNumberOfChannelsKey:    [NSNumber numberWithInt: 2],
                                AVEncoderAudioQualityKey: [NSNumber numberWithInt: AVAudioQualityMin]};
-    
+        
     NSError *error;
     self.recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:&error];
     
@@ -555,13 +566,7 @@ static const CGFloat kMusicListStyle = 0;
         NSLog(@"Ups, could not create recorder %@", error);
         return;
     }
-    
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
-    
-    if (error) {
-        NSLog(@"Error setting category: %@", [error description]);
-    }
-    
+        
     [self.recorder prepareToRecord];
     [self.recorder setMeteringEnabled:YES];
     [self.recorder record];
