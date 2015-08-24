@@ -14,9 +14,6 @@
 
 #warning - TODO: Music List 鸟字 有一点会露出来 图片要重做
 
-#warning - TODO: 重来按钮和 Music List 的位置要调整 --> 不要重来按钮?
-#warning - TODO: 烟雾还是太敏感 --> 干脆不然烟雾响应声音?还是说弄成一条的?
-
 #import "CLFMainViewController.h"
 #import "CLFCloud.h"
 #import "CLFIncenseView.h"
@@ -122,13 +119,9 @@ static const CGFloat kMusicListStyle = 1;
 - (void)lightTheIncense {
     NSLog(@"lightTheIncense");
     
-    UITapGestureRecognizer *tapRecognizer = kMusicListStyle ? [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAudioView)] : [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMusicView)];
-    [self.view addGestureRecognizer:tapRecognizer];
-    self.tap = tapRecognizer;
+
     
-    if (kMusicListStyle) {
-        self.audioView.userInteractionEnabled = YES;
-    }
+
 
     self.burning = YES;
     [self setupRecorder];
@@ -153,10 +146,18 @@ static const CGFloat kMusicListStyle = 1;
     [UIView animateWithDuration:5.0f animations:^{
         self.fire.alpha = 0.0f;  // --> 此处创建了 cloud ????
         self.incenseView.waver.alpha = 1.0f;
+        self.audioView.alpha = 1.0f;
 
     } completion:^(BOOL finished) {
         [self.fire removeFromSuperview];
-
+        
+        UITapGestureRecognizer *tapRecognizer = kMusicListStyle ? [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAudioView)] : [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMusicView)];
+        [self.view addGestureRecognizer:tapRecognizer];
+        self.tap = tapRecognizer;
+        
+        if (kMusicListStyle) {
+            self.audioView.userInteractionEnabled = YES;
+        }
     }];
 }
 
@@ -180,6 +181,10 @@ static const CGFloat kMusicListStyle = 1;
 /**
  *  incense burnt off in normal way. Increase the burnt off number, stop the audio player/recorder and show a normal endView.
  */
+
+- (void)calculateBurntIncenseNumber {
+    
+}
 
 - (void)incenseDidBurnOff {
     NSLog(@"End %@", [NSDate date]);
@@ -218,6 +223,7 @@ static const CGFloat kMusicListStyle = 1;
         self.incenseView.waver.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 0.0f;
         self.rippleView.alpha = 0.3f;
+        self.audioView.alpha = 0.0f;
     } completion:^(BOOL finished) {
         self.endView.alpha = 0.0f;
         [UIView animateWithDuration:0.5f animations:^{
@@ -243,7 +249,8 @@ static const CGFloat kMusicListStyle = 1;
  *  If the user ignored the alert, show a incompletely burnt incense.
  */
 
-- (void)incenseDidBurnOffForALongTime {
+
+- (void)incenseDidBurnOffFromBackgroundWithResult:(NSString *)resultString {
     [self.view removeGestureRecognizer:self.tap];
     self.burning = NO;
     
@@ -257,12 +264,31 @@ static const CGFloat kMusicListStyle = 1;
     }
     
     [self.rippleMaker stopWave];
+    self.audioView.alpha = 0.0f;
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
     self.incenseView.lightView.alpha = 0.0f;
     [self.recorder stop];
     [self stopFloating];
-    [self showFailure];
+    
+    if ([resultString isEqualToString:@"failure"]) {
+       [self showFailure];
+    } else {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSInteger burntIncenseNumber = [defaults integerForKey:@"burntIncenseNumber"];
+        
+        if (burntIncenseNumber) {
+            burntIncenseNumber++;
+        } else {
+            burntIncenseNumber = 1;
+        }
+        
+        [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
+        
+        [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber]];
+        self.endView.alpha = 1.0f;
+    }
+    
     [self.incenseView.waver.displaylink invalidate];
     [self.incenseView.displaylink invalidate];
 }
@@ -427,6 +453,7 @@ static const CGFloat kMusicListStyle = 1;
 }
 
 - (void)renewSmokeStatusWithTimeHaveGone:(CGFloat)leaveBackInterval {
+    
     smokeLocation += smokeChangeRate * Size_Ratio_To_iPhone6 * leaveBackInterval * 7.5;
 }
 
@@ -434,8 +461,6 @@ static const CGFloat kMusicListStyle = 1;
 
 /**
  *  Cloud exists before the incense is burnt. After the incense being lighted, cloud would disappear with fire.
- *
- *  @return <#return value description#>
  */
 
 - (CLFCloud *)cloud {
@@ -494,7 +519,7 @@ static const CGFloat kMusicListStyle = 1;
 }
 
 - (void)fireAppearInSky {
-    [UIView animateWithDuration:2.0f animations:^{
+    [UIView animateWithDuration:1.0f animations:^{
         self.smoke.frame = CGRectMake(0, -440 , Incense_Screen_Width, 520); // 用 -440 是为了让火焰的出现更自然
     } completion:^(BOOL finished) {
         [self makeFire];
@@ -550,7 +575,7 @@ static const CGFloat kMusicListStyle = 1;
 - (CLFAudioPlayView *)audioView {
     if (!_audioView) {
         CLFAudioPlayView *audioView = [[CLFAudioPlayView alloc] init];
-        audioView.backgroundColor = [UIColor greenColor];
+        audioView.backgroundColor = [UIColor clearColor];
         [self.view addSubview:audioView];
         _audioView = audioView;
     }
@@ -561,7 +586,7 @@ static const CGFloat kMusicListStyle = 1;
     self.audioView.userInteractionEnabled = NO;
     self.audioView.frame = CGRectMake(0, Incense_Screen_Height - 60, Incense_Screen_Width, 40);
     self.audioView.show = NO;
-    self.audioView.hidden = NO;
+    self.audioView.alpha = 0.0f;
 }
 
 - (CLFMusicPlayView *)musicView {
@@ -585,6 +610,7 @@ static const CGFloat kMusicListStyle = 1;
 }
 
 - (void)showAudioView {
+        NSLog(@"kkkkkkkkkk");
     [self.audioView showAudioButtons];
 }
 

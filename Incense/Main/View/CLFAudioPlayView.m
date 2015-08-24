@@ -33,15 +33,16 @@
 @implementation CLFAudioPlayView
 
 static CGFloat selfWidth;
-static CGFloat audioButtonWidth = 50.0f;
+static CGFloat audioButtonWidth = 60.0f;
 
 - (instancetype)init {
     if (self = [super init]) {
         NSLog(@"initialPlayerView");
+        
         AVAudioSession *aSession = [AVAudioSession sharedInstance];
         NSError *error = nil;
         
-        [aSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+        [aSession setCategory:AVAudioSessionCategoryMultiRoute error:&error];
         
         if (error) {
             NSLog(@"Error setting category: %@", [error description]);
@@ -60,6 +61,7 @@ static CGFloat audioButtonWidth = 50.0f;
         [rainButton setImage:[UIImage imageNamed:@"RainButton"] forState:UIControlStateNormal];
         rainButton.name = @"2";
         rainButton.status = 0;
+        rainButton.backgroundColor = [UIColor grayColor];
         [rainButton addTarget:self action:@selector(playAudioWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:rainButton];
         _rainButton = rainButton;
@@ -145,6 +147,8 @@ static CGFloat audioButtonWidth = 50.0f;
     self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - audioButtonWidth * 0.5, -77, audioButtonWidth, 132);
 }
 
+
+
 - (void)showAudioButtons {
     CGFloat dewLocation = 0.0f;
     CGFloat rainLocation = 0.0f;
@@ -162,28 +166,34 @@ static CGFloat audioButtonWidth = 50.0f;
         self.show = YES;
     }
     
-    [UIView animateWithDuration:0.5f animations:^{
+    [UIView animateWithDuration:0.3f animations:^{
         self.dewButton.frame = CGRectMake(selfWidth * 0.5 - audioButtonWidth * 0.5, dewLocation, audioButtonWidth, 132);
         self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - audioButtonWidth * 0.5, rainLocation, audioButtonWidth, 132);
         self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - audioButtonWidth * 0.5, chirpLocation, audioButtonWidth, 132);
     }];
 
     if (self.show) {
-        self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showAudioButtons) userInfo:nil repeats:NO];
+        NSLog(@"schedual to hide");
+        self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(showAudioButtons) userInfo:nil repeats:NO];
     } else {
+        NSLog(@"cancel switchTimer");
         [self.switchTimer invalidate];
         self.switchTimer = nil;
     }
 }
 
 - (void)playAudioWithNamedButton:(CLFPlayButton *)namedButton {
-    [self.switchTimer invalidate];
-    self.switchTimer = nil;
-    self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showAudioButtons) userInfo:nil repeats:NO];
+    NSLog(@"playAudioWithNamedButton %@", self.switchTimer);
+    if (self.switchTimer) {
+        [self.switchTimer invalidate];
+        self.switchTimer = nil;
+    }
+
+
     
     if (self.show) {
+        self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(showAudioButtons) userInfo:nil repeats:NO];
         
-
         if (![self.playingButton isEqual:namedButton]) {
             NSLog(@"%@", namedButton.name);
             
@@ -191,7 +201,7 @@ static CGFloat audioButtonWidth = 50.0f;
             self.playingButton.status = 0;
             CGFloat playingButtonX = self.playingButton.frame.origin.x;
             CGFloat playingButtonY = -51;
-            [UIView animateWithDuration:0.5f animations:^{
+            [UIView animateWithDuration:0.3f animations:^{
                 self.playingButton.frame = CGRectMake(playingButtonX, playingButtonY, audioButtonWidth, 132);
                 self.playingButton = namedButton;
             } completion:nil];
@@ -200,7 +210,7 @@ static CGFloat audioButtonWidth = 50.0f;
         namedButton.status = !namedButton.status;   // 间隔很短的话...此时 nameButton 还没有切换,所以...
         CGFloat namedButtonY = [self.statusLocationArray[namedButton.status] floatValue];
         CGFloat namedButtonX = namedButton.frame.origin.x;
-        [UIView animateWithDuration:0.5f animations:^{
+        [UIView animateWithDuration:0.3f animations:^{
             namedButton.frame = CGRectMake(namedButtonX, namedButtonY, audioButtonWidth, 132);
         } completion:^(BOOL finished) {
             
@@ -220,8 +230,6 @@ static CGFloat audioButtonWidth = 50.0f;
             [self.audioPlayer pause];
         }
         
-        
-        
     } else {
         [self showAudioButtons];
     }
@@ -240,6 +248,7 @@ static CGFloat audioButtonWidth = 50.0f;
         self.playingButton = nil;
         [self.audioTimer invalidate];
         [self.audioPlayer stop];
+        
     }
 }
 

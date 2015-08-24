@@ -140,13 +140,13 @@ static const CGFloat kIncenseStickWidth = 2.0f;
         NSMutableArray *colors = [NSMutableArray array];
         
         [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0f].CGColor];
-        [colors addObject:(id)[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:190/255.0 green:190/255.0 blue:190/255.0 alpha:1.0f].CGColor];
 //        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
-        [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0f].CGColor];
 
         
         dustGradient.colors = colors;
-        dustGradient.locations = @[@0.0f, @0.9f, @1.0f];
+        dustGradient.locations = @[@0.0f, @0.9f, @2.0f];
         
         dustGradient.position = CGPointMake(0, 0);
         dustGradient.anchorPoint = CGPointMake(0, 0);
@@ -202,7 +202,10 @@ static const CGFloat kIncenseStickWidth = 2.0f;
 }
 
 - (void)invokeBrightnessCallback {
+    UIGraphicsBeginImageContextWithOptions(self.headDustView.frame.size, NO, 0.0f);
+
     _brightnessCallback(self);
+        UIGraphicsEndImageContext();
 }
 
 - (void)setBrightnessLevel:(CGFloat)brightnessLevel {
@@ -230,23 +233,24 @@ static const CGFloat kIncenseStickWidth = 2.0f;
  *  The dust shape should be redrawed when users back to app from lockScreen status. This is so called modifyDust.
  */
 static BOOL modifyDust = NO;
+static BOOL burntOffFromBackground = NO;
 
 - (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval {
     modifyDust = YES;
     CGFloat tempIncenseHeight = incenseHeight - timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
-//    if (tempIncenseHeight > incenseBurnOffLength) {
-    incenseHeight = tempIncenseHeight;
-    waverHeight -= timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
-    colorLocation -= timeInterval * (1.2 / 100) * (60 / self.displaylink.frameInterval);
-    x += timeInterval * 0.0072f * (60 / self.displaylink.frameInterval);
-//    } else {
-//        incenseHeight = incenseBurnOffLength;
-//        waverHeight = -703 * Size_Ratio_To_iPhone6;
-//        colorLocation = 0.0f;
-//        x = 5.5;
-//        
-//        NSLog(@"Else timeInterval %f, incenseHeight %f", timeInterval, incenseHeight);
-//    }
+    if (tempIncenseHeight > incenseBurnOffLength) {
+        incenseHeight = tempIncenseHeight;
+        waverHeight -= timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
+        colorLocation -= timeInterval * (2.2 / 100) * (60 / self.displaylink.frameInterval);
+        x += timeInterval * 0.0072f * (60 / self.displaylink.frameInterval);
+    } else {
+        incenseHeight = incenseBurnOffLength;
+        waverHeight = -703 * Size_Ratio_To_iPhone6;
+        colorLocation = 0.0f;
+        x = 5.5;
+        burntOffFromBackground = YES;
+        NSLog(@"Else timeInterval %f, incenseHeight %f", timeInterval, incenseHeight);
+    }
 }
 
 
@@ -270,7 +274,7 @@ static CGFloat colorLocation = 0.8f;
     waverHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
     self.waver.frame = (CGRect) {{0, 0}, {Incense_Screen_Width, waverHeight}};
     
-    colorLocation = colorLocation - 0.5 / 100 > 0 ? colorLocation - 0.5 / 100 : 0.0f;
+    colorLocation = colorLocation - 0.1 / 100 > 0 ? colorLocation - 0.1 / 100 : 0.0f;
     self.dustGradient.locations = @[@0.0f, @(colorLocation), @1.0f];
     
     if (!modifyDust) {
@@ -286,8 +290,12 @@ static CGFloat colorLocation = 0.8f;
     
     self.dustGradient.bounds = self.headDustView.bounds;
     
-    if (incenseHeight <= incenseBurnOffLength) {
+    if (incenseHeight <= incenseBurnOffLength && !burntOffFromBackground) {
         [self.delegate incenseDidBurnOff];
+        self.lightView.alpha = 0.0f;
+    } else if (burntOffFromBackground) {
+        [self.delegate incenseDidBurnOffFromBackgroundWithResult:@"success"];
+        burntOffFromBackground = NO;
         self.lightView.alpha = 0.0f;
     }
 }
@@ -302,7 +310,6 @@ CGFloat eulerSpiralLength = 0.0f;
     CGFloat n;
     
 #warning - TODO: 位置换掉??
-    UIGraphicsBeginImageContextWithOptions(self.headDustView.frame.size, NO, 0.0f);
     if (x == 2.5) {
         e = x - 2.5;
         m = 2.5 + 40 * Size_Ratio_To_iPhone6 * integral(fresnelSin, 0, e, 10);
@@ -326,7 +333,7 @@ CGFloat eulerSpiralLength = 0.0f;
     x += 0.0072f / (Incense_Burn_Off_Time / 60.0f);
     self.dustLine.path = self.dustPath.CGPath;
     
-    UIGraphicsEndImageContext();
+
 //    NSLog(@"eulerSpiralLength %f, incenseLength %f, totalLength %f", eulerSpiralLength, incenseHeight, eulerSpiralLength + incenseHeight);
 }
 

@@ -16,7 +16,7 @@
 @property (nonatomic, assign, getter=isBurning) BOOL            burning;
 @property (nonatomic, strong)                   AVAudioRecorder *recorder;
 
-- (void)incenseDidBurnOffForALongTime;
+- (void)incenseDidBurnOffFromBackgroundWithResult:(NSString *)resultString;
 - (void)renewSmokeStatusWithTimeHaveGone:(CGFloat)leaveBackInterval;
 
 @end

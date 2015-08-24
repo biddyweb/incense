@@ -11,6 +11,7 @@
 @protocol CLFIncenseViewDelegate <NSObject>
 
 - (void)incenseDidBurnOff;
+- (void)incenseDidBurnOffFromBackgroundWithResult:(NSString *)resultString;
 
 @end
 

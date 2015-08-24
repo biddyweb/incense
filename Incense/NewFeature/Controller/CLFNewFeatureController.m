@@ -62,7 +62,7 @@ static const NSInteger NewFeaturePages = 5;
         
         NSString *name = [NSString stringWithFormat:@"NewFeature%ld", i + 1];
         imageView.image = [UIImage imageNamed:name];
-        
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
         CGFloat pageX = i * pageW;
         CGFloat pageY = 0;
         imageView.frame = CGRectMake(pageX, pageY, pageW, pageH);
@@ -98,7 +98,7 @@ static const NSInteger NewFeaturePages = 5;
 }
 
 - (void)start {
-    [UIView animateWithDuration:2.0f animations:^{
+    [UIView animateWithDuration:1.0f animations:^{
         self.scrollView.alpha = 0.0f;
         self.pageControl.alpha = 0.0f;
     } completion:^(BOOL finished) {
@@ -132,12 +132,19 @@ static const NSInteger NewFeaturePages = 5;
     CGFloat offsetX = scrollView.contentOffset.x;
     
     NSInteger page = (offsetX + 0.5 * CGRectGetWidth(scrollView.frame)) / CGRectGetWidth(scrollView.frame);
-    self.pageControl.currentPage = page;
-//    if (page == 4) {
+    if (page < 4) {
+        self.pageControl.hidden = NO;
+        self.pageControl.currentPage = page;
+    }
+
+    
+    if (page == 4) {
+        self.pageControl.hidden = YES;
+        
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //            [self start];
 //        });
-//    }
+    }
 }
 
 @end
