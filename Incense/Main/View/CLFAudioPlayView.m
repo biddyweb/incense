@@ -182,7 +182,22 @@ static CGFloat audioButtonWidth = 50.0f;
     self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(showAudioButtons) userInfo:nil repeats:NO];
     
     if (self.show) {
-        namedButton.status = !namedButton.status;
+        
+
+        if (![self.playingButton isEqual:namedButton]) {
+            NSLog(@"%@", namedButton.name);
+            
+            
+            self.playingButton.status = 0;
+            CGFloat playingButtonX = self.playingButton.frame.origin.x;
+            CGFloat playingButtonY = -51;
+            [UIView animateWithDuration:0.5f animations:^{
+                self.playingButton.frame = CGRectMake(playingButtonX, playingButtonY, audioButtonWidth, 132);
+                self.playingButton = namedButton;
+            } completion:nil];
+        }
+        
+        namedButton.status = !namedButton.status;   // 间隔很短的话...此时 nameButton 还没有切换,所以...
         CGFloat namedButtonY = [self.statusLocationArray[namedButton.status] floatValue];
         CGFloat namedButtonX = namedButton.frame.origin.x;
         [UIView animateWithDuration:0.5f animations:^{
@@ -190,17 +205,6 @@ static CGFloat audioButtonWidth = 50.0f;
         } completion:^(BOOL finished) {
             
         }];
-        
-        if (![self.playingButton isEqual:namedButton]) {
-            self.playingButton.status = 0;
-            CGFloat playingButtonX = self.playingButton.frame.origin.x;
-            CGFloat playingButtonY = -51;
-            [UIView animateWithDuration:0.5f animations:^{
-                self.playingButton.frame = CGRectMake(playingButtonX, playingButtonY, audioButtonWidth, 132);
-            } completion:^(BOOL finished) {
-                self.playingButton = namedButton;
-            }];
-        }
         
         if (namedButton.status) {
             NSString *musicPath = [[NSBundle mainBundle] pathForResource:namedButton.name ofType:@"mp3"];
@@ -215,6 +219,8 @@ static CGFloat audioButtonWidth = 50.0f;
         } else {
             [self.audioPlayer pause];
         }
+        
+        
         
     } else {
         [self showAudioButtons];

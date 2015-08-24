@@ -38,13 +38,14 @@
         
         UIButton *restartButton = [[UIButton alloc] init];
         [finishedView addSubview:restartButton];
-        restartButton.imageView.bounds = CGRectMake(0, 0, 24, 24);
-        [restartButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
-        [restartButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
-        [restartButton setImageEdgeInsets:UIEdgeInsetsMake(5, 11, 17, 11)];
-        restartButton.contentMode = UIViewContentModeTop;
-        restartButton.backgroundColor = [UIColor clearColor];
-        [restartButton setImage:[UIImage imageNamed:@"否"] forState:UIControlStateNormal];
+        
+//        restartButton.imageView.bounds = CGRectMake(0, 0, 24, 24);
+//        [restartButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
+//        [restartButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
+//        [restartButton setImageEdgeInsets:UIEdgeInsetsMake(5, 11, 17, 11)];
+//        restartButton.contentMode = UIViewContentModeTop;
+//        [restartButton setImage:[UIImage imageNamed:@"否"] forState:UIControlStateNormal];
+        
         [restartButton addTarget:self action:@selector(wantOneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
         _restartButton = restartButton;
     }
@@ -83,7 +84,8 @@
     CGFloat restartButtonW = 48;
     CGFloat restartButtonH = restartButtonW;
     
-    self.restartButton.frame = CGRectMake((Incense_Screen_Width - restartButtonW) * 0.5, Incense_Screen_Height * 0.875, restartButtonW, restartButtonH);
+//    self.restartButton.frame = CGRectMake((Incense_Screen_Width - restartButtonW) * 0.5, Incense_Screen_Height * 0.875, restartButtonW, restartButtonH);
+    self.restartButton.frame = self.frame;
 
 }
 

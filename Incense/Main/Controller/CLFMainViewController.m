@@ -17,25 +17,6 @@
 #warning - TODO: 重来按钮和 Music List 的位置要调整 --> 不要重来按钮?
 #warning - TODO: 烟雾还是太敏感 --> 干脆不然烟雾响应声音?还是说弄成一条的?
 
-// #warning - TODO: 点燃时的效果微调
-// #warning - TODO: 会被 AlertView 打断? --> AlertView 出现后 CADisplayLink 会被打断... 所以设定了让它在非 burning 状态弹出. 至于如何打断的呢??....待解决
-// #warning - DONE: 来电/短信中断音乐的播放后恢复
-// #warning - DONE: 瑕疵:"灭"之后火光应该消失
-// #warning - DONE: Cloud 的高度调整
-// #warning - DONE: Music List 按钮太小, 要调整
-// #warning - DONE: 瑕疵:Music List 应该改为在用户不再点击之后 5s 收起, 而非在 List 出现 5s 后收起
-
-// #warning - DONE: MusicList 显示方式修改
-// #warning - DONE: 统一下...用宏?
-// #warning - DONE: 添加评分功能
-// #warning - DONE: Intro 页面修改
-// #warning - DONE: pageControl 也许需要自定义,以修改小点的图片为句号
-// #warning - DONE: 燃烧支数的位置要调整
-// #warning - DONE: 不同设备 cloud 的高度
-// #warning - DONE: 第一次进入程序 锁屏等会出问题
-// #warning - DONE: 进入后台关闭录音/ 似乎录音和本地通知有冲突...后台录音本地通知就没声音?
-// #warning - DONE: 在 Intro 页面切到后台会崩溃
-
 #import "CLFMainViewController.h"
 #import "CLFCloud.h"
 #import "CLFIncenseView.h"
@@ -53,7 +34,7 @@
 @property (nonatomic, weak)   UIImageView            *incenseShadowView;
 @property (nonatomic, weak)   CLFCloud               *cloud;
 @property (nonatomic, weak)   UIImageView            *smoke;
-@property (nonatomic, weak)   UIImageView            *fire;
+@property (nonatomic, strong) UIImageView            *fire;
 
 @property (nonatomic, weak)   UIView                 *rippleView;
 @property (nonatomic, strong) BMWaveMaker            *rippleMaker;
@@ -131,6 +112,13 @@ static const CGFloat kMusicListStyle = 1;
 
 #pragma mark - LightTheIncense
 
+/**
+ *  light the incense. 
+ *  1. Add a tapGestureRecognizer to allow user to choose white noises.
+ *  2. Setup and Recorder so that the light of incense can interactive with users by voice.
+ *  3. Cloud and fire would disapear gradually
+ *  4. Time goes by
+ */
 - (void)lightTheIncense {
     NSLog(@"lightTheIncense");
     
@@ -159,11 +147,11 @@ static const CGFloat kMusicListStyle = 1;
         self.cloud.cloudImageView.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 1.0f;
     } completion:^(BOOL finished) {
-        [self.cloud removeFromSuperview];
+        [self.cloud removeFromSuperview]; // --> 此处 fire 被释放了
     }];
 
     [UIView animateWithDuration:5.0f animations:^{
-        self.fire.alpha = 0.0f;
+        self.fire.alpha = 0.0f;  // --> 此处创建了 cloud ????
         self.incenseView.waver.alpha = 1.0f;
 
     } completion:^(BOOL finished) {
@@ -171,6 +159,10 @@ static const CGFloat kMusicListStyle = 1;
 
     }];
 }
+
+/**
+ *  Time goes by, incense would be shorter and smoke of incense ('waver' in this program) and smoke in sky would be longer and thicker.
+ */
 
 - (void)timeFlow {
     NSLog(@"start %@", [NSDate date]);
@@ -184,6 +176,10 @@ static const CGFloat kMusicListStyle = 1;
         self.smoke.frame = CGRectMake(0, smokeLocation, Incense_Screen_Width, 520);
     };
 }
+
+/**
+ *  incense burnt off in normal way. Increase the burnt off number, stop the audio player/recorder and show a normal endView.
+ */
 
 - (void)incenseDidBurnOff {
     NSLog(@"End %@", [NSDate date]);
@@ -242,6 +238,11 @@ static const CGFloat kMusicListStyle = 1;
     [self.incenseView.displaylink invalidate];
 }
 
+
+/**
+ *  If the user ignored the alert, show a incompletely burnt incense.
+ */
+
 - (void)incenseDidBurnOffForALongTime {
     [self.view removeGestureRecognizer:self.tap];
     self.burning = NO;
@@ -285,6 +286,10 @@ static const CGFloat kMusicListStyle = 1;
     self.endView.alpha = 1.0f;
 }
 
+
+/**
+ *  Make a new incense for users.
+ */
 - (void)oneMoreIncense {
     NSLog(@"oneMoreIncense");
     
@@ -298,6 +303,7 @@ static const CGFloat kMusicListStyle = 1;
     } completion:^(BOOL finished) {
         
         [self.endView removeFromSuperview];
+        self.endView = nil;
         [self.incenseView removeFromSuperview];
         self.incenseView = nil;
         self.incenseShadowView.alpha = 1.0f;
@@ -317,6 +323,11 @@ static const CGFloat kMusicListStyle = 1;
 }
 
 #pragma mark - Incense
+
+/**
+ *  Make incense and the shadow above ripple.
+ *
+ */
 
 - (CLFIncenseView *)incenseView {
     if (!_incenseView) {
@@ -353,6 +364,10 @@ static const CGFloat kMusicListStyle = 1;
 
 
 #pragma mark - floatingAnimation
+
+/**
+ *  Make incense floating above the ripple, and the shadow should react to the floating.
+ */
 
 - (void)floating {
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
@@ -395,6 +410,10 @@ static const CGFloat kMusicListStyle = 1;
 
 #pragma mark - Smoke
 
+/**
+ *  Smoke here means the smoke in the sky. It's also used for transition.
+ */
+
 - (UIImageView *)smoke {
     if (!_smoke) {
         UIImageView *smoke = [[UIImageView alloc] init];
@@ -407,12 +426,17 @@ static const CGFloat kMusicListStyle = 1;
     return _smoke;
 }
 
-#warning - 补偿高度要怎么算?
 - (void)renewSmokeStatusWithTimeHaveGone:(CGFloat)leaveBackInterval {
     smokeLocation += smokeChangeRate * Size_Ratio_To_iPhone6 * leaveBackInterval * 7.5;
 }
 
 #pragma mark - Cloud
+
+/**
+ *  Cloud exists before the incense is burnt. After the incense being lighted, cloud would disappear with fire.
+ *
+ *  @return <#return value description#>
+ */
 
 - (CLFCloud *)cloud {
     if (!_cloud) {
@@ -441,19 +465,23 @@ static const CGFloat kMusicListStyle = 1;
 
 #pragma mark - Fire
 
+/**
+ *  Locating on cloud, which used to light the incense (but in this program, whether the incense lighted is determined by the position of cloud).
+ */
+
 - (UIImageView *)fire {
     if (!_fire) {
         UIImageView *fire = [[UIImageView alloc] init];
         NSURL *url = [[NSBundle mainBundle] URLForResource:@"Fire" withExtension:@"gif"];
         fire.image = [UIImage animatedImageWithAnimatedGIFURL:url];
-        self.cloud.cloudImageView.alpha = 1.0f;
-        [self.cloud addSubview:fire];
         _fire = fire;
     }
     return _fire;
 }
 
 - (void)makeFire {
+    self.cloud.cloudImageView.alpha = 1.0f;
+    [self.cloud addSubview:self.fire];
     CGFloat fireW = 18;
     CGFloat fireH = 24;
     self.fire.alpha = 0.0f;
@@ -475,6 +503,10 @@ static const CGFloat kMusicListStyle = 1;
 }
 
 #pragma mark - Ripple
+
+/**
+ *  eeeeeeee..........Ripple.
+ */
 
 - (UIView *)rippleView {
     if (!_rippleView) {
@@ -510,9 +542,15 @@ static const CGFloat kMusicListStyle = 1;
 
 #pragma mark - About Audio
 
+/**
+ *  audioView and musicView have the same function but different styles. we can switch between audioView and musicView by setting kMusicListStyle.
+ *
+ */
+
 - (CLFAudioPlayView *)audioView {
     if (!_audioView) {
         CLFAudioPlayView *audioView = [[CLFAudioPlayView alloc] init];
+        audioView.backgroundColor = [UIColor greenColor];
         [self.view addSubview:audioView];
         _audioView = audioView;
     }

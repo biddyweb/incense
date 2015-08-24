@@ -140,8 +140,8 @@ static const CGFloat kIncenseStickWidth = 2.0f;
         NSMutableArray *colors = [NSMutableArray array];
         
         [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0f].CGColor];
-//        [colors addObject:(id)[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0f].CGColor];
-        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1.0f].CGColor];
+//        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
         [colors addObject:(id)[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor];
 
         
@@ -218,10 +218,17 @@ static const CGFloat kIncenseStickWidth = 2.0f;
     [self updateHeightWithBrightnessLevel:brightnessLevel];
 }
 
+
+/**
+ *  Return the time have passed by.
+ */
 - (CGFloat)timeHaveGone {
     return timeHaveGone;
 }
 
+/**
+ *  The dust shape should be redrawed when users back to app from lockScreen status. This is so called modifyDust.
+ */
 static BOOL modifyDust = NO;
 
 - (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval {
@@ -241,6 +248,12 @@ static BOOL modifyDust = NO;
 //        NSLog(@"Else timeInterval %f, incenseHeight %f", timeInterval, incenseHeight);
 //    }
 }
+
+
+/**
+ *  Once the CADisplayLink method be called, one point should be drawed in context. We chose the Euler spiral as the shape of dust.
+ *  At the same time adjust the height and dust gradient of incense.
+ */
 
 static CGFloat x = 2.5f;
 static CGFloat y = 0.0f;
