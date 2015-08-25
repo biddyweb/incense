@@ -18,7 +18,6 @@
 
 @end
 
-
 @implementation CLFEndView
 
 - (instancetype)init {
@@ -31,20 +30,20 @@
         _finishView = finishedView;
         
         UIImageView *finishImageView = [[UIImageView alloc] init];
-        [finishedView addSubview:finishImageView];
+        [_finishView addSubview:finishImageView];
         finishImageView.contentMode = UIViewContentModeTop;
         finishImageView.backgroundColor = [UIColor clearColor];
         _finishImageView = finishImageView;
         
         UIButton *restartButton = [[UIButton alloc] init];
-        [finishedView addSubview:restartButton];
+        [_finishView addSubview:restartButton];
         
         restartButton.imageView.bounds = CGRectMake(0, 0, 24, 24);
         [restartButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
         [restartButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
         [restartButton setImageEdgeInsets:UIEdgeInsetsMake(5, 11, 17, 11)];
         restartButton.contentMode = UIViewContentModeTop;
-        [restartButton setImage:[UIImage imageNamed:@"否"] forState:UIControlStateNormal];
+        [restartButton setImage:[UIImage imageNamed:@"轮回"] forState:UIControlStateNormal];
         
         [restartButton addTarget:self action:@selector(wantOneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
         _restartButton = restartButton;
@@ -85,7 +84,7 @@
     CGFloat restartButtonH = restartButtonW;
     
     self.restartButton.frame = CGRectMake((Incense_Screen_Width - restartButtonW) * 0.5, Incense_Screen_Height * 0.875, restartButtonW, restartButtonH);
-//    self.restartButton.frame = self.frame;
+        //    self.restartButton.frame = self.frame;
 
 }
 

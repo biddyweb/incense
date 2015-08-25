@@ -115,6 +115,7 @@ static NSString *const kBMViewError = @"the animationView is nil";
     waveLayer.waveDelegate = self;
     
     [self.animationView.layer addSublayer:waveLayer];
+    self.animationView.layer.zPosition = -101;
 
     [waveLayer startAnimation];
     if (_needsAutoSpan) {

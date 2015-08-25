@@ -14,12 +14,13 @@
 
 @interface CLFIncenseView ()
 
-@property (nonatomic, assign, getter=isBlowing)   BOOL            blowing;
 @property (nonatomic, weak)                       UIView          *incenseStick;
 @property (nonatomic, weak)                       UIView          *incenseBodyView;
 @property (nonatomic, weak)                       UIView          *headDustView;
 @property (nonatomic, weak)                       UIImageView     *smokeView;
-
+/**
+ *  Used to draw the dust(Euler spiral)
+ */
 @property (nonatomic)                             CAShapeLayer    *dustLine;
 @property (nonatomic)                             CAGradientLayer *dustGradient;
 @property (nonatomic)                             UIBezierPath    *dustPath;
@@ -196,9 +197,8 @@ static const CGFloat kIncenseStickWidth = 2.0f;
     _brightnessCallback = brightnessCallback;
     
     _displaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(invokeBrightnessCallback)];
-    _displaylink.frameInterval = 8;
+    _displaylink.frameInterval = 20;
     [_displaylink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-    self.blowing = NO;
 }
 
 - (void)invokeBrightnessCallback {
@@ -214,8 +214,6 @@ static const CGFloat kIncenseStickWidth = 2.0f;
     } else {
         [UIView animateWithDuration:2.0f animations:^{
             self.lightView.alpha = 0.0f;
-        } completion:^(BOOL finished) {
-            self.blowing = NO;
         }];
     }
     [self updateHeightWithBrightnessLevel:brightnessLevel];
@@ -242,7 +240,7 @@ static BOOL burntOffFromBackground = NO;
         incenseHeight = tempIncenseHeight;
         waverHeight -= timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
         colorLocation -= timeInterval * (2.2 / 100) * (60 / self.displaylink.frameInterval);
-        x += timeInterval * 0.0072f * (60 / self.displaylink.frameInterval);
+        x += timeInterval * 0.0072f * (60.0f / self.displaylink.frameInterval) * (8.0f / self.displaylink.frameInterval);
     } else {
         incenseHeight = incenseBurnOffLength;
         waverHeight = -703 * Size_Ratio_To_iPhone6;
@@ -308,8 +306,7 @@ CGFloat eulerSpiralLength = 0.0f;
     CGFloat e;
     CGFloat m;
     CGFloat n;
-    
-#warning - TODO: 位置换掉??
+
     if (x == 2.5) {
         e = x - 2.5;
         m = 2.5 + 40 * Size_Ratio_To_iPhone6 * integral(fresnelSin, 0, e, 10);
@@ -330,9 +327,8 @@ CGFloat eulerSpiralLength = 0.0f;
         [self.dustPath addLineToPoint:CGPointMake(m, headDustHeight - n)];
     }
     
-    x += 0.0072f / (Incense_Burn_Off_Time / 60.0f);
+    x += (0.0072f / (Incense_Burn_Off_Time / 60.0f)) * (self.displaylink.frameInterval / 8.0f);
     self.dustLine.path = self.dustPath.CGPath;
-    
 
 //    NSLog(@"eulerSpiralLength %f, incenseLength %f, totalLength %f", eulerSpiralLength, incenseHeight, eulerSpiralLength + incenseHeight);
 }

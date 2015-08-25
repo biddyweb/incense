@@ -15,6 +15,7 @@
 
 @property (nonatomic, weak) UIScrollView   *scrollView;
 @property (nonatomic, weak) CLFPageControl *pageControl;
+@property (nonatomic, strong) NSTimer      *showTimer;
 
 @end
 
@@ -122,9 +123,6 @@ static const NSInteger NewFeaturePages = 5;
     
     pageControl.userInteractionEnabled = NO;
     
-//    pageControl.currentPageIndicatorTintColor = [UIColor redColor];
-//    pageControl.pageIndicatorTintColor = [UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0];
-
     self.pageControl = pageControl;
 }
 
@@ -135,15 +133,19 @@ static const NSInteger NewFeaturePages = 5;
     if (page < 4) {
         self.pageControl.hidden = NO;
         self.pageControl.currentPage = page;
+        if (self.showTimer) {
+            [self.showTimer invalidate];
+            self.showTimer = nil;
+        }
+
     }
 
     
     if (page == 4) {
         self.pageControl.hidden = YES;
-        
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [self start];
-//        });
+        if (!self.showTimer) {
+            self.showTimer = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(start) userInfo:nil repeats:NO];
+        }
     }
 }
 

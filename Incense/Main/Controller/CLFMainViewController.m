@@ -9,8 +9,12 @@
 
 
 #warning - TODO: 音频修改
+
 #warning - TODO: 文案修改
-#warning - TODO: appid 修改
+
+#warning - TODO: 菜单？诗词？
+
+#warning - TODO: Appid 修改
 
 #warning - TODO: Music List 鸟字 有一点会露出来 图片要重做
 
@@ -86,7 +90,7 @@ static const CGFloat kMusicListStyle = 1;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 8.0f)));
+    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 20.0f)));
     
     [self makeIncense];
     [self makeCloud];
@@ -119,10 +123,6 @@ static const CGFloat kMusicListStyle = 1;
 - (void)lightTheIncense {
     NSLog(@"lightTheIncense");
     
-
-    
-
-
     self.burning = YES;
     [self setupRecorder];
     __block AVAudioRecorder *weakRecorder = self.recorder;
@@ -202,9 +202,9 @@ static const CGFloat kMusicListStyle = 1;
     [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
     
     [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber]];
-    
+
     self.burning = NO;
-    [self.rippleMaker stopWave];
+//    [self.rippleMaker stopWave];
     
     if (!kMusicListStyle) {
         [self.musicView stopPlayMusic];
@@ -222,13 +222,13 @@ static const CGFloat kMusicListStyle = 1;
     [UIView animateWithDuration:2.0f animations:^{
         self.incenseView.waver.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 0.0f;
-        self.rippleView.alpha = 0.3f;
+//        self.rippleView.alpha = 0.3f;
         self.audioView.alpha = 0.0f;
     } completion:^(BOOL finished) {
         self.endView.alpha = 0.0f;
         [UIView animateWithDuration:0.5f animations:^{
             self.endView.alpha = 1.0f;
-            self.rippleView.alpha = 0.0f;
+//            self.rippleView.alpha = 0.0f;
             
             if (!kMusicListStyle) {
                 self.musicView.hidden = YES;
@@ -263,7 +263,7 @@ static const CGFloat kMusicListStyle = 1;
         [self.audioView stopPlayAudio];
     }
     
-    [self.rippleMaker stopWave];
+//    [self.rippleMaker stopWave];
     self.audioView.alpha = 0.0f;
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
@@ -298,7 +298,7 @@ static const CGFloat kMusicListStyle = 1;
 - (CLFEndView *)endView {
     if (!_endView) {
         CLFEndView *endView = [[CLFEndView alloc] init];
-        endView.frame = self.view.frame;
+        endView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
         endView.alpha = 0.0f;
         endView.delegate = self;
         [self.view addSubview:endView];
@@ -318,14 +318,18 @@ static const CGFloat kMusicListStyle = 1;
  */
 - (void)oneMoreIncense {
     NSLog(@"oneMoreIncense");
+
+    NSLog(@"self.view.subviews %@", self.view.subviews);
     
     [self.view bringSubviewToFront:self.smoke];
-    [self.view bringSubviewToFront:self.endView];
+    self.smoke.layer.zPosition = 101;
+
+    
     smokeLocation = -520.0f;
     cloudLocation = -380.0f;
     [UIView animateWithDuration:3.0f animations:^{
         self.smoke.frame = self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
-        self.endView.alpha = 0.0f;
+        self.endView.alpha = 1.0f;
     } completion:^(BOOL finished) {
         
         [self.endView removeFromSuperview];
@@ -454,7 +458,7 @@ static const CGFloat kMusicListStyle = 1;
 
 - (void)renewSmokeStatusWithTimeHaveGone:(CGFloat)leaveBackInterval {
     
-    smokeLocation += smokeChangeRate * Size_Ratio_To_iPhone6 * leaveBackInterval * 7.5;
+    smokeLocation += smokeChangeRate * Size_Ratio_To_iPhone6 * leaveBackInterval * 3;
 }
 
 #pragma mark - Cloud
@@ -524,6 +528,7 @@ static const CGFloat kMusicListStyle = 1;
     } completion:^(BOOL finished) {
         [self makeFire];
         self.smoke.frame = CGRectMake(0, smokeLocation , Incense_Screen_Width, 520);
+        self.smoke.layer.zPosition = 0;
     }];
 }
 
@@ -556,10 +561,10 @@ static const CGFloat kMusicListStyle = 1;
 - (BMWaveMaker *)rippleMaker {
     if (!_rippleMaker) {
         _rippleMaker = [[BMWaveMaker alloc] init];
-        _rippleMaker.spanScale = 80.0f;
+        _rippleMaker.spanScale = 100.0f;
         _rippleMaker.originRadius = 0.9f;
         _rippleMaker.waveColor = [UIColor whiteColor];
-        _rippleMaker.animationDuration = 20.0f;
+        _rippleMaker.animationDuration = 30.0f;
         _rippleMaker.wavePathWidth = 1.5f;
     }
     return _rippleMaker;

@@ -70,10 +70,10 @@ static CGFloat beginCenterY = -140.0f;
     CGFloat newCenterY = self.center.y + offsetY;
     CGFloat distance = newCenterY - beginCenterY;
 
-    if (distance > floorY - 54 * Size_Ratio_To_iPhone6) {
+    if (distance >= floorY - 54 * Size_Ratio_To_iPhone6) {
         newCenterY = beginCenterY + floorY - 54 * Size_Ratio_To_iPhone6;
-        self.dragEnable = NO;
         [self.delegate lightTheIncense];
+        self.dragEnable = NO;
     }
     
     self.center = CGPointMake(self.center.x, newCenterY);    

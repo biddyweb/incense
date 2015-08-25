@@ -61,7 +61,6 @@ static CGFloat audioButtonWidth = 60.0f;
         [rainButton setImage:[UIImage imageNamed:@"RainButton"] forState:UIControlStateNormal];
         rainButton.name = @"2";
         rainButton.status = 0;
-        rainButton.backgroundColor = [UIColor grayColor];
         [rainButton addTarget:self action:@selector(playAudioWithNamedButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:rainButton];
         _rainButton = rainButton;
@@ -189,14 +188,11 @@ static CGFloat audioButtonWidth = 60.0f;
         self.switchTimer = nil;
     }
 
-
-    
     if (self.show) {
         self.switchTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(showAudioButtons) userInfo:nil repeats:NO];
         
         if (![self.playingButton isEqual:namedButton]) {
             NSLog(@"%@", namedButton.name);
-            
             
             self.playingButton.status = 0;
             CGFloat playingButtonX = self.playingButton.frame.origin.x;
@@ -248,7 +244,6 @@ static CGFloat audioButtonWidth = 60.0f;
         self.playingButton = nil;
         [self.audioTimer invalidate];
         [self.audioPlayer stop];
-        
     }
 }
 
