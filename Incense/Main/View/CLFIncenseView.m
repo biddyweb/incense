@@ -142,7 +142,7 @@ static const CGFloat kIncenseStickWidth = 2.0f;
         [colors addObject:(id)[UIColor colorWithRed:190/255.0 green:190/255.0 blue:190/255.0 alpha:1.0f].CGColor];
         [colors addObject:(id)[UIColor colorWithRed:190/255.0 green:190/255.0 blue:190/255.0 alpha:1.0f].CGColor];
 //        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
-        [colors addObject:(id)[UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0f].CGColor];
 
         
         dustGradient.colors = colors;

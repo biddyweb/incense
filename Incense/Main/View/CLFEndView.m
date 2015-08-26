@@ -56,6 +56,7 @@
         
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showTheShareView)];
         [restartButton addGestureRecognizer:longPress];
+        restartButton.adjustsImageWhenHighlighted = NO;
         
         _restartButton = restartButton;
         

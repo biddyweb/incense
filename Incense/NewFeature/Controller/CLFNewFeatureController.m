@@ -81,7 +81,7 @@ static const NSInteger NewFeaturePages = 5;
 }
 
 - (void)start {
-    [UIView animateWithDuration:1.0f animations:^{
+    [UIView animateWithDuration:0.8f animations:^{
         self.scrollView.alpha = 0.0f;
         self.pageControl.alpha = 0.0f;
     } completion:^(BOOL finished) {

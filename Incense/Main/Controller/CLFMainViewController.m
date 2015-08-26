@@ -38,7 +38,6 @@
 @property (nonatomic, strong)                    NSTimer                *musicTimer;
 
 @property (nonatomic, weak)                      UITapGestureRecognizer *tap;
-@property (nonatomic, assign, getter=isNeedSpan)   BOOL                   needSpan;
 
 @end
 
@@ -61,6 +60,8 @@ static CGFloat   cloudLocation = -380.0f;
 static CGFloat   smokeLocation = -520.0f;
 static CGFloat   animationTime = 4.0f;
 static CGFloat   smokeChangeRate = 0.0f;
+static BOOL      needShare = YES;
+static BOOL      needSpan = YES;
 
 static const CGFloat kWaverVoiceFactor = 10.0f;
 static const CGFloat kFireVoiceFactor = 40.0f;
@@ -81,17 +82,14 @@ static const CGFloat kMusicListStyle = 1;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
 
-    
     [self makeIncense];
     [self makeCloud];
-    self.needSpan = YES;
     [self makeRipple];
     
     [self makeAudioView];
     
-    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 8.0f)));
+    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 20.0f)));
     self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
     [self fireAppearInSky];
 }
@@ -242,7 +240,7 @@ static const CGFloat kMusicListStyle = 1;
         [self stopFloating];
         [self showFailure];
         [self.rippleMaker stopWave];
-        self.needSpan = YES;
+        needSpan = YES;
     } else {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSInteger burntIncenseNumber = [defaults integerForKey:@"burntIncenseNumber"];
@@ -292,6 +290,7 @@ static const CGFloat kMusicListStyle = 1;
     [self.view bringSubviewToFront:self.smoke];
     self.smoke.layer.zPosition = 101;
     
+    needShare = YES;
     smokeLocation = -520.0f;
     cloudLocation = -380.0f;
     [UIView animateWithDuration:3.0f animations:^{
@@ -517,9 +516,9 @@ static const CGFloat kMusicListStyle = 1;
 
     self.rippleMaker.animationView = self.rippleView;
     
-    if (self.needSpan) {
+    if (needSpan) {
         [self.rippleMaker spanWaveContinuallyWithTimeInterval:animationTime];
-        self.needSpan = NO;
+        needSpan = NO;
     }
 
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
@@ -588,24 +587,35 @@ static const CGFloat kMusicListStyle = 1;
 }
 
 - (void)showShareView {
-    NSArray* actItems = @[];
-    
-    UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:actItems applicationActivities:actItems];
-    
-    [self presentViewController:activityView animated:YES completion:^{
-    }];
+    if (needShare) {
+        UIImage *screenShot = [self takeSnapshotOfView:self.view];
+        NSArray *actItems = @[screenShot];
+        
+        UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:actItems applicationActivities:nil];
+        activityView.excludedActivityTypes = @[UIActivityTypePrint,
+                                               UIActivityTypeCopyToPasteboard,
+                                               UIActivityTypeAssignToContact,
+                                               UIActivityTypeMessage,
+                                               UIActivityTypeAddToReadingList];
+        [self presentViewController:activityView animated:YES completion:nil];
+        needShare = NO;
+        
+        [activityView setCompletionWithItemsHandler:^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *error) {
+            needShare = YES;
+        }];
+    }
 }
 
-//- (UIImage *)takeSnapshotOfView:(UIView *)view
-//{
-//    CGFloat reductionFactor = 1;
-//    UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor));
-//    [view drawViewHierarchyInRect:CGRectMake(0, 0, view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor) afterScreenUpdates:YES];
-//    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-//    
-//    return image;
-//}
+- (UIImage *)takeSnapshotOfView:(UIView *)view
+{
+    CGFloat reductionFactor = 0.5;
+    UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor));
+    [view drawViewHierarchyInRect:CGRectMake(0, 0, view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor) afterScreenUpdates:YES];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
 
 
 - (void)didReceiveMemoryWarning {

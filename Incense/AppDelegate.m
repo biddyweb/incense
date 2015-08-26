@@ -129,7 +129,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         notification.fireDate = [currentDate dateByAddingTimeInterval:notificationTimeInterval];
         notification.repeatInterval = 0;
         
-        notification.alertBody = @"施主,香已烧尽...";
+        notification.alertBody = @"香已燃尽，起来休息下吧";
         notification.alertAction = @"一炷香";
         
         notification.userInfo = @{@"identifier" : @"finishNotification"};
@@ -148,7 +148,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         notification.fireDate = [currentDate dateByAddingTimeInterval:1.0];
         notification.repeatInterval = 0;
         
-        notification.alertBody = @"烧香要虔诚懂不懂啊白痴!";
+        notification.alertBody = @"志士惜日短，愁人知夜长";
         
         notification.userInfo = @{@"identifier" : @"switchNotification"};
         
@@ -160,10 +160,6 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kDisplayStatusLocked"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-//    for (UILocalNotification *noti in application.scheduledLocalNotifications) {
-//        noti.applicationIconBadgeNumber = 0;
-//        [application scheduleLocalNotification:noti];
-//    }
     
     [application cancelAllLocalNotifications];
     
@@ -178,8 +174,6 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     }
     
     if (!firstLaunch) {
-        
-        NSLog(@"enterHere...jiongjiongjiong...");
         CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
         if (mainVC.burning) {
             [mainVC.recorder record];
