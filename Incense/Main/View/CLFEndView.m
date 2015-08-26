@@ -8,6 +8,7 @@
 
 #import "CLFEndView.h"
 #import "CLFIncenseCommonHeader.h"
+#import "CLFEndButton.h"
 
 @interface CLFEndView ()
 
@@ -17,7 +18,6 @@
 @property (nonatomic, weak) UIButton    *restartButton;
 
 @end
-
 
 @implementation CLFEndView
 
@@ -31,20 +31,20 @@
         _finishView = finishedView;
         
         UIImageView *finishImageView = [[UIImageView alloc] init];
-        [finishedView addSubview:finishImageView];
+        [_finishView addSubview:finishImageView];
         finishImageView.contentMode = UIViewContentModeTop;
         finishImageView.backgroundColor = [UIColor clearColor];
         _finishImageView = finishImageView;
         
         UIButton *restartButton = [[UIButton alloc] init];
-        [finishedView addSubview:restartButton];
+        [_finishView addSubview:restartButton];
         
-//        restartButton.imageView.bounds = CGRectMake(0, 0, 24, 24);
-//        [restartButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
-//        [restartButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
-//        [restartButton setImageEdgeInsets:UIEdgeInsetsMake(5, 11, 17, 11)];
-//        restartButton.contentMode = UIViewContentModeTop;
-//        [restartButton setImage:[UIImage imageNamed:@"否"] forState:UIControlStateNormal];
+        restartButton.imageView.bounds = CGRectMake(0, 0, 24, 24);
+        [restartButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
+        [restartButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
+        [restartButton setImageEdgeInsets:UIEdgeInsetsMake(5, 11, 17, 11)];
+        restartButton.contentMode = UIViewContentModeTop;
+        [restartButton setImage:[UIImage imageNamed:@"轮回"] forState:UIControlStateNormal];
         
         [restartButton addTarget:self action:@selector(wantOneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
         _restartButton = restartButton;
@@ -61,18 +61,13 @@
         blurView.alpha = 0.0f;
         [self addSubview:blurView];
 
-        UIButton *restartButton = [[UIButton alloc] init];
+        CLFEndButton *restartButton = [[CLFEndButton alloc] init];
         [blurView addSubview:restartButton];
         restartButton.frame = self.frame;
-        restartButton.imageView.bounds = CGRectMake(0, 0, 22, 110);
-        restartButton.contentMode = UIViewContentModeTop;
-        [restartButton setContentHorizontalAlignment: UIControlContentHorizontalAlignmentCenter];
-        [restartButton setContentVerticalAlignment: UIControlContentVerticalAlignmentTop];
-        [restartButton setImageEdgeInsets:UIEdgeInsetsMake(CGRectGetHeight(restartButton.frame) * 1.0 / 3, 0, 0, 0)];
 
         restartButton.backgroundColor = [UIColor clearColor];
         [restartButton addTarget:self action:@selector(showFinishView) forControlEvents:UIControlEventTouchUpInside];
-        [restartButton setImage:[UIImage imageNamed:@"時"] forState:UIControlStateNormal];
+        restartButton.endImageView.image = [UIImage imageNamed:@"時"];
 
         _blurView = blurView;
     }
@@ -84,14 +79,12 @@
     CGFloat restartButtonW = 48;
     CGFloat restartButtonH = restartButtonW;
     
-//    self.restartButton.frame = CGRectMake((Incense_Screen_Width - restartButtonW) * 0.5, Incense_Screen_Height * 0.875, restartButtonW, restartButtonH);
-    self.restartButton.frame = self.frame;
-
+    self.restartButton.frame = CGRectMake((Incense_Screen_Width - restartButtonW) * 0.5, Incense_Screen_Height * 0.875, restartButtonW, restartButtonH);
 }
 
 - (void)setupWithBurntOffNumber:(NSString *)numberString {
-    CGFloat digitW = 22 * Size_Ratio_To_iPhone6;
-    CGFloat digitH = digitW;
+    CGFloat digitW = 20 * Size_Ratio_To_iPhone6;
+    CGFloat digitH = digitW + 2 * Size_Ratio_To_iPhone6;
     self.blurView.alpha = 1.0f;
     self.finishImageView.frame = CGRectMake((Incense_Screen_Width - digitW) * 0.5, Incense_Screen_Height * 0.25, digitW, 300);
     
@@ -119,6 +112,7 @@
     CGFloat finishViewW = 22 * Size_Ratio_To_iPhone6;
     CGFloat finishViewH = 44 * Size_Ratio_To_iPhone6;
     self.finishImageView.frame = CGRectMake((Incense_Screen_Width - finishViewW) * 0.5, Incense_Screen_Height * 0.25 - finishViewH, finishViewW, finishViewH);
+    self.finishImageView.contentMode = UIViewContentModeScaleAspectFit;
     self.finishImageView.image = [UIImage imageNamed:@"灭"];
 }
 

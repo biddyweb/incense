@@ -46,8 +46,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     NSLog(@"version %@, oldVersion %@", version, oldVersion);
     
     if ([version isEqualToString:oldVersion]) {
-        NSLog(@"dududududud");
-        self.window.rootViewController = [[CLFNewFeatureController alloc] init];
+        self.window.rootViewController = [[CLFMainViewController alloc] init];
     } else {
         self.window.rootViewController = [[CLFNewFeatureController alloc] init];
         [[NSUserDefaults standardUserDefaults] setValue:version forKey:@"firstLaunch"];
@@ -189,18 +188,22 @@ static void displayStatusChanged(CFNotificationCenterRef center,
             NSTimeInterval backTimeInterval = [backTime timeIntervalSince1970];
             CGFloat leaveBackInterval = backTimeInterval - leaveTimeInterval;
             
-            if (leaveBackInterval > Incense_Burn_Off_Time - timeHaveGone) {
-                leaveBackInterval = Incense_Burn_Off_Time - timeHaveGone;
-            }
+//            if (leaveBackInterval > Incense_Burn_Off_Time - timeHaveGone) {
+//                leaveBackInterval = Incense_Burn_Off_Time - timeHaveGone;
+//            }
             
             CLFIncenseView *incense = mainVC.incenseView;
             incense.displaylink.paused = NO;
             
             if (leaveBySwitch && leaveBackInterval > 5) {
-                [mainVC incenseDidBurnOffForALongTime];
+                [mainVC incenseDidBurnOffFromBackgroundWithResult:@"failure"];
+            } else if (leaveBackInterval > Incense_Burn_Off_Time - timeHaveGone) {  // If the incense have burnt off when user come back.
+                NSLog(@"烧完啦烧完啦啦啦啦");
+                [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
+                [mainVC renewSmokeStatusWithTimeHaveGone:Incense_Burn_Off_Time - timeHaveGone];
             } else {
                 NSLog(@"回来回来啦啦啦");
-                NSLog(@"leaveBackInterval : %f", leaveBackInterval);
+                NSLog(@"leaveBackInterval : %f", leaveBackInterval);   // If the incense haven't burnt off when user come back.
                 [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
                 [mainVC renewSmokeStatusWithTimeHaveGone:leaveBackInterval];
             }
@@ -227,9 +230,10 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     }
     
     CLFMainViewController *mainVC = (CLFMainViewController *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    
     if (33 <= launchTime && !mainVC.burning) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"喜欢 一炷香 吗?"
-                                                        message:@"亲~赏个好评吧~O(∩_∩)O~~"
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"喜欢【一炷香】 么?"
+                                                        message:@"给个好评吧~"
                                                        delegate:self
                                               cancelButtonTitle:@"再看看"
                                               otherButtonTitles:@"准了!", nil];

@@ -11,6 +11,7 @@
 @protocol CLFIncenseViewDelegate <NSObject>
 
 - (void)incenseDidBurnOff;
+- (void)incenseDidBurnOffFromBackgroundWithResult:(NSString *)resultString;
 
 @end
 
@@ -18,16 +19,16 @@
 
 @interface CLFIncenseView : UIView
 
-@property (nonatomic, weak)   UIImageView                *incenseHeadView;
-@property (nonatomic, weak)   UIImageView                *lightView;
-@property (nonatomic, weak)   Waver                      *waver;
+@property (nonatomic, weak)                      UIImageView                *incenseHeadView;
+@property (nonatomic, weak)                      UIImageView                *lightView;
+@property (nonatomic, weak)                      Waver                      *waver;
 @property (nonatomic, assign, getter=isBurntOff) BOOL    *burntOff;
 
-@property (nonatomic, assign) CGFloat                    brightnessLevel;
-@property (nonatomic, copy)   void                       (^brightnessCallback)(CLFIncenseView * incense);
-@property (nonatomic, strong) CADisplayLink              *displaylink;;
+@property (nonatomic, assign)                    CGFloat                    brightnessLevel;
+@property (nonatomic, copy)                      void                       (^brightnessCallback)(CLFIncenseView * incense);
+@property (nonatomic, strong)                    CADisplayLink              *displaylink;;
 
-@property (nonatomic, weak)   id<CLFIncenseViewDelegate> delegate;
+@property (nonatomic, weak)                      id<CLFIncenseViewDelegate> delegate;
 
 - (void)initialSetup;
 - (CGFloat)timeHaveGone;

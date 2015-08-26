@@ -15,6 +15,7 @@
 
 @property (nonatomic, weak) UIScrollView   *scrollView;
 @property (nonatomic, weak) CLFPageControl *pageControl;
+@property (nonatomic, strong) NSTimer      *showTimer;
 
 @end
 
@@ -60,18 +61,14 @@ static const NSInteger NewFeaturePages = 5;
     for (NSInteger i = 0; i < NewFeaturePages; i++) {
         UIImageView *imageView = [[UIImageView alloc] init];
         
-        NSString *name = [NSString stringWithFormat:@"NewFeature%ld", i + 1];
+        NSString *name = [NSString stringWithFormat:@"NewFeature%d", i + 1];
         imageView.image = [UIImage imageNamed:name];
-        
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
         CGFloat pageX = i * pageW;
         CGFloat pageY = 0;
         imageView.frame = CGRectMake(pageX, pageY, pageW, pageH);
         
         [scrollView addSubview:imageView];
-        
-        if (NewFeaturePages - 1 == i) {
-            [self setupLastImageView:imageView];
-        }
     }
     
     scrollView.contentSize = CGSizeMake(NewFeaturePages * pageW, 0);
@@ -83,22 +80,8 @@ static const NSInteger NewFeaturePages = 5;
     self.scrollView = scrollView;
 }
 
-- (void)setupLastImageView:(UIImageView *)imageView {
-    imageView.userInteractionEnabled = YES;
-    
-    UIButton *startButton = [[UIButton alloc] init];
-    [startButton addTarget:self action:@selector(start) forControlEvents:UIControlEventTouchUpInside];
-    [imageView addSubview:startButton];
-    
-    [startButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(imageView);
-        make.height.equalTo(imageView);
-        make.centerX.equalTo(imageView);
-    }];
-}
-
 - (void)start {
-    [UIView animateWithDuration:2.0f animations:^{
+    [UIView animateWithDuration:1.0f animations:^{
         self.scrollView.alpha = 0.0f;
         self.pageControl.alpha = 0.0f;
     } completion:^(BOOL finished) {
@@ -122,9 +105,6 @@ static const NSInteger NewFeaturePages = 5;
     
     pageControl.userInteractionEnabled = NO;
     
-//    pageControl.currentPageIndicatorTintColor = [UIColor redColor];
-//    pageControl.pageIndicatorTintColor = [UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0];
-
     self.pageControl = pageControl;
 }
 
@@ -132,12 +112,21 @@ static const NSInteger NewFeaturePages = 5;
     CGFloat offsetX = scrollView.contentOffset.x;
     
     NSInteger page = (offsetX + 0.5 * CGRectGetWidth(scrollView.frame)) / CGRectGetWidth(scrollView.frame);
-    self.pageControl.currentPage = page;
-//    if (page == 4) {
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [self start];
-//        });
-//    }
+    if (page < NewFeaturePages - 1) {
+        self.pageControl.hidden = NO;
+        self.pageControl.currentPage = page;
+        if (self.showTimer) {
+            [self.showTimer invalidate];
+            self.showTimer = nil;
+        }
+    }
+    
+    if (page == NewFeaturePages - 1) {
+        self.pageControl.hidden = YES;
+        if (!self.showTimer) {
+            self.showTimer = [NSTimer scheduledTimerWithTimeInterval:1.5f target:self selector:@selector(start) userInfo:nil repeats:NO];
+        }
+    }
 }
 
 @end

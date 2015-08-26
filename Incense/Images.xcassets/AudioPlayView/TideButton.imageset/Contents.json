@@ -7,12 +7,12 @@
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "DewButton@2x.png"
+      "filename" : "TideButton@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "DewButton@3x.png"
+      "filename" : "TideButton@3x.png"
     }
   ],
   "info" : {
