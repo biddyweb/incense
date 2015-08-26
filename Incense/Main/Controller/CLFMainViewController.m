@@ -12,11 +12,7 @@
 
 #warning - TODO: 文案修改
 
-#warning - TODO: 菜单？诗词？
-
 #warning - TODO: Appid 修改
-
-#warning - TODO: Music List 鸟字 有一点会露出来 图片要重做
 
 #import "CLFMainViewController.h"
 #import "CLFCloud.h"
@@ -30,7 +26,7 @@
 #import "CLFEndView.h"
 #import "CLFIncenseCommonHeader.h"
 
-@interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, CLFEndViewDelegate, UICollisionBehaviorDelegate>
+@interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, CLFEndViewDelegate>
 
 @property (nonatomic, weak)   UIImageView            *incenseShadowView;
 @property (nonatomic, weak)   CLFCloud               *cloud;
@@ -90,7 +86,7 @@ static const CGFloat kMusicListStyle = 1;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 20.0f)));
+
     
     [self makeIncense];
     [self makeCloud];
@@ -103,6 +99,7 @@ static const CGFloat kMusicListStyle = 1;
         [self makeAudioView];
     }
     
+    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 20.0f)));
     self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
     [self fireAppearInSky];
 }
@@ -139,25 +136,27 @@ static const CGFloat kMusicListStyle = 1;
     [UIView animateWithDuration:4.0f animations:^{
         self.cloud.cloudImageView.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 1.0f;
+        self.audioView.alpha = 1.0f;
     } completion:^(BOOL finished) {
         [self.cloud removeFromSuperview]; // --> 此处 fire 被释放了
+        UITapGestureRecognizer *tapRecognizer = kMusicListStyle ? [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAudioView)] : [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMusicView)];
+        [self.view addGestureRecognizer:tapRecognizer];
+        self.tap = tapRecognizer;
+
+        if (kMusicListStyle) {
+            self.audioView.userInteractionEnabled = YES;
+        }
+
     }];
+
 
     [UIView animateWithDuration:5.0f animations:^{
         self.fire.alpha = 0.0f;  // --> 此处创建了 cloud ????
         self.incenseView.waver.alpha = 1.0f;
-        self.audioView.alpha = 1.0f;
-
+        self.fire.transform = CGAffineTransformMakeScale(0.3, 0.3);
     } completion:^(BOOL finished) {
         [self.fire removeFromSuperview];
-        
-        UITapGestureRecognizer *tapRecognizer = kMusicListStyle ? [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAudioView)] : [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMusicView)];
-        [self.view addGestureRecognizer:tapRecognizer];
-        self.tap = tapRecognizer;
-        
-        if (kMusicListStyle) {
-            self.audioView.userInteractionEnabled = YES;
-        }
+        self.fire.transform = CGAffineTransformIdentity;
     }];
 }
 
@@ -263,7 +262,7 @@ static const CGFloat kMusicListStyle = 1;
         [self.audioView stopPlayAudio];
     }
     
-//    [self.rippleMaker stopWave];
+    [self.rippleMaker stopWave];
     self.audioView.alpha = 0.0f;
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
@@ -318,12 +317,8 @@ static const CGFloat kMusicListStyle = 1;
  */
 - (void)oneMoreIncense {
     NSLog(@"oneMoreIncense");
-
-    NSLog(@"self.view.subviews %@", self.view.subviews);
-    
     [self.view bringSubviewToFront:self.smoke];
     self.smoke.layer.zPosition = 101;
-
     
     smokeLocation = -520.0f;
     cloudLocation = -380.0f;
@@ -458,7 +453,7 @@ static const CGFloat kMusicListStyle = 1;
 
 - (void)renewSmokeStatusWithTimeHaveGone:(CGFloat)leaveBackInterval {
     
-    smokeLocation += smokeChangeRate * Size_Ratio_To_iPhone6 * leaveBackInterval * 3;
+    smokeLocation += smokeChangeRate * Size_Ratio_To_iPhone6 * leaveBackInterval * (60.0f / self.incenseView.displaylink.frameInterval);
 }
 
 #pragma mark - Cloud
@@ -615,12 +610,10 @@ static const CGFloat kMusicListStyle = 1;
 }
 
 - (void)showAudioView {
-        NSLog(@"kkkkkkkkkk");
     [self.audioView showAudioButtons];
 }
 
 - (void)setupRecorder {
-    NSLog(@"setupRecorder");
     NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
     
     NSDictionary *settings = @{AVSampleRateKey:          [NSNumber numberWithFloat: 44100.0],

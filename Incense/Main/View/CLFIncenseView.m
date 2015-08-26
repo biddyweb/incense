@@ -10,20 +10,19 @@
 #import "CLFIncenseCommonHeader.h"
 #import "Masonry.h"
 #import "Waver.h"
-#import <math.h>
 
 @interface CLFIncenseView ()
 
-@property (nonatomic, weak)                       UIView          *incenseStick;
-@property (nonatomic, weak)                       UIView          *incenseBodyView;
-@property (nonatomic, weak)                       UIView          *headDustView;
-@property (nonatomic, weak)                       UIImageView     *smokeView;
+@property (nonatomic, weak) UIView          *incenseStick;
+@property (nonatomic, weak) UIView          *incenseBodyView;
+@property (nonatomic, weak) UIView          *headDustView;
+@property (nonatomic, weak) UIImageView     *smokeView;
 /**
  *  Used to draw the dust(Euler spiral)
  */
-@property (nonatomic)                             CAShapeLayer    *dustLine;
-@property (nonatomic)                             CAGradientLayer *dustGradient;
-@property (nonatomic)                             UIBezierPath    *dustPath;
+@property (nonatomic)       CAShapeLayer    *dustLine;
+@property (nonatomic)       CAGradientLayer *dustGradient;
+@property (nonatomic)       UIBezierPath    *dustPath;
 
 @end
 
@@ -140,7 +139,7 @@ static const CGFloat kIncenseStickWidth = 2.0f;
         
         NSMutableArray *colors = [NSMutableArray array];
         
-        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0f].CGColor];
+        [colors addObject:(id)[UIColor colorWithRed:190/255.0 green:190/255.0 blue:190/255.0 alpha:1.0f].CGColor];
         [colors addObject:(id)[UIColor colorWithRed:190/255.0 green:190/255.0 blue:190/255.0 alpha:1.0f].CGColor];
 //        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
         [colors addObject:(id)[UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0f].CGColor];
@@ -272,7 +271,7 @@ static CGFloat colorLocation = 0.8f;
     waverHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
     self.waver.frame = (CGRect) {{0, 0}, {Incense_Screen_Width, waverHeight}};
     
-    colorLocation = colorLocation - 0.1 / 100 > 0 ? colorLocation - 0.1 / 100 : 0.0f;
+    colorLocation = colorLocation - 0.6 / 100 > 0 ? colorLocation - 0.6 / 100 : 0.0f;
     self.dustGradient.locations = @[@0.0f, @(colorLocation), @1.0f];
     
     if (!modifyDust) {

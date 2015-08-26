@@ -34,10 +34,8 @@
         }
         
         if (i == self.currentPage) {
-//            dot.image = [UIImage imageNamed:@"spark"];
             dot.backgroundColor = [UIColor redColor];
         } else {
-//            dot.image = [UIImage imageNamed:@"PlayButton6"];
             dot.backgroundColor = [UIColor colorWithRed:231/255.0 green:231/255.0 blue:231/255.0 alpha:1.0];
         }
     }

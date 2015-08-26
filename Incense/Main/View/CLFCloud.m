@@ -20,7 +20,6 @@
 static CGPoint beginPoint;
 static CGFloat beginCenterY = -140.0f;
 
-
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -51,7 +50,6 @@ static CGFloat beginCenterY = -140.0f;
 
     UITouch *touch = [touches anyObject];
     beginPoint = [touch locationInView:self];
-    NSLog(@"begin center Y %f", self.center.y);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {

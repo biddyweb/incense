@@ -46,7 +46,6 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     NSLog(@"version %@, oldVersion %@", version, oldVersion);
     
     if ([version isEqualToString:oldVersion]) {
-        NSLog(@"dududududud");
         self.window.rootViewController = [[CLFNewFeatureController alloc] init];
     } else {
         self.window.rootViewController = [[CLFNewFeatureController alloc] init];
@@ -232,10 +231,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     
     CLFMainViewController *mainVC = (CLFMainViewController *) [UIApplication sharedApplication].keyWindow.rootViewController;
     
-    NSLog(@"appLauchTimers");
-    NSLog(@"%ld", launchTime);
     if (33 <= launchTime && !mainVC.burning) {
-        NSLog(@"LauchTime-->33");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"喜欢【一炷香】 么?"
                                                         message:@"给个好评吧~"
                                                        delegate:self

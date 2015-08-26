@@ -69,10 +69,6 @@ static const NSInteger NewFeaturePages = 5;
         imageView.frame = CGRectMake(pageX, pageY, pageW, pageH);
         
         [scrollView addSubview:imageView];
-        
-        if (NewFeaturePages - 1 == i) {
-            [self setupLastImageView:imageView];
-        }
     }
     
     scrollView.contentSize = CGSizeMake(NewFeaturePages * pageW, 0);
@@ -82,20 +78,6 @@ static const NSInteger NewFeaturePages = 5;
     scrollView.delegate = self;
     
     self.scrollView = scrollView;
-}
-
-- (void)setupLastImageView:(UIImageView *)imageView {
-    imageView.userInteractionEnabled = YES;
-    
-    UIButton *startButton = [[UIButton alloc] init];
-    [startButton addTarget:self action:@selector(start) forControlEvents:UIControlEventTouchUpInside];
-    [imageView addSubview:startButton];
-    
-    [startButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(imageView);
-        make.height.equalTo(imageView);
-        make.centerX.equalTo(imageView);
-    }];
 }
 
 - (void)start {
@@ -137,14 +119,12 @@ static const NSInteger NewFeaturePages = 5;
             [self.showTimer invalidate];
             self.showTimer = nil;
         }
-
     }
-
     
     if (page == 4) {
         self.pageControl.hidden = YES;
         if (!self.showTimer) {
-            self.showTimer = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(start) userInfo:nil repeats:NO];
+            self.showTimer = [NSTimer scheduledTimerWithTimeInterval:1.5f target:self selector:@selector(start) userInfo:nil repeats:NO];
         }
     }
 }
