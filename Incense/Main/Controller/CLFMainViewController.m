@@ -149,7 +149,6 @@ static const CGFloat kMusicListStyle = 1;
 
     }];
 
-
     [UIView animateWithDuration:5.0f animations:^{
         self.fire.alpha = 0.0f;  // --> 此处创建了 cloud ????
         self.incenseView.waver.alpha = 1.0f;
@@ -248,7 +247,6 @@ static const CGFloat kMusicListStyle = 1;
  *  If the user ignored the alert, show a incompletely burnt incense.
  */
 
-
 - (void)incenseDidBurnOffFromBackgroundWithResult:(NSString *)resultString {
     [self.view removeGestureRecognizer:self.tap];
     self.burning = NO;
@@ -257,21 +255,20 @@ static const CGFloat kMusicListStyle = 1;
         self.musicView.hidden = YES;
         [self.musicView stopPlayMusic];
     } else {
-//        self.audioView.hidden = YES;
         self.audioView.userInteractionEnabled = NO;
         [self.audioView stopPlayAudio];
     }
     
-    [self.rippleMaker stopWave];
     self.audioView.alpha = 0.0f;
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
     self.incenseView.lightView.alpha = 0.0f;
     [self.recorder stop];
-    [self stopFloating];
-    
+
     if ([resultString isEqualToString:@"failure"]) {
-       [self showFailure];
+        [self stopFloating];
+        [self showFailure];
+        [self.rippleMaker stopWave];
     } else {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSInteger burntIncenseNumber = [defaults integerForKey:@"burntIncenseNumber"];
@@ -315,6 +312,7 @@ static const CGFloat kMusicListStyle = 1;
 /**
  *  Make a new incense for users.
  */
+
 - (void)oneMoreIncense {
     NSLog(@"oneMoreIncense");
     [self.view bringSubviewToFront:self.smoke];
@@ -490,7 +488,7 @@ static const CGFloat kMusicListStyle = 1;
 #pragma mark - Fire
 
 /**
- *  Locating on cloud, which used to light the incense (but in this program, whether the incense lighted is determined by the position of cloud).
+ *  Fire located on cloud, which used to light the incense (but in this program, whether the incense lighted is determined by the position of cloud).
  */
 
 - (UIImageView *)fire {
@@ -519,7 +517,7 @@ static const CGFloat kMusicListStyle = 1;
 
 - (void)fireAppearInSky {
     [UIView animateWithDuration:1.0f animations:^{
-        self.smoke.frame = CGRectMake(0, -440 , Incense_Screen_Width, 520); // 用 -440 是为了让火焰的出现更自然
+        self.smoke.frame = CGRectMake(0, -440 , Incense_Screen_Width, 520); // 让火焰的出现更自然
     } completion:^(BOOL finished) {
         [self makeFire];
         self.smoke.frame = CGRectMake(0, smokeLocation , Incense_Screen_Width, 520);
@@ -548,6 +546,7 @@ static const CGFloat kMusicListStyle = 1;
     self.rippleView.alpha = 1.0f;
 
     self.rippleMaker.animationView = self.rippleView;
+    
     [self.rippleMaker spanWaveContinuallyWithTimeInterval:animationTime];
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
     self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);

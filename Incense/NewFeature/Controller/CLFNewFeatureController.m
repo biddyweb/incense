@@ -61,7 +61,7 @@ static const NSInteger NewFeaturePages = 5;
     for (NSInteger i = 0; i < NewFeaturePages; i++) {
         UIImageView *imageView = [[UIImageView alloc] init];
         
-        NSString *name = [NSString stringWithFormat:@"NewFeature%ld", i + 1];
+        NSString *name = [NSString stringWithFormat:@"NewFeature%d", i + 1];
         imageView.image = [UIImage imageNamed:name];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         CGFloat pageX = i * pageW;
@@ -112,7 +112,7 @@ static const NSInteger NewFeaturePages = 5;
     CGFloat offsetX = scrollView.contentOffset.x;
     
     NSInteger page = (offsetX + 0.5 * CGRectGetWidth(scrollView.frame)) / CGRectGetWidth(scrollView.frame);
-    if (page < 4) {
+    if (page < NewFeaturePages - 1) {
         self.pageControl.hidden = NO;
         self.pageControl.currentPage = page;
         if (self.showTimer) {
@@ -121,7 +121,7 @@ static const NSInteger NewFeaturePages = 5;
         }
     }
     
-    if (page == 4) {
+    if (page == NewFeaturePages - 1) {
         self.pageControl.hidden = YES;
         if (!self.showTimer) {
             self.showTimer = [NSTimer scheduledTimerWithTimeInterval:1.5f target:self selector:@selector(start) userInfo:nil repeats:NO];
