@@ -34,6 +34,7 @@
 
 static CGFloat selfWidth;
 static CGFloat audioButtonWidth = 60.0f;
+static CGFloat dotLocation = -79;
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -139,9 +140,9 @@ static CGFloat audioButtonWidth = 60.0f;
     
     selfWidth = CGRectGetWidth(self.frame);
     
-    self.tideButton.frame = CGRectMake(selfWidth * 0.5 - audioButtonWidth * 0.5, -77, audioButtonWidth, 132);
-    self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - audioButtonWidth * 0.5, -77, audioButtonWidth, 132);
-    self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - audioButtonWidth * 0.5, -77, audioButtonWidth, 132);
+    self.tideButton.frame = CGRectMake(selfWidth * 0.5 - audioButtonWidth * 0.5, dotLocation, audioButtonWidth, 132);
+    self.rainButton.frame = CGRectMake((selfWidth * 1.0f / 3) - audioButtonWidth * 0.5, dotLocation, audioButtonWidth, 132);
+    self.chirpButton.frame = CGRectMake((selfWidth * 2.0f / 3) - audioButtonWidth * 0.5, dotLocation, audioButtonWidth, 132);
 }
 
 
@@ -152,7 +153,7 @@ static CGFloat audioButtonWidth = 60.0f;
     CGFloat chirpLocation = 0.0f;
     
     if (self.show) {
-        tideLocation = -77;
+        tideLocation = dotLocation;
         rainLocation = tideLocation;
         chirpLocation = rainLocation;
         self.show = NO;

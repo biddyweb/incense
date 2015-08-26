@@ -13,6 +13,6 @@
 #define Incense_Screen_Height    [UIScreen mainScreen].bounds.size.height
 #define Size_Ratio_To_iPhone6    (Incense_Screen_Height / 667.0f)
 #define Incense_Location         ((Incense_Screen_Height - 200 * Size_Ratio_To_iPhone6) * 0.425)
-#define Incense_Burn_Off_Time    (1800.0f)
+#define Incense_Burn_Off_Time    (10.0f)
 
 #endif

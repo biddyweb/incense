@@ -188,14 +188,10 @@ static void displayStatusChanged(CFNotificationCenterRef center,
             NSTimeInterval backTimeInterval = [backTime timeIntervalSince1970];
             CGFloat leaveBackInterval = backTimeInterval - leaveTimeInterval;
             
-//            if (leaveBackInterval > Incense_Burn_Off_Time - timeHaveGone) {
-//                leaveBackInterval = Incense_Burn_Off_Time - timeHaveGone;
-//            }
-            
             CLFIncenseView *incense = mainVC.incenseView;
             incense.displaylink.paused = NO;
             
-            if (leaveBySwitch && leaveBackInterval > 5) {
+            if (leaveBySwitch && leaveBackInterval > 10) {
                 [mainVC incenseDidBurnOffFromBackgroundWithResult:@"failure"];
             } else if (leaveBackInterval > Incense_Burn_Off_Time - timeHaveGone) {  // If the incense have burnt off when user come back.
                 NSLog(@"烧完啦烧完啦啦啦啦");

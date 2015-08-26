@@ -7,9 +7,6 @@
 //
 
 
-
-#warning - TODO: 音频修改
-
 #warning - TODO: 文案修改
 
 #warning - TODO: Appid 修改
@@ -21,28 +18,27 @@
 #import "Waver.h"
 #import "UIImage+animatedGIF.h"
 #import "CLFMathTools.h"
-#import "CLFMusicPlayView.h"
 #import "CLFAudioPlayView.h"
 #import "CLFEndView.h"
 #import "CLFIncenseCommonHeader.h"
 
 @interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, CLFEndViewDelegate>
 
-@property (nonatomic, weak)   UIImageView            *incenseShadowView;
-@property (nonatomic, weak)   CLFCloud               *cloud;
-@property (nonatomic, weak)   UIImageView            *smoke;
-@property (nonatomic, strong) UIImageView            *fire;
+@property (nonatomic, weak)                      UIImageView            *incenseShadowView;
+@property (nonatomic, weak)                      CLFCloud               *cloud;
+@property (nonatomic, weak)                      UIImageView            *smoke;
+@property (nonatomic, strong)                    UIImageView            *fire;
 
-@property (nonatomic, weak)   UIView                 *rippleView;
-@property (nonatomic, strong) BMWaveMaker            *rippleMaker;
+@property (nonatomic, weak)                      UIView                 *rippleView;
+@property (nonatomic, strong)                    BMWaveMaker            *rippleMaker;
 
-@property (nonatomic, weak)   CLFEndView             *endView;
+@property (nonatomic, weak)                      CLFEndView             *endView;
 
-@property (nonatomic, weak)   CLFAudioPlayView       *audioView;
-@property (nonatomic, weak)   CLFMusicPlayView       *musicView;
-@property (nonatomic, strong) NSTimer                *musicTimer;
+@property (nonatomic, weak)                      CLFAudioPlayView       *audioView;
+@property (nonatomic, strong)                    NSTimer                *musicTimer;
 
-@property (nonatomic, weak)   UITapGestureRecognizer *tap;
+@property (nonatomic, weak)                      UITapGestureRecognizer *tap;
+@property (nonatomic, assign, getter=isNeedSpan)   BOOL                   needSpan;
 
 @end
 
@@ -90,16 +86,12 @@ static const CGFloat kMusicListStyle = 1;
     
     [self makeIncense];
     [self makeCloud];
-
+    self.needSpan = YES;
     [self makeRipple];
     
-    if (!kMusicListStyle) {
-        [self makeMusicView];
-    } else {
-        [self makeAudioView];
-    }
+    [self makeAudioView];
     
-    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 20.0f)));
+    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 8.0f)));
     self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
     [self fireAppearInSky];
 }
@@ -204,17 +196,10 @@ static const CGFloat kMusicListStyle = 1;
     self.burning = NO;
 //    [self.rippleMaker stopWave];
     
-    if (!kMusicListStyle) {
-        [self.musicView stopPlayMusic];
-        if (self.musicView.show) {
-            [self showMusicView];
-        }
-    } else {
-        [self.audioView stopPlayAudio];
-        self.audioView.userInteractionEnabled = NO;
-        if (self.audioView.show) {
-            [self showAudioView];
-        }
+    [self.audioView stopPlayAudio];
+    self.audioView.userInteractionEnabled = NO;
+    if (self.audioView.show) {
+        [self showAudioView];
     }
 
     [UIView animateWithDuration:2.0f animations:^{
@@ -227,13 +212,6 @@ static const CGFloat kMusicListStyle = 1;
         [UIView animateWithDuration:0.5f animations:^{
             self.endView.alpha = 1.0f;
 //            self.rippleView.alpha = 0.0f;
-            
-            if (!kMusicListStyle) {
-                self.musicView.hidden = YES;
-            } else {
-//                self.audioView.hidden = YES;
-            }
-
         }];
     }];
     
@@ -251,13 +229,8 @@ static const CGFloat kMusicListStyle = 1;
     [self.view removeGestureRecognizer:self.tap];
     self.burning = NO;
     
-    if (!kMusicListStyle) {
-        self.musicView.hidden = YES;
-        [self.musicView stopPlayMusic];
-    } else {
-        self.audioView.userInteractionEnabled = NO;
-        [self.audioView stopPlayAudio];
-    }
+    self.audioView.userInteractionEnabled = NO;
+    [self.audioView stopPlayAudio];
     
     self.audioView.alpha = 0.0f;
     self.incenseView.waver.alpha = 0.0f;
@@ -269,6 +242,7 @@ static const CGFloat kMusicListStyle = 1;
         [self stopFloating];
         [self showFailure];
         [self.rippleMaker stopWave];
+        self.needSpan = YES;
     } else {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSInteger burntIncenseNumber = [defaults integerForKey:@"burntIncenseNumber"];
@@ -331,11 +305,7 @@ static const CGFloat kMusicListStyle = 1;
         self.incenseView = nil;
         self.incenseShadowView.alpha = 1.0f;
         
-        if (!kMusicListStyle) {
-            self.musicView.hidden = NO;
-        } else {
-            self.audioView.hidden = NO;
-        }
+        self.audioView.hidden = NO;
         
         [self makeIncense];
         [self makeCloud];
@@ -547,7 +517,11 @@ static const CGFloat kMusicListStyle = 1;
 
     self.rippleMaker.animationView = self.rippleView;
     
-    [self.rippleMaker spanWaveContinuallyWithTimeInterval:animationTime];
+    if (self.needSpan) {
+        [self.rippleMaker spanWaveContinuallyWithTimeInterval:animationTime];
+        self.needSpan = NO;
+    }
+
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
     self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);
 }
@@ -588,26 +562,6 @@ static const CGFloat kMusicListStyle = 1;
     self.audioView.alpha = 0.0f;
 }
 
-- (CLFMusicPlayView *)musicView {
-    if (!_musicView) {
-        CLFMusicPlayView *musicView = [[CLFMusicPlayView alloc] init];
-        musicView.backgroundColor = [UIColor clearColor];
-        [self.view addSubview:musicView];
-        _musicView = musicView;
-    }
-    return _musicView;
-}
-
-- (void)makeMusicView {
-    self.musicView.frame = CGRectMake(0, Incense_Screen_Height - 60, Incense_Screen_Width, 120);
-    self.musicView.show = NO;
-    self.musicView.hidden = NO;
-}
-
-- (void)showMusicView {
-    [self.musicView showMusicButtons];
-}
-
 - (void)showAudioView {
     [self.audioView showAudioButtons];
 }
@@ -631,7 +585,15 @@ static const CGFloat kMusicListStyle = 1;
     [self.recorder prepareToRecord];
     [self.recorder setMeteringEnabled:YES];
     [self.recorder record];
+}
+
+- (void)showShareView {
+    NSArray* actItems = @[];
     
+    UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:actItems applicationActivities:actItems];
+    
+    [self presentViewController:activityView animated:YES completion:^{
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

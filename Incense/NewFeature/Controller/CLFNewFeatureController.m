@@ -58,7 +58,7 @@ static const NSInteger NewFeaturePages = 5;
     CGFloat pageW = CGRectGetWidth(scrollView.frame);
     CGFloat pageH = CGRectGetHeight(scrollView.frame);
     
-    for (NSInteger i = 0; i < NewFeaturePages; i++) {
+    for (int i = 0; i < NewFeaturePages; i++) {
         UIImageView *imageView = [[UIImageView alloc] init];
         
         NSString *name = [NSString stringWithFormat:@"NewFeature%d", i + 1];
