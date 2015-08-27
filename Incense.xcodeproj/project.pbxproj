@@ -30,6 +30,14 @@
 		3F48CE121B78777F00F889BC /* IncenseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CE111B78777F00F889BC /* IncenseTests.m */; };
 		3F55A5B51B862BA0000FAE56 /* CLFMathTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F55A5B41B862BA0000FAE56 /* CLFMathTools.m */; };
 		3F55A5B81B862DC3000FAE56 /* CLFNewFeatureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F55A5B71B862DC3000FAE56 /* CLFNewFeatureController.m */; };
+		3F67E2831B8EF78200BBBC04 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2821B8EF78200BBBC04 /* libc++.dylib */; };
+		3F67E29E1B8EF88200BBBC04 /* WeixinActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F67E28F1B8EF88200BBBC04 /* WeixinActivity.m */; };
+		3F67E29F1B8EF88200BBBC04 /* WeixinActivityBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F67E2911B8EF88200BBBC04 /* WeixinActivityBase.m */; };
+		3F67E2A01B8EF88200BBBC04 /* WeixinSessionActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F67E2931B8EF88200BBBC04 /* WeixinSessionActivity.m */; };
+		3F67E2A11B8EF88200BBBC04 /* WeixinTimelineActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F67E2951B8EF88200BBBC04 /* WeixinTimelineActivity.m */; };
+		3F67E2A31B8EFA8200BBBC04 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2A21B8EFA8200BBBC04 /* libz.dylib */; };
+		3F67E2A51B8EFA9100BBBC04 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2A41B8EFA9100BBBC04 /* libsqlite3.0.dylib */; };
+		3F67E2A71B8EFA9F00BBBC04 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2A61B8EFA9F00BBBC04 /* SystemConfiguration.framework */; };
 		3F69D23E1B846E0A00DD6B03 /* CLFCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */; };
 		3F7F66531B7D91E20045C689 /* Fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66521B7D91E20045C689 /* Fire.gif */; };
 		3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66571B7DFD390045C689 /* LaunchScreen.xib */; };
@@ -106,6 +114,18 @@
 		3F55A5B41B862BA0000FAE56 /* CLFMathTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFMathTools.m; sourceTree = "<group>"; };
 		3F55A5B61B862DC3000FAE56 /* CLFNewFeatureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFNewFeatureController.h; sourceTree = "<group>"; };
 		3F55A5B71B862DC3000FAE56 /* CLFNewFeatureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFNewFeatureController.m; sourceTree = "<group>"; };
+		3F67E2821B8EF78200BBBC04 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		3F67E28E1B8EF88200BBBC04 /* WeixinActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeixinActivity.h; sourceTree = "<group>"; };
+		3F67E28F1B8EF88200BBBC04 /* WeixinActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeixinActivity.m; sourceTree = "<group>"; };
+		3F67E2901B8EF88200BBBC04 /* WeixinActivityBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeixinActivityBase.h; sourceTree = "<group>"; };
+		3F67E2911B8EF88200BBBC04 /* WeixinActivityBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeixinActivityBase.m; sourceTree = "<group>"; };
+		3F67E2921B8EF88200BBBC04 /* WeixinSessionActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeixinSessionActivity.h; sourceTree = "<group>"; };
+		3F67E2931B8EF88200BBBC04 /* WeixinSessionActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeixinSessionActivity.m; sourceTree = "<group>"; };
+		3F67E2941B8EF88200BBBC04 /* WeixinTimelineActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeixinTimelineActivity.h; sourceTree = "<group>"; };
+		3F67E2951B8EF88200BBBC04 /* WeixinTimelineActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeixinTimelineActivity.m; sourceTree = "<group>"; };
+		3F67E2A21B8EFA8200BBBC04 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		3F67E2A41B8EFA9100BBBC04 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		3F67E2A61B8EFA9F00BBBC04 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3F69D23C1B846E0A00DD6B03 /* CLFCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFCloud.h; sourceTree = "<group>"; };
 		3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFCloud.m; sourceTree = "<group>"; };
 		3F7F66521B7D91E20045C689 /* Fire.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Fire.gif; sourceTree = "<group>"; };
@@ -136,6 +156,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F67E2A71B8EFA9F00BBBC04 /* SystemConfiguration.framework in Frameworks */,
+				3F67E2A51B8EFA9100BBBC04 /* libsqlite3.0.dylib in Frameworks */,
+				3F67E2A31B8EFA8200BBBC04 /* libz.dylib in Frameworks */,
+				3F67E2831B8EF78200BBBC04 /* libc++.dylib in Frameworks */,
 				3FB5EA7E1B8E16AA00CDF0B0 /* libWeChatSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,6 +177,7 @@
 		3F1956A01B789B95003A5575 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				3F67E2841B8EF88200BBBC04 /* WeixinActivity */,
 				3FB5EA791B8E16AA00CDF0B0 /* WeChatSDK_1.5 */,
 				3FCF3A511B7B9E6200B9FFFF /* ThirdPartyCategory */,
 				3F3AA2B21B7B0BFD00DD9E84 /* BMWaveMaker */,
@@ -218,6 +243,10 @@
 		3F48CDE91B78777F00F889BC = {
 			isa = PBXGroup;
 			children = (
+				3F67E2A61B8EFA9F00BBBC04 /* SystemConfiguration.framework */,
+				3F67E2A41B8EFA9100BBBC04 /* libsqlite3.0.dylib */,
+				3F67E2A21B8EFA8200BBBC04 /* libz.dylib */,
+				3F67E2821B8EF78200BBBC04 /* libc++.dylib */,
 				3F48CDF41B78777F00F889BC /* Incense */,
 				3F48CE0E1B78777F00F889BC /* IncenseTests */,
 				3F48CDF31B78777F00F889BC /* Products */,
@@ -314,6 +343,21 @@
 				3F55A5B41B862BA0000FAE56 /* CLFMathTools.m */,
 			);
 			path = Tools;
+			sourceTree = "<group>";
+		};
+		3F67E2841B8EF88200BBBC04 /* WeixinActivity */ = {
+			isa = PBXGroup;
+			children = (
+				3F67E28E1B8EF88200BBBC04 /* WeixinActivity.h */,
+				3F67E28F1B8EF88200BBBC04 /* WeixinActivity.m */,
+				3F67E2901B8EF88200BBBC04 /* WeixinActivityBase.h */,
+				3F67E2911B8EF88200BBBC04 /* WeixinActivityBase.m */,
+				3F67E2921B8EF88200BBBC04 /* WeixinSessionActivity.h */,
+				3F67E2931B8EF88200BBBC04 /* WeixinSessionActivity.m */,
+				3F67E2941B8EF88200BBBC04 /* WeixinTimelineActivity.h */,
+				3F67E2951B8EF88200BBBC04 /* WeixinTimelineActivity.m */,
+			);
+			path = WeixinActivity;
 			sourceTree = "<group>";
 		};
 		3F732C0A1B79E534009DE244 /* Main */ = {
@@ -422,6 +466,7 @@
 				TargetAttributes = {
 					3F48CDF11B78777F00F889BC = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = Y2VDUB37Q5;
 					};
 					3F48CE0A1B78777F00F889BC = {
 						CreatedOnToolsVersion = 6.4;
@@ -484,14 +529,17 @@
 				3F1956C21B78B95A003A5575 /* MASConstraint.m in Sources */,
 				3FA8695D1B858C3B00799E0A /* CLFPlayButton.m in Sources */,
 				3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */,
+				3F67E29E1B8EF88200BBBC04 /* WeixinActivity.m in Sources */,
 				3F1956C41B78B95A003A5575 /* MASLayoutConstraint.m in Sources */,
 				3FE6F4941B887B6000D06810 /* CLFPageControl.m in Sources */,
 				3F1956C71B78B95A003A5575 /* NSArray+MASAdditions.m in Sources */,
 				3F3AA2B81B7B0BFD00DD9E84 /* BMWaveMaker.m in Sources */,
+				3F67E29F1B8EF88200BBBC04 /* WeixinActivityBase.m in Sources */,
 				3F1956C61B78B95A003A5575 /* MASViewConstraint.m in Sources */,
 				3F55A5B81B862DC3000FAE56 /* CLFNewFeatureController.m in Sources */,
 				3FDEF5B41B8D6DAE00A65DC1 /* CLFEndButton.m in Sources */,
 				3F1956C51B78B95A003A5575 /* MASViewAttribute.m in Sources */,
+				3F67E2A01B8EF88200BBBC04 /* WeixinSessionActivity.m in Sources */,
 				3F1956C91B78B95A003A5575 /* View+MASAdditions.m in Sources */,
 				3F48CDF81B78777F00F889BC /* main.m in Sources */,
 				3F1956A41B789BE7003A5575 /* Waver.m in Sources */,
@@ -500,6 +548,7 @@
 				3F55A5B51B862BA0000FAE56 /* CLFMathTools.m in Sources */,
 				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
+				3F67E2A11B8EF88200BBBC04 /* WeixinTimelineActivity.m in Sources */,
 				3FCB4CF51B86C33B00B854E4 /* CLFEndView.m in Sources */,
 				3FCF3A541B7B9F2D00B9FFFF /* UIImage+animatedGIF.m in Sources */,
 				3F1956CD1B78B98F003A5575 /* CLFIncenseView.m in Sources */,
@@ -562,7 +611,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -599,7 +648,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -610,13 +659,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Incense/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Incense/Libs/WeChatSDK_1.5",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -624,13 +677,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Incense/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Incense/Libs/WeChatSDK_1.5",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

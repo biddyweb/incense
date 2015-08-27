@@ -19,6 +19,7 @@
 #import "CLFAudioPlayView.h"
 #import "CLFEndView.h"
 #import "CLFIncenseCommonHeader.h"
+#import "WeixinActivity.h"
 
 @interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, CLFEndViewDelegate>
 
@@ -86,7 +87,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     
     [self makeAudioView];
     
-    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 20.0f)));
+    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 8.0f)));
     self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
     [self fireAppearInSky];
 }
@@ -568,8 +569,9 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     if (needShare) {
         UIImage *screenShot = [self takeSnapshotOfView:self.view];
         NSArray *actItems = @[screenShot];
+        NSArray *activity = @[[[WeixinSessionActivity alloc] init], [[WeixinTimelineActivity alloc] init]];
         
-        UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:actItems applicationActivities:nil];
+        UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:actItems applicationActivities:activity];
         activityView.excludedActivityTypes = @[UIActivityTypePrint,
                                                UIActivityTypeCopyToPasteboard,
                                                UIActivityTypeAssignToContact,
@@ -585,7 +587,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (UIImage *)takeSnapshotOfView:(UIView *)view {
-    CGFloat reductionFactor = 0.5;
+    CGFloat reductionFactor = 0.3;
     UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor));
     [view drawViewHierarchyInRect:CGRectMake(0, 0, view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor) afterScreenUpdates:YES];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();

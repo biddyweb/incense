@@ -11,8 +11,9 @@
 #import "CLFNewFeatureController.h"
 #import "CLFIncenseView.h"
 #import "CLFIncenseCommonHeader.h"
+#import "WXApi.h"
 
-@interface AppDelegate () <UIAlertViewDelegate>
+@interface AppDelegate () <UIAlertViewDelegate, WXApiDelegate>
 
 @end
 
@@ -36,6 +37,8 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [WXApi registerApp:@"wxf2f0e430f493af01"];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window makeKeyAndVisible];
     
@@ -46,7 +49,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     NSLog(@"version %@, oldVersion %@", version, oldVersion);
     
     if ([version isEqualToString:oldVersion]) {
-        self.window.rootViewController = [[CLFMainViewController alloc] init];
+        self.window.rootViewController = [[CLFNewFeatureController alloc] init];
     } else {
         self.window.rootViewController = [[CLFNewFeatureController alloc] init];
         [[NSUserDefaults standardUserDefaults] setValue:version forKey:@"firstLaunch"];
