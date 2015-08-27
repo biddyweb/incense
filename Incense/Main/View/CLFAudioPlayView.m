@@ -84,8 +84,6 @@ static CGFloat dotLocation = -79;
         self.show = NO;
         
         self.layer.masksToBounds = YES;
-        
-//        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     }
     return self;
 }

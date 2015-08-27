@@ -166,6 +166,8 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     [self appLaunchTimes];
 }
 
+static CGFloat totalLeaveBackInterval = 0;
+
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
     if (![application.keyWindow.rootViewController isKindOfClass:[CLFMainViewController class]]) { //
@@ -189,10 +191,17 @@ static void displayStatusChanged(CFNotificationCenterRef center,
                 [mainVC incenseDidBurnOffFromBackgroundWithResult:@"failure"];
             } else if (leaveBackInterval > Incense_Burn_Off_Time - timeHaveGone) {  // If the incense have burnt off when user come back.
                 NSLog(@"烧完啦烧完啦啦啦啦");
+                NSLog(@"leaveBackInterval : %f", Incense_Burn_Off_Time - timeHaveGone);
+                
+                totalLeaveBackInterval += Incense_Burn_Off_Time - timeHaveGone;
+                
                 [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
                 [mainVC renewSmokeStatusWithTimeHaveGone:Incense_Burn_Off_Time - timeHaveGone];
             } else {
                 NSLog(@"回来回来啦啦啦");
+                
+                totalLeaveBackInterval += leaveBackInterval;
+                
                 NSLog(@"leaveBackInterval : %f", leaveBackInterval);   // If the incense haven't burnt off when user come back.
                 [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
                 [mainVC renewSmokeStatusWithTimeHaveGone:leaveBackInterval];
@@ -203,6 +212,8 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     }
     
     NSLog(@"becomeActive %@", [NSDate date]);
+    
+    NSLog(@"totalLeaveBackInterval %f", totalLeaveBackInterval);
 }
 
 - (void)appLaunchTimes {

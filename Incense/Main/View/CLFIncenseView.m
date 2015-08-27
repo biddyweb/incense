@@ -141,10 +141,8 @@ static const CGFloat kIncenseStickWidth = 2.0f;
         
         [colors addObject:(id)[UIColor colorWithRed:190/255.0 green:190/255.0 blue:190/255.0 alpha:1.0f].CGColor];
         [colors addObject:(id)[UIColor colorWithRed:190/255.0 green:190/255.0 blue:190/255.0 alpha:1.0f].CGColor];
-//        [colors addObject:(id)[UIColor colorWithRed:231/255.0 green:2/255.0 blue:2/255.0 alpha:1.0f].CGColor];
         [colors addObject:(id)[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0f].CGColor];
 
-        
         dustGradient.colors = colors;
         dustGradient.locations = @[@0.0f, @0.9f, @2.0f];
         
@@ -196,7 +194,7 @@ static const CGFloat kIncenseStickWidth = 2.0f;
     _brightnessCallback = brightnessCallback;
     
     _displaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(invokeBrightnessCallback)];
-    _displaylink.frameInterval = 8;
+    _displaylink.frameInterval = 20;
     [_displaylink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
 }
 
@@ -240,6 +238,8 @@ static BOOL burntOffFromBackground = NO;
         waverHeight -= timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
         colorLocation -= timeInterval * (2.2 / 100) * (60 / self.displaylink.frameInterval);
         x += timeInterval * 0.0072f * (60.0f / self.displaylink.frameInterval) * (8.0f / self.displaylink.frameInterval);
+        
+        timeHaveGone += timeInterval;
     } else {
         incenseHeight = incenseBurnOffLength;
         waverHeight = -703 * Size_Ratio_To_iPhone6;
@@ -247,32 +247,22 @@ static BOOL burntOffFromBackground = NO;
         x = 5.5;
         burntOffFromBackground = YES;
         NSLog(@"Else timeInterval %f, incenseHeight %f", timeInterval, incenseHeight);
+        
+        timeHaveGone = 30.0f;
     }
 }
 
-
 /**
- *  Once the CADisplayLink method be called, one point should be drawed in context. We chose the Euler spiral as the shape of dust.
+ *  Once the CADisplayLink method be called, one point would be drawed in context. We chose the Euler spiral as the shape of dust.
  *  At the same time adjust the height and dust gradient of incense.
  */
-
 static CGFloat x = 2.5f;
 static CGFloat y = 0.0f;
 static CGFloat colorLocation = 0.8f;
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
-    CGFloat declineDistance = Incense_Burn_Off_Time * 60 / self.displaylink.frameInterval;
-
+//    NSLog(@"time %f", timeHaveGone);
     timeHaveGone += 1.0 / (60.0 / self.displaylink.frameInterval);
-    
-    incenseHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
-    self.frame = (CGRect){self.frame.origin, {Incense_Screen_Width, incenseHeight}};
-    
-    waverHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
-    self.waver.frame = (CGRect) {{0, 0}, {Incense_Screen_Width, waverHeight}};
-    
-    colorLocation = colorLocation - 0.6 / 100 > 0 ? colorLocation - 0.6 / 100 : 0.0f;
-    self.dustGradient.locations = @[@0.0f, @(colorLocation), @1.0f];
     
     if (!modifyDust) {
         [self drawEulerSpiralDust];
@@ -295,6 +285,17 @@ static CGFloat colorLocation = 0.8f;
         burntOffFromBackground = NO;
         self.lightView.alpha = 0.0f;
     }
+    
+    CGFloat declineDistance = Incense_Burn_Off_Time * 60 / self.displaylink.frameInterval;
+
+    incenseHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
+    self.frame = (CGRect){self.frame.origin, {Incense_Screen_Width, incenseHeight}};
+    
+    waverHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
+    self.waver.frame = (CGRect) {{0, 0}, {Incense_Screen_Width, waverHeight}};
+    
+    colorLocation = colorLocation - 0.6 / 100 > 0 ? colorLocation - 0.6 / 100 : 0.0f;
+    self.dustGradient.locations = @[@0.0f, @(colorLocation), @1.0f];
 }
 
 CGFloat previousM;
@@ -328,8 +329,6 @@ CGFloat eulerSpiralLength = 0.0f;
     
     x += (0.0072f / (Incense_Burn_Off_Time / 60.0f)) * (self.displaylink.frameInterval / 8.0f);
     self.dustLine.path = self.dustPath.CGPath;
-
-//    NSLog(@"eulerSpiralLength %f, incenseLength %f, totalLength %f", eulerSpiralLength, incenseHeight, eulerSpiralLength + incenseHeight);
 }
 
 CGFloat distance(CGFloat xm, CGFloat xn, CGFloat ym, CGFloat yn) {
