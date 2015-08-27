@@ -11,6 +11,9 @@
 #import "CLFNewFeatureController.h"
 #import "CLFIncenseView.h"
 #import "CLFIncenseCommonHeader.h"
+#import "AppDelegate.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @interface AppDelegate () <UIAlertViewDelegate>
 
@@ -38,6 +41,8 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window makeKeyAndVisible];
+    
+    [Fabric with:@[[Crashlytics class]]];
     
     NSString *key = (NSString *)kCFBundleVersionKey;
     NSString *version = [NSBundle mainBundle].infoDictionary[key];
