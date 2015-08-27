@@ -194,7 +194,7 @@ static const CGFloat kIncenseStickWidth = 2.0f;
     _brightnessCallback = brightnessCallback;
     
     _displaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(invokeBrightnessCallback)];
-    _displaylink.frameInterval = 8;
+    _displaylink.frameInterval = 20;
     [_displaylink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
 }
 

@@ -84,7 +84,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     
     [self makeAudioView];
     
-    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 8.0f)));
+    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 20.0f)));
     self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
     [self fireAppearInSky];
 }
