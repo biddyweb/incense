@@ -6,9 +6,6 @@
 //  Copyright (c) 2015 CaiGavin. All rights reserved.
 //
 
-
-#warning - TODO: 文案修改
-
 #import "CLFMainViewController.h"
 #import "CLFCloud.h"
 #import "CLFIncenseView.h"
