@@ -11,6 +11,9 @@
 #import "CLFNewFeatureController.h"
 #import "CLFIncenseView.h"
 #import "CLFIncenseCommonHeader.h"
+#import "AppDelegate.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 #import "WXApi.h"
 
 @interface AppDelegate () <UIAlertViewDelegate, WXApiDelegate>
@@ -38,16 +41,18 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [WXApi registerApp:@"wxf2f0e430f493af01"];
-    
+
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window makeKeyAndVisible];
-    
+
+    [Fabric with:@[[Crashlytics class]]];
+
     NSString *key = (NSString *)kCFBundleVersionKey;
     NSString *version = [NSBundle mainBundle].infoDictionary[key];
     NSString *oldVersion = [[NSUserDefaults standardUserDefaults] valueForKey:@"firstLaunch"];
-    
+
     NSLog(@"version %@, oldVersion %@", version, oldVersion);
-    
+
     if ([version isEqualToString:oldVersion]) {
         self.window.rootViewController = [[CLFNewFeatureController alloc] init];
     } else {
@@ -55,20 +60,20 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         [[NSUserDefaults standardUserDefaults] setValue:version forKey:@"firstLaunch"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    
+
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
         [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
     }
-    
+
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
                                     NULL,
                                     displayStatusChanged,
                                     CFSTR("com.apple.springboard.lockcomplete"),
                                     NULL,
                                     CFNotificationSuspensionBehaviorDeliverImmediately);
-    
+
     [self appLaunchTimes];
-    
+
     return YES;
 }
 
@@ -101,13 +106,13 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         NSLog(@"time have gone %f", timeHaveGone);
         leaveTime = [NSDate date];
         UIApplicationState state = application.applicationState;
-        
+
         if (state == UIApplicationStateInactive) {
             // 锁屏
             NSLog(@"Sent to background by locking screen");
             [self addFinishedNotificationWithTimeHaveGone:timeHaveGone];
             leaveBySwitch = NO;
-            
+
         } else if (state == UIApplicationStateBackground) { // 进入后台
             if (![[NSUserDefaults standardUserDefaults] boolForKey:@"kDisplayStatusLocked"]) {
                 [self addAlertNotification];
@@ -124,21 +129,21 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 
 - (void)addFinishedNotificationWithTimeHaveGone:(CGFloat)timeHaveGone; {
     CGFloat notificationTimeInterval = Incense_Burn_Off_Time - timeHaveGone;
-    
+
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     if (notification) {
         NSDate *currentDate   = [NSDate date];
         notification.timeZone = [NSTimeZone defaultTimeZone]; // 使用本地时区
         notification.fireDate = [currentDate dateByAddingTimeInterval:notificationTimeInterval];
         notification.repeatInterval = 0;
-        
+
         notification.alertBody = @"香已燃尽，起来休息下吧";
         notification.alertAction = @"一炷香";
-        
+
         notification.userInfo = @{@"identifier" : @"finishNotification"};
-    
+
         notification.soundName = UILocalNotificationDefaultSoundName;
-    
+
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
 }
@@ -150,11 +155,11 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         notification.timeZone = [NSTimeZone defaultTimeZone];
         notification.fireDate = [currentDate dateByAddingTimeInterval:1.0];
         notification.repeatInterval = 0;
-        
+
         notification.alertBody = @"志士惜日短，愁人知夜长";
-        
+
         notification.userInfo = @{@"identifier" : @"switchNotification"};
-        
+
         notification.soundName = UILocalNotificationDefaultSoundName;
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
@@ -163,9 +168,9 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kDisplayStatusLocked"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
+
     [application cancelAllLocalNotifications];
-    
+
     [self appLaunchTimes];
 }
 
@@ -177,7 +182,7 @@ static CGFloat totalLeaveBackInterval = 0;
         firstLaunch = NO;
         return;
     }
-    
+
     if (!firstLaunch) {
         CLFMainViewController *mainVC = (CLFMainViewController *) application.keyWindow.rootViewController;
         if (mainVC.burning) {
@@ -186,25 +191,25 @@ static CGFloat totalLeaveBackInterval = 0;
             NSTimeInterval leaveTimeInterval = [leaveTime timeIntervalSince1970];
             NSTimeInterval backTimeInterval = [backTime timeIntervalSince1970];
             CGFloat leaveBackInterval = backTimeInterval - leaveTimeInterval;
-            
+
             CLFIncenseView *incense = mainVC.incenseView;
             incense.displaylink.paused = NO;
-            
+
             if (leaveBySwitch && leaveBackInterval > 10) {
                 [mainVC incenseDidBurnOffFromBackgroundWithResult:@"failure"];
             } else if (leaveBackInterval > Incense_Burn_Off_Time - timeHaveGone) {  // If the incense have burnt off when user come back.
                 NSLog(@"烧完啦烧完啦啦啦啦");
                 NSLog(@"leaveBackInterval : %f", Incense_Burn_Off_Time - timeHaveGone);
-                
+
                 totalLeaveBackInterval += Incense_Burn_Off_Time - timeHaveGone;
-                
+
                 [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
                 [mainVC renewSmokeStatusWithTimeHaveGone:Incense_Burn_Off_Time - timeHaveGone];
             } else {
                 NSLog(@"回来回来啦啦啦");
-                
+
                 totalLeaveBackInterval += leaveBackInterval;
-                
+
                 NSLog(@"leaveBackInterval : %f", leaveBackInterval);   // If the incense haven't burnt off when user come back.
                 [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
                 [mainVC renewSmokeStatusWithTimeHaveGone:leaveBackInterval];
@@ -213,16 +218,16 @@ static CGFloat totalLeaveBackInterval = 0;
     } else {
         firstLaunch = NO;
     }
-    
+
     NSLog(@"becomeActive %@", [NSDate date]);
-    
+
     NSLog(@"totalLeaveBackInterval %f", totalLeaveBackInterval);
 }
 
 - (void)appLaunchTimes {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSInteger launchTime = [defaults integerForKey:@"launchTime"];
-    
+
     if (launchTime) {
         launchTime ++;
     } else {
@@ -232,9 +237,9 @@ static CGFloat totalLeaveBackInterval = 0;
     if ([[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[CLFNewFeatureController class]]) {
         return;
     }
-    
+
     CLFMainViewController *mainVC = (CLFMainViewController *) [UIApplication sharedApplication].keyWindow.rootViewController;
-    
+
     if (33 <= launchTime && !mainVC.burning) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"喜欢【一炷香】 么?"
                                                         message:@"给个好评吧~"
@@ -257,7 +262,7 @@ static CGFloat totalLeaveBackInterval = 0;
             NSString *str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/cn/app/id%@?mt=8", appid];
             NSURL *url = [NSURL URLWithString:str];
             [[UIApplication sharedApplication] openURL:url];
-            
+
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             NSInteger launchTime = [defaults integerForKey:@"launchTime"];
             launchTime = -666666;
