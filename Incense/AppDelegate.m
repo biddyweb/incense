@@ -54,7 +54,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     NSLog(@"version %@, oldVersion %@", version, oldVersion);
 
     if ([version isEqualToString:oldVersion]) {
-        self.window.rootViewController = [[CLFNewFeatureController alloc] init];
+        self.window.rootViewController = [[CLFMainViewController alloc] init];
     } else {
         self.window.rootViewController = [[CLFNewFeatureController alloc] init];
         [[NSUserDefaults standardUserDefaults] setValue:version forKey:@"firstLaunch"];
