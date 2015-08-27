@@ -9,8 +9,6 @@
 
 #warning - TODO: 文案修改
 
-#warning - TODO: Appid 修改
-
 #import "CLFMainViewController.h"
 #import "CLFCloud.h"
 #import "CLFIncenseView.h"
@@ -21,6 +19,7 @@
 #import "CLFAudioPlayView.h"
 #import "CLFEndView.h"
 #import "CLFIncenseCommonHeader.h"
+#import "WeixinActivity.h"
 
 @interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, CLFEndViewDelegate>
 
@@ -56,16 +55,15 @@ CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ)
 
 @implementation CLFMainViewController
 
-static CGFloat   cloudLocation = -380.0f;
-static CGFloat   smokeLocation = -520.0f;
-static CGFloat   animationTime = 4.0f;
-static CGFloat   smokeChangeRate = 0.0f;
-static BOOL      needShare = YES;
-static BOOL      needSpan = YES;
+static CGFloat cloudLocation = -380.0f;
+static CGFloat smokeLocation = -520.0f;
+static CGFloat animationTime = 4.0f;
+static CGFloat smokeChangeRate = 0.0f;
+static BOOL    needShare = YES;
+static BOOL    needSpan = YES;
 
 static const CGFloat kWaverVoiceFactor = 10.0f;
 static const CGFloat kFireVoiceFactor = 40.0f;
-static const CGFloat kMusicListStyle = 1;
 
 - (instancetype)init {
     self = [super init];
@@ -89,7 +87,7 @@ static const CGFloat kMusicListStyle = 1;
     
     [self makeAudioView];
     
-    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 20.0f)));
+    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 8.0f)));
     self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
     [self fireAppearInSky];
 }
@@ -129,14 +127,11 @@ static const CGFloat kMusicListStyle = 1;
         self.audioView.alpha = 1.0f;
     } completion:^(BOOL finished) {
         [self.cloud removeFromSuperview]; // --> 此处 fire 被释放了
-        UITapGestureRecognizer *tapRecognizer = kMusicListStyle ? [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAudioView)] : [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMusicView)];
+        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAudioView)];
         [self.view addGestureRecognizer:tapRecognizer];
         self.tap = tapRecognizer;
 
-        if (kMusicListStyle) {
-            self.audioView.userInteractionEnabled = YES;
-        }
-
+        self.audioView.userInteractionEnabled = YES;
     }];
 
     [UIView animateWithDuration:5.0f animations:^{
@@ -169,11 +164,6 @@ static const CGFloat kMusicListStyle = 1;
 /**
  *  incense burnt off in normal way. Increase the burnt off number, stop the audio player/recorder and show a normal endView.
  */
-
-- (void)calculateBurntIncenseNumber {
-    
-}
-
 - (void)incenseDidBurnOff {
     NSLog(@"End %@", [NSDate date]);
     [self.view removeGestureRecognizer:self.tap];
@@ -192,7 +182,6 @@ static const CGFloat kMusicListStyle = 1;
     [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber]];
 
     self.burning = NO;
-//    [self.rippleMaker stopWave];
     
     [self.audioView stopPlayAudio];
     self.audioView.userInteractionEnabled = NO;
@@ -203,13 +192,11 @@ static const CGFloat kMusicListStyle = 1;
     [UIView animateWithDuration:2.0f animations:^{
         self.incenseView.waver.alpha = 0.0f;
         self.incenseView.incenseHeadView.alpha = 0.0f;
-//        self.rippleView.alpha = 0.3f;
         self.audioView.alpha = 0.0f;
     } completion:^(BOOL finished) {
         self.endView.alpha = 0.0f;
         [UIView animateWithDuration:0.5f animations:^{
             self.endView.alpha = 1.0f;
-//            self.rippleView.alpha = 0.0f;
         }];
     }];
     
@@ -280,11 +267,9 @@ static const CGFloat kMusicListStyle = 1;
     self.endView.alpha = 1.0f;
 }
 
-
 /**
  *  Make a new incense for users.
  */
-
 - (void)oneMoreIncense {
     NSLog(@"oneMoreIncense");
     [self.view bringSubviewToFront:self.smoke];
@@ -320,7 +305,6 @@ static const CGFloat kMusicListStyle = 1;
  *  Make incense and the shadow above ripple.
  *
  */
-
 - (CLFIncenseView *)incenseView {
     if (!_incenseView) {
         CLFIncenseView *incenseView = [[CLFIncenseView alloc] init];
@@ -354,13 +338,11 @@ static const CGFloat kMusicListStyle = 1;
     [self floating];
 }
 
-
 #pragma mark - floatingAnimation
 
 /**
  *  Make incense floating above the ripple, and the shadow should react to the floating.
  */
-
 - (void)floating {
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
@@ -405,7 +387,6 @@ static const CGFloat kMusicListStyle = 1;
 /**
  *  Smoke here means the smoke in the sky. It's also used for transition.
  */
-
 - (UIImageView *)smoke {
     if (!_smoke) {
         UIImageView *smoke = [[UIImageView alloc] init];
@@ -428,7 +409,6 @@ static const CGFloat kMusicListStyle = 1;
 /**
  *  Cloud exists before the incense is burnt. After the incense being lighted, cloud would disappear with fire.
  */
-
 - (CLFCloud *)cloud {
     if (!_cloud) {
         CLFCloud *cloud = [[CLFCloud alloc] init];
@@ -459,7 +439,6 @@ static const CGFloat kMusicListStyle = 1;
 /**
  *  Fire located on cloud, which used to light the incense (but in this program, whether the incense lighted is determined by the position of cloud).
  */
-
 - (UIImageView *)fire {
     if (!_fire) {
         UIImageView *fire = [[UIImageView alloc] init];
@@ -499,7 +478,6 @@ static const CGFloat kMusicListStyle = 1;
 /**
  *  eeeeeeee..........Ripple.
  */
-
 - (UIView *)rippleView {
     if (!_rippleView) {
         UIView *rippleView = [[UIView alloc] init];
@@ -543,7 +521,6 @@ static const CGFloat kMusicListStyle = 1;
  *  audioView and musicView have the same function but different styles. we can switch between audioView and musicView by setting kMusicListStyle.
  *
  */
-
 - (CLFAudioPlayView *)audioView {
     if (!_audioView) {
         CLFAudioPlayView *audioView = [[CLFAudioPlayView alloc] init];
@@ -586,12 +563,15 @@ static const CGFloat kMusicListStyle = 1;
     [self.recorder record];
 }
 
+#pragma - mark Share snapshot of endView;
+
 - (void)showShareView {
     if (needShare) {
         UIImage *screenShot = [self takeSnapshotOfView:self.view];
         NSArray *actItems = @[screenShot];
+        NSArray *activity = @[[[WeixinSessionActivity alloc] init], [[WeixinTimelineActivity alloc] init]];
         
-        UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:actItems applicationActivities:nil];
+        UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:actItems applicationActivities:activity];
         activityView.excludedActivityTypes = @[UIActivityTypePrint,
                                                UIActivityTypeCopyToPasteboard,
                                                UIActivityTypeAssignToContact,
@@ -606,9 +586,8 @@ static const CGFloat kMusicListStyle = 1;
     }
 }
 
-- (UIImage *)takeSnapshotOfView:(UIView *)view
-{
-    CGFloat reductionFactor = 0.5;
+- (UIImage *)takeSnapshotOfView:(UIView *)view {
+    CGFloat reductionFactor = 0.3;
     UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor));
     [view drawViewHierarchyInRect:CGRectMake(0, 0, view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor) afterScreenUpdates:YES];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
@@ -616,7 +595,6 @@ static const CGFloat kMusicListStyle = 1;
     
     return image;
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

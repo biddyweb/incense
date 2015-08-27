@@ -38,7 +38,6 @@ static CGFloat beginCenterY = -140.0f;
     return _cloudImageView;
 }
 
-
 - (void)layoutSubviews {
     self.cloudImageView.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
 }
