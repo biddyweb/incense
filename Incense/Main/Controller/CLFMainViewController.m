@@ -103,8 +103,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
  *  4. Time goes by
  */
 - (void)lightTheIncense {
-    NSLog(@"lightTheIncense");
-    
     self.burning = YES;
     [self setupRecorder];
     __block AVAudioRecorder *weakRecorder = self.recorder;
@@ -146,7 +144,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
  */
 
 - (void)timeFlow {
-    NSLog(@"start %@", [NSDate date]);
     __block AVAudioRecorder *weakRecorder = self.recorder;
     
     self.incenseView.brightnessCallback = ^(CLFIncenseView *incense) {
@@ -162,7 +159,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
  *  incense burnt off in normal way. Increase the burnt off number, stop the audio player/recorder and show a normal endView.
  */
 - (void)incenseDidBurnOff {
-    NSLog(@"End %@", [NSDate date]);
     [self.view removeGestureRecognizer:self.tap];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -268,7 +264,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
  *  Make a new incense for users.
  */
 - (void)oneMoreIncense {
-    NSLog(@"oneMoreIncense");
     [self.view bringSubviewToFront:self.smoke];
     self.smoke.layer.zPosition = 101;
     
@@ -598,3 +593,29 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

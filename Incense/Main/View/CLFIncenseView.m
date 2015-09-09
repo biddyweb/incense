@@ -246,8 +246,7 @@ static BOOL burntOffFromBackground = NO;
         colorLocation = 0.0f;
         x = 5.5;
         burntOffFromBackground = YES;
-        NSLog(@"Else timeInterval %f, incenseHeight %f", timeInterval, incenseHeight);
-        
+
         timeHaveGone = 30.0f;
     }
 }
@@ -261,7 +260,6 @@ static CGFloat y = 0.0f;
 static CGFloat colorLocation = 0.8f;
 
 - (void)updateHeightWithBrightnessLevel:(CGFloat)brightnessLevel {
-//    NSLog(@"time %f", timeHaveGone);
     timeHaveGone += 1.0 / (60.0 / self.displaylink.frameInterval);
     
     if (!modifyDust) {

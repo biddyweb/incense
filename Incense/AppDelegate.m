@@ -51,8 +51,6 @@ static void displayStatusChanged(CFNotificationCenterRef center,
     NSString *version = [NSBundle mainBundle].infoDictionary[key];
     NSString *oldVersion = [[NSUserDefaults standardUserDefaults] valueForKey:@"firstLaunch"];
 
-    NSLog(@"version %@, oldVersion %@", version, oldVersion);
-
     if ([version isEqualToString:oldVersion]) {
         self.window.rootViewController = [[CLFMainViewController alloc] init];
     } else {
@@ -87,13 +85,11 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         CLFIncenseView *incense = mainVC.incenseView;
         timeHaveGone = [incense timeHaveGone];
         incense.displaylink.paused = YES; // 暂停动画
-        NSLog(@"Resign TimeHaveGone %f", timeHaveGone);
         leaveTime = [NSDate date];
     }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    NSLog(@"Did Enter BackGround");
     if (![application.keyWindow.rootViewController isKindOfClass:[CLFMainViewController class]]) {
         return;
     }
@@ -103,23 +99,19 @@ static void displayStatusChanged(CFNotificationCenterRef center,
         CLFIncenseView *incense = mainVC.incenseView;
         timeHaveGone = [incense timeHaveGone];
         incense.displaylink.paused = YES; // 暂停动画
-        NSLog(@"time have gone %f", timeHaveGone);
         leaveTime = [NSDate date];
         UIApplicationState state = application.applicationState;
 
         if (state == UIApplicationStateInactive) {
             // 锁屏
-            NSLog(@"Sent to background by locking screen");
             [self addFinishedNotificationWithTimeHaveGone:timeHaveGone];
             leaveBySwitch = NO;
 
         } else if (state == UIApplicationStateBackground) { // 进入后台
             if (![[NSUserDefaults standardUserDefaults] boolForKey:@"kDisplayStatusLocked"]) {
                 [self addAlertNotification];
-                NSLog(@"switch");
                 leaveBySwitch = YES;
             } else {
-                NSLog(@"kkkk Sent to background by locking screen");
                 leaveBySwitch = NO;
                 [self addFinishedNotificationWithTimeHaveGone:timeHaveGone];
             }
@@ -198,19 +190,13 @@ static CGFloat totalLeaveBackInterval = 0;
             if (leaveBySwitch && leaveBackInterval > 10) {
                 [mainVC incenseDidBurnOffFromBackgroundWithResult:@"failure"];
             } else if (leaveBackInterval > Incense_Burn_Off_Time - timeHaveGone) {  // If the incense have burnt off when user come back.
-                NSLog(@"烧完啦烧完啦啦啦啦");
-                NSLog(@"leaveBackInterval : %f", Incense_Burn_Off_Time - timeHaveGone);
-
                 totalLeaveBackInterval += Incense_Burn_Off_Time - timeHaveGone;
 
                 [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
                 [mainVC renewSmokeStatusWithTimeHaveGone:Incense_Burn_Off_Time - timeHaveGone];
             } else {
-                NSLog(@"回来回来啦啦啦");
-
                 totalLeaveBackInterval += leaveBackInterval;
 
-                NSLog(@"leaveBackInterval : %f", leaveBackInterval);   // If the incense haven't burnt off when user come back.
                 [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
                 [mainVC renewSmokeStatusWithTimeHaveGone:leaveBackInterval];
             }
@@ -218,10 +204,6 @@ static CGFloat totalLeaveBackInterval = 0;
     } else {
         firstLaunch = NO;
     }
-
-    NSLog(@"becomeActive %@", [NSDate date]);
-
-    NSLog(@"totalLeaveBackInterval %f", totalLeaveBackInterval);
 }
 
 - (void)appLaunchTimes {
