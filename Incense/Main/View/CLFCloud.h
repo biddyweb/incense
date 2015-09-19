@@ -10,7 +10,7 @@
 
 @protocol CLFCloudDelegate <NSObject>
 
-- (void)lightTheIncense;
+- (void)lightTheIncenseWithIncenseHeight:(CGFloat)incenseHeight;
 - (void)cloudRebound;
 
 @end

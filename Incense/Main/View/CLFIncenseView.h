@@ -29,6 +29,7 @@
 @property (nonatomic, strong)                    CADisplayLink              *displaylink;;
 
 @property (nonatomic, weak)                      id<CLFIncenseViewDelegate> delegate;
+@property (nonatomic, assign)                    CGFloat                    incenseHeight;
 
 - (void)initialSetupWithIncenseHeight:(CGFloat)height;
 - (CGFloat)timeHaveGone;

@@ -102,7 +102,9 @@ static const CGFloat kFireVoiceFactor = 40.0f;
  *  3. Cloud and fire would disapear gradually
  *  4. Time goes by
  */
-- (void)lightTheIncense {
+- (void)lightTheIncenseWithIncenseHeight:(CGFloat)incenseHeight {
+    self.incenseView.incenseHeight = incenseHeight;
+    
     self.burning = YES;
     [self setupRecorder];
     __block AVAudioRecorder *weakRecorder = self.recorder;
@@ -300,7 +302,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (CLFIncenseView *)incenseView {
     if (!_incenseView) {
         CLFIncenseView *incenseView = [[CLFIncenseView alloc] init];
-        incenseView.backgroundColor = [UIColor blueColor];
         incenseView.delegate = self;
         [self.view insertSubview:incenseView belowSubview:self.smoke];
         _incenseView = incenseView;
@@ -319,10 +320,9 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)makeIncense {
-    CGFloat incenseHeight = 150.0f * Size_Ratio_To_iPhone6;
+    CGFloat incenseHeight = 200.0f * Size_Ratio_To_iPhone6;
     [self.incenseView initialSetupWithIncenseHeight:incenseHeight];
 
-    
     // MARK: Incense height was defined here ---> 200
     // Incense_Location should be modified. It's related with incenseHeight --> It is fine
     self.incenseView.frame = CGRectMake(0, Incense_Screen_Height - Incense_Location - incenseHeight, Incense_Screen_Width, incenseHeight);
@@ -343,7 +343,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
     anim.repeatCount = 1500;
-    anim.values = @[@(Incense_Screen_Height - Incense_Location + 5), @(Incense_Screen_Height - Incense_Location), @(Incense_Screen_Height - Incense_Location + 5)];
+    anim.values = @[@(Incense_Screen_Height - Incense_Location), @(Incense_Screen_Height - Incense_Location - 5), @(Incense_Screen_Height - Incense_Location)];
     anim.duration = animationTime;
     anim.removedOnCompletion = NO;
     anim.fillMode = kCAFillModeForwards;
@@ -419,6 +419,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)makeCloud {
     self.cloud.alpha = 1.0f;
     self.cloud.dragEnable = YES;
+    // 140 是指一开始可见的部分高度
     self.cloud.frame = CGRectMake(0, cloudLocation, Incense_Screen_Width, 380 + 140 * Size_Ratio_To_iPhone6); // 也许要换成1042
 }
 

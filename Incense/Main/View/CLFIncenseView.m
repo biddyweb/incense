@@ -30,7 +30,6 @@
 
 static CGFloat headDustHeight;
 static CGFloat waverHeight;
-static CGFloat incenseHeight;
 
 static CGFloat timeHaveGone;
 static CGFloat incenseBurnOffLength;
@@ -232,16 +231,16 @@ static BOOL burntOffFromBackground = NO;
 
 - (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval {
     modifyDust = YES;
-    CGFloat tempIncenseHeight = incenseHeight - timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
+    CGFloat tempIncenseHeight = self.incenseHeight - timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
     if (tempIncenseHeight > incenseBurnOffLength) {
-        incenseHeight = tempIncenseHeight;
+        self.incenseHeight = tempIncenseHeight;
         waverHeight -= timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
         colorLocation -= timeInterval * (2.2 / 100) * (60 / self.displaylink.frameInterval);
         x += timeInterval * 0.0072f * (60.0f / self.displaylink.frameInterval) * (8.0f / self.displaylink.frameInterval);
         
         timeHaveGone += timeInterval;
     } else {
-        incenseHeight = incenseBurnOffLength;
+        self.incenseHeight = incenseBurnOffLength;
         waverHeight = -703 * Size_Ratio_To_iPhone6;
         colorLocation = 0.0f;
         x = 5.5;
@@ -275,7 +274,7 @@ static CGFloat colorLocation = 0.8f;
     
     self.dustGradient.bounds = self.headDustView.bounds;
     
-    if (incenseHeight <= incenseBurnOffLength && !burntOffFromBackground) {
+    if (self.incenseHeight <= incenseBurnOffLength && !burntOffFromBackground) {
         [self.delegate incenseDidBurnOff];
         self.lightView.alpha = 0.0f;
     } else if (burntOffFromBackground) {
@@ -289,8 +288,8 @@ static CGFloat colorLocation = 0.8f;
     
 // MARK: What's the meaning of 135.0f ? --> 135.0 is the flammable incense length
     
-    incenseHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
-    self.frame = (CGRect){self.frame.origin, {Incense_Screen_Width, incenseHeight}};
+    self.incenseHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
+    self.frame = (CGRect){self.frame.origin, {Incense_Screen_Width, self.incenseHeight}};
     
     waverHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
     self.waver.frame = (CGRect) {{0, 0}, {Incense_Screen_Width, waverHeight}};
@@ -360,7 +359,7 @@ CGFloat integral(CGFloat(*f)(CGFloat x), CGFloat low, CGFloat high, NSInteger n)
     headDustHeight = 73.0f * Size_Ratio_To_iPhone6;
     
     // MARK: So, here is the incenseHeight when the incense be lightened
-    incenseHeight = height;
+    self.incenseHeight = height;
     x = 2.5f;
     y = 0.0f;
     colorLocation = 0.8f;
