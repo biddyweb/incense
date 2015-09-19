@@ -300,7 +300,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (CLFIncenseView *)incenseView {
     if (!_incenseView) {
         CLFIncenseView *incenseView = [[CLFIncenseView alloc] init];
-        incenseView.backgroundColor = [UIColor clearColor];
+        incenseView.backgroundColor = [UIColor blueColor];
         incenseView.delegate = self;
         [self.view insertSubview:incenseView belowSubview:self.smoke];
         _incenseView = incenseView;
@@ -319,9 +319,13 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 - (void)makeIncense {
-    [self.incenseView initialSetup];
+    CGFloat incenseHeight = 150.0f * Size_Ratio_To_iPhone6;
+    [self.incenseView initialSetupWithIncenseHeight:incenseHeight];
 
-    self.incenseView.frame = CGRectMake(0, Incense_Screen_Height - Incense_Location - 200, Incense_Screen_Width, 200 * Size_Ratio_To_iPhone6);
+    
+    // MARK: Incense height was defined here ---> 200
+    // Incense_Location should be modified. It's related with incenseHeight --> It is fine
+    self.incenseView.frame = CGRectMake(0, Incense_Screen_Height - Incense_Location - incenseHeight, Incense_Screen_Width, incenseHeight);
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
     
@@ -593,29 +597,4 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 }
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

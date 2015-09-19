@@ -30,7 +30,7 @@
 
 @property (nonatomic, weak)                      id<CLFIncenseViewDelegate> delegate;
 
-- (void)initialSetup;
+- (void)initialSetupWithIncenseHeight:(CGFloat)height;
 - (CGFloat)timeHaveGone;
 - (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval;
 

@@ -62,6 +62,7 @@ static CGFloat beginCenterY = -140.0f;
     
     CGFloat offsetY = currentPoint.y - beginPoint.y;
 
+    // MARK: Incense Height ---> 200 trigger
     CGFloat floorY = Incense_Screen_Height - 200 * Size_Ratio_To_iPhone6 - Incense_Location;
     
     CGFloat newCenterY = self.center.y + offsetY;
