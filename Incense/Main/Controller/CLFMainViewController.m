@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 CaiGavin. All rights reserved.
 //
 
+
+#warning 分享的时候: This app is not allowed to query for scheme weixin
+
 #import "CLFMainViewController.h"
 #import "CLFCloud.h"
 #import "CLFIncenseView.h"

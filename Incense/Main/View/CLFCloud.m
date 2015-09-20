@@ -8,6 +8,7 @@
 
 #import "CLFIncenseCommonHeader.h"
 #import "CLFCloud.h"
+#import "CLFMathTools.h"
 
 @interface CLFCloud ()
 
@@ -70,7 +71,6 @@ static CGFloat beginCenterY = -140.0f;
     UITouch *touch = [touches anyObject];
     beginPoint = [touch locationInView:self];
     beginCenterY = self.center.y;
-    NSLog(@"beginCenterY %f", self.center.y);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -97,21 +97,26 @@ static CGFloat beginCenterY = -140.0f;
     
     // 当一炷香总时间为30分钟时,其可燃烧长度为 135, 当它的燃烧总时间为15分钟时,可燃烧长度为67.5
     int totalSeconds = 1800;
-    
-    if (distance >= burnLine + 67.5 * Size_Ratio_To_iPhone6) {
-        newCenterY = beginCenterY + burnLine + 67.5 * Size_Ratio_To_iPhone6;
-        self.wouldBurnt = YES;
-        distance = burnLine + 67.5 * Size_Ratio_To_iPhone6;
-    } else if (distance >= burnLine) {
+    if (distance >= burnLine) {
+        if (distance >= burnLine + 67.5 * Size_Ratio_To_iPhone6) {
+            newCenterY = beginCenterY + burnLine + 67.5 * Size_Ratio_To_iPhone6;
+            distance = burnLine + 67.5 * Size_Ratio_To_iPhone6;
+        }
+        
         self.timeLabel.alpha = 1.0;
         totalSeconds -= (distance - burnLine) * (900 / (67.5 * Size_Ratio_To_iPhone6));
         
-        int seconds = totalSeconds % 60;
-        int minutes = totalSeconds / 60;
+//        int seconds = totalSeconds % 60;
+        CGFloat minutes = round(totalSeconds / 60.0);
         
-        self.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
+//        NSLog(@"minutes %f round minutes %f", minutes, round(minutes));
+        NSString *timeString = [CLFMathTools numberToChinese:minutes];
+//        self.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
+        self.timeLabel.text = timeString;
+        
         lengthNeedToBeCut = distance - burnLine;
         self.wouldBurnt = YES;
+
     } else if (distance < burnLine) {
         self.timeLabel.alpha = 0.0f;
         self.wouldBurnt = NO;

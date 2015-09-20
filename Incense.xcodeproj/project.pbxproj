@@ -39,6 +39,8 @@
 		3F67E2A51B8EFA9100BBBC04 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2A41B8EFA9100BBBC04 /* libsqlite3.0.dylib */; };
 		3F67E2A71B8EFA9F00BBBC04 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2A61B8EFA9F00BBBC04 /* SystemConfiguration.framework */; };
 		3F69D23E1B846E0A00DD6B03 /* CLFCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */; };
+		3F710C3F1BAE5FEB006B1044 /* CLFShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F710C3E1BAE5FEB006B1044 /* CLFShareView.m */; settings = {ASSET_TAGS = (); }; };
+		3F710C421BAE67DB006B1044 /* CLFCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F710C411BAE67DB006B1044 /* CLFCardView.m */; settings = {ASSET_TAGS = (); }; };
 		3F7F66531B7D91E20045C689 /* Fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66521B7D91E20045C689 /* Fire.gif */; };
 		3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66571B7DFD390045C689 /* LaunchScreen.xib */; };
 		3FA747A51B8D950E001121AD /* 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA747A41B8D950E001121AD /* 3.mp3 */; };
@@ -130,6 +132,10 @@
 		3F67E2A61B8EFA9F00BBBC04 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3F69D23C1B846E0A00DD6B03 /* CLFCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFCloud.h; sourceTree = "<group>"; };
 		3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFCloud.m; sourceTree = "<group>"; };
+		3F710C3D1BAE5FEB006B1044 /* CLFShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFShareView.h; sourceTree = "<group>"; };
+		3F710C3E1BAE5FEB006B1044 /* CLFShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFShareView.m; sourceTree = "<group>"; };
+		3F710C401BAE67DB006B1044 /* CLFCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFCardView.h; sourceTree = "<group>"; };
+		3F710C411BAE67DB006B1044 /* CLFCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFCardView.m; sourceTree = "<group>"; };
 		3F7F66521B7D91E20045C689 /* Fire.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Fire.gif; sourceTree = "<group>"; };
 		3F7F66571B7DFD390045C689 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		3FA747A41B8D950E001121AD /* 3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 3.mp3; sourceTree = "<group>"; };
@@ -392,6 +398,10 @@
 				3FCB4CF41B86C33B00B854E4 /* CLFEndView.m */,
 				3FDEF5B21B8D6DAE00A65DC1 /* CLFEndButton.h */,
 				3FDEF5B31B8D6DAE00A65DC1 /* CLFEndButton.m */,
+				3F710C3D1BAE5FEB006B1044 /* CLFShareView.h */,
+				3F710C3E1BAE5FEB006B1044 /* CLFShareView.m */,
+				3F710C401BAE67DB006B1044 /* CLFCardView.h */,
+				3F710C411BAE67DB006B1044 /* CLFCardView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -555,6 +565,7 @@
 				3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */,
 				3F67E29E1B8EF88200BBBC04 /* WeixinActivity.m in Sources */,
 				3F1956C41B78B95A003A5575 /* MASLayoutConstraint.m in Sources */,
+				3F710C3F1BAE5FEB006B1044 /* CLFShareView.m in Sources */,
 				3FE6F4941B887B6000D06810 /* CLFPageControl.m in Sources */,
 				3F1956C71B78B95A003A5575 /* NSArray+MASAdditions.m in Sources */,
 				3F3AA2B81B7B0BFD00DD9E84 /* BMWaveMaker.m in Sources */,
@@ -564,6 +575,7 @@
 				3FDEF5B41B8D6DAE00A65DC1 /* CLFEndButton.m in Sources */,
 				3F1956C51B78B95A003A5575 /* MASViewAttribute.m in Sources */,
 				3F67E2A01B8EF88200BBBC04 /* WeixinSessionActivity.m in Sources */,
+				3F710C421BAE67DB006B1044 /* CLFCardView.m in Sources */,
 				3F1956C91B78B95A003A5575 /* View+MASAdditions.m in Sources */,
 				3F48CDF81B78777F00F889BC /* main.m in Sources */,
 				3F1956A41B789BE7003A5575 /* Waver.m in Sources */,
