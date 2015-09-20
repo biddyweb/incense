@@ -18,6 +18,7 @@
 @interface CLFCloud : UIView
 
 @property (nonatomic, assign, getter=isDragEnable) BOOL                 dragEnable;
+@property (nonatomic, assign)                      BOOL                 wouldBurnt;
 @property (nonatomic, weak)                        UIImageView          *cloudImageView;
 @property (nonatomic, weak)                        id<CLFCloudDelegate> delegate;
 

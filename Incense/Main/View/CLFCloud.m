@@ -25,7 +25,10 @@ static CGFloat beginCenterY = -140.0f;
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        
+        // MARK: dragEnable? 
         self.dragEnable = YES;
+        self.wouldBurnt = NO;
     }
     return self;
 }
@@ -97,6 +100,7 @@ static CGFloat beginCenterY = -140.0f;
     
     if (distance >= burnLine + 67.5 * Size_Ratio_To_iPhone6) {
         newCenterY = beginCenterY + burnLine + 67.5 * Size_Ratio_To_iPhone6;
+        self.wouldBurnt = YES;
         distance = burnLine + 67.5 * Size_Ratio_To_iPhone6;
     } else if (distance >= burnLine) {
         self.timeLabel.alpha = 1.0;
@@ -107,10 +111,11 @@ static CGFloat beginCenterY = -140.0f;
         
         self.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
         lengthNeedToBeCut = distance - burnLine;
+        self.wouldBurnt = YES;
     } else if (distance < burnLine) {
         self.timeLabel.alpha = 0.0f;
+        self.wouldBurnt = NO;
     }
-
     
     self.center = CGPointMake(self.center.x, newCenterY);
 }
@@ -123,7 +128,10 @@ static CGFloat beginCenterY = -140.0f;
     // MARK: 180???
     self.timeLabel.alpha = 0.0f;
     [self.delegate cloudRebound];
-    [self.delegate lightTheIncenseWithIncenseHeight:200.0f * Size_Ratio_To_iPhone6 - lengthNeedToBeCut];
+    if (self.wouldBurnt) {
+        [self.delegate lightTheIncenseWithIncenseHeight:200.0f * Size_Ratio_To_iPhone6 - lengthNeedToBeCut];
+        self.dragEnable = NO;
+    }
 }
 
 @end

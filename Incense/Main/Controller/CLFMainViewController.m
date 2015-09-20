@@ -419,6 +419,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)makeCloud {
     self.cloud.alpha = 1.0f;
     self.cloud.dragEnable = YES;
+    self.cloud.wouldBurnt = NO;
     // 140 是指一开始可见的部分高度
     self.cloud.frame = CGRectMake(0, cloudLocation, Incense_Screen_Width, 380 + 140 * Size_Ratio_To_iPhone6); // 也许要换成1042
 }
