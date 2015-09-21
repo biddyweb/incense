@@ -11,7 +11,7 @@
 @protocol CLFEndViewDelegate <NSObject>
 
 - (void)oneMoreIncense;
-- (void)showShareView;
+- (void)showShareActivity;
 
 @end
 
@@ -20,6 +20,6 @@
 @property (nonatomic, weak) id<CLFEndViewDelegate> delegate;
 
 - (void)setupWithFailure;
-- (void)setupWithBurntOffNumber:(NSString *)numberString;
+- (void)setupWithBurntOffNumber:(NSMutableString *)numberString incenseSnapShot:(UIView *)incenseShot;
 
 @end

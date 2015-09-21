@@ -10,6 +10,6 @@
 
 @interface CLFMathTools : NSObject
 
-+ (NSString *)numberToChinese:(NSInteger)integer;
++ (NSMutableString *)numberToChinese:(NSInteger)integer;
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation CLFMathTools
 
-+ (NSString *)numberToChinese:(NSInteger)integer {
++ (NSMutableString *)numberToChinese:(NSInteger)integer {
     if (integer > 99999) {
         integer = 99999;
     }
@@ -18,8 +18,8 @@
     NSMutableString *digitStr = [NSMutableString string];
     NSMutableString *resultStr = [NSMutableString string];
     
-    NSArray *digitArray = @[@"万", @"千", @"百", @"十"];
-    NSArray *numArray = @[@"零", @"一", @"二", @"三", @"四", @"五", @"六", @"七", @"八", @"九"];
+    NSArray *digitArray = @[@"萬", @"仟", @"佰", @"拾"];
+    NSArray *numArray = @[@"零", @"壹", @"貳", @"叄", @"肆", @"伍", @"陸", @"柒", @"捌", @"玖"];
     
     NSInteger temp;
     while (integer) {
@@ -47,11 +47,13 @@
         [resultStr replaceOccurrencesOfString:@"零零" withString:@"零" options:0 range:range];
     }
     
-    NSString *finialString = nil;
+    NSMutableString *finialString = nil;
     if ([resultStr hasSuffix:@"零"]) {
-        finialString = [resultStr substringToIndex:(resultStr.length - 1)];
+        NSString *tempString = [resultStr substringToIndex:(resultStr.length - 1)];
+        finialString = [NSMutableString stringWithString:tempString];
+//        finialString = [resultStr substringToIndex:resultStr.length - 1];
     } else {
-        finialString = [NSString stringWithString:resultStr];
+        finialString = [NSMutableString stringWithString:resultStr];
     }
 
     return finialString;

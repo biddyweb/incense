@@ -10,9 +10,6 @@
 
 @interface CLFCardView ()
 
-@property (nonatomic, weak) UIImageView *shotView;
-@property (nonatomic, weak) UIView      *poemView;
-
 @end
 
 @implementation CLFCardView
@@ -27,7 +24,7 @@
 - (UIImageView *)shotView {
     if (!_shotView) {
         UIImageView *shotView = [[UIImageView alloc] init];
-        shotView.backgroundColor = [UIColor blueColor];
+//        shotView.backgroundColor = [UIColor blueColor];
         [self addSubview:shotView];
         _shotView = shotView;
     }

@@ -10,4 +10,7 @@
 
 @interface CLFCardView : UIView
 
+@property (nonatomic, weak) UIImageView *shotView;
+@property (nonatomic, weak) UIView      *poemView;
+
 @end

@@ -28,6 +28,7 @@
 		3F48CDFE1B78777F00F889BC /* CLFMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CDFD1B78777F00F889BC /* CLFMainViewController.m */; };
 		3F48CE031B78777F00F889BC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CE021B78777F00F889BC /* Images.xcassets */; };
 		3F48CE121B78777F00F889BC /* IncenseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CE111B78777F00F889BC /* IncenseTests.m */; };
+		3F4EA70C1BAFCC22002E4A8C /* STFangsong.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F4EA70B1BAFCC22002E4A8C /* STFangsong.ttf */; settings = {ASSET_TAGS = (); }; };
 		3F55A5B51B862BA0000FAE56 /* CLFMathTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F55A5B41B862BA0000FAE56 /* CLFMathTools.m */; };
 		3F55A5B81B862DC3000FAE56 /* CLFNewFeatureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F55A5B71B862DC3000FAE56 /* CLFNewFeatureController.m */; };
 		3F67E2831B8EF78200BBBC04 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2821B8EF78200BBBC04 /* libc++.dylib */; };
@@ -114,6 +115,7 @@
 		3F48CE0B1B78777F00F889BC /* IncenseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncenseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F48CE101B78777F00F889BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F48CE111B78777F00F889BC /* IncenseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IncenseTests.m; sourceTree = "<group>"; };
+		3F4EA70B1BAFCC22002E4A8C /* STFangsong.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = STFangsong.ttf; sourceTree = "<group>"; };
 		3F55A5B31B862BA0000FAE56 /* CLFMathTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFMathTools.h; sourceTree = "<group>"; };
 		3F55A5B41B862BA0000FAE56 /* CLFMathTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFMathTools.m; sourceTree = "<group>"; };
 		3F55A5B61B862DC3000FAE56 /* CLFNewFeatureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFNewFeatureController.h; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 		3F48CDF51B78777F00F889BC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3F4EA70B1BAFCC22002E4A8C /* STFangsong.ttf */,
 				3FE6F4951B8890F800D06810 /* CLFIncenseCommonHeader.h */,
 				3F3AF0771B8C7D090016D548 /* 4.mp3 */,
 				3FA747A41B8D950E001121AD /* 3.mp3 */,
@@ -517,6 +520,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */,
+				3F4EA70C1BAFCC22002E4A8C /* STFangsong.ttf in Resources */,
 				3FA747A51B8D950E001121AD /* 3.mp3 in Resources */,
 				3F1956C01B78B95A003A5575 /* Info.plist in Resources */,
 				3FA869631B85C98A00799E0A /* 2.mp3 in Resources */,

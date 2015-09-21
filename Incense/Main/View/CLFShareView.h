@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class CLFCardView;
 @interface CLFShareView : UIView
+
+@property (nonatomic, weak) CLFCardView *cardView;
 
 @end

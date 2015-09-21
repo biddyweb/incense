@@ -12,8 +12,6 @@
 
 @interface CLFShareView ()
 
-@property (nonatomic, weak) CLFCardView *cardView;
-
 @end
 
 @implementation CLFShareView

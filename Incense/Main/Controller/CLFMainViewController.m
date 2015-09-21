@@ -177,7 +177,9 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     
     [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
     
-    [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber]];
+    UIView *incenseShot = [self.incenseView resizableSnapshotViewFromRect:CGRectMake(150, 0, 100, 50) afterScreenUpdates:NO withCapInsets:UIEdgeInsetsMake(100, 0, 0, 0)];
+//    UIView *incenseShot = [self.incenseView snapshotViewAfterScreenUpdates:NO];
+    [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber] incenseSnapShot:incenseShot];
 
     self.burning = NO;
     
@@ -238,7 +240,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         
         [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
         
-        [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber]];
+        UIView *incenseShot = [self.incenseView snapshotViewAfterScreenUpdates:NO];
+        [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber] incenseSnapShot:incenseShot];
         self.endView.alpha = 1.0f;
     }
     
@@ -312,7 +315,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     return _incenseView;
 }
 
-- (UIImageView *)incenseShadowView {
+- (UIImageView *)incenseShadowView { 
     if (!_incenseShadowView) {
         UIImageView *incenseShadowView = [[UIImageView alloc] init];
         incenseShadowView.image = [UIImage imageNamed:@"影"];
@@ -326,7 +329,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     CGFloat incenseHeight = 200.0f * Size_Ratio_To_iPhone6;
     [self.incenseView initialSetupWithIncenseHeight:incenseHeight];
 
-    // MARK: Incense height was defined here ---> 200
     // Incense_Location should be modified. It's related with incenseHeight --> It is fine
     self.incenseView.frame = CGRectMake(0, Incense_Screen_Height - Incense_Location - incenseHeight, Incense_Screen_Width, incenseHeight);
     self.incenseView.waver.alpha = 0.0f;
@@ -337,7 +339,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self floating];
 }
 
-#pragma mark - floatingAnimation
+#pragma mark - floatingAnimation 其实这个应该放到 IncenseView 里面
 
 /**
  *  Make incense floating above the ripple, and the shadow should react to the floating.
@@ -566,7 +568,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 #pragma - mark Share snapshot of endView;
 
-- (void)showShareView {
+- (void)showShareActivity {
     if (needShare) {
         UIImage *screenShot = [self takeSnapshotOfView:self.view];
         NSArray *actItems = @[screenShot];
@@ -586,6 +588,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         }];
     }
 }
+
+// 这个也该抽出去
 
 - (UIImage *)takeSnapshotOfView:(UIView *)view {
     CGFloat reductionFactor = 0.3;

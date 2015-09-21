@@ -48,9 +48,9 @@ static CGFloat beginCenterY = -140.0f;
     if (!_timeLabel) {
         UILabel *timeLabel = [[UILabel alloc] init];
         timeLabel.textAlignment = NSTextAlignmentCenter;
-        timeLabel.font = [UIFont systemFontOfSize:20];
+        timeLabel.font = [UIFont fontWithName:@"STFangsong" size:18];
         timeLabel.textColor = [UIColor blackColor];
-        timeLabel.text = @"30:00";
+        timeLabel.text = @"叄拾";
         timeLabel.alpha = 0.0;
         [self addSubview:timeLabel];
         _timeLabel = timeLabel;
@@ -110,8 +110,17 @@ static CGFloat beginCenterY = -140.0f;
         CGFloat minutes = round(totalSeconds / 60.0);
         
 //        NSLog(@"minutes %f round minutes %f", minutes, round(minutes));
-        NSString *timeString = [CLFMathTools numberToChinese:minutes];
+        NSString *timeString = [NSString stringWithFormat:@"%@%@", [CLFMathTools numberToChinese:minutes], @"分"];
 //        self.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
+        if ([timeString isEqualToString:@"貳拾分"]) {
+            timeString = @"貳拾分鐘";
+        } else if ([timeString isEqualToString:@"叄拾分"]) {
+            timeString = @"兩刻鐘整";
+        } else if ([timeString isEqualToString:@"壹拾伍分"]) {
+            timeString = @"一刻鐘整";
+        }
+        
+        
         self.timeLabel.text = timeString;
         
         lengthNeedToBeCut = distance - burnLine;

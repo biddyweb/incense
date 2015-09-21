@@ -10,15 +10,19 @@
 #import "CLFIncenseCommonHeader.h"
 #import "CLFEndButton.h"
 #import "CLFShareView.h"
+#import "CLFCardView.h"
 
 @interface CLFEndView ()
 
-@property (nonatomic, weak) UIImageView *blurView;
-@property (nonatomic, weak) UIView      *finishView;
-@property (nonatomic, weak) UIImageView *finishImageView;
-@property (nonatomic, weak) UIButton    *restartButton;
-@property (nonatomic, weak) UIImageView *shadowView;
-@property (nonatomic, weak) UIButton    *shareButton;
+@property (nonatomic, weak) UIImageView  *blurView;
+@property (nonatomic, weak) UIView       *finishView;
+//@property (nonatomic, weak) UIImageView  *finishImageView;
+@property (nonatomic, weak) UIButton     *restartButton;
+@property (nonatomic, weak) UIImageView  *shadowView;
+@property (nonatomic, weak) UIButton     *shareButton;
+@property (nonatomic, weak) CLFShareView *shareCardView;
+
+@property (nonatomic, weak) UILabel      *numberLabel;
 
 @end
 
@@ -33,11 +37,21 @@
         [self addSubview:finishedView];
         _finishView = finishedView;
         
-        UIImageView *finishImageView = [[UIImageView alloc] init];
-        [_finishView addSubview:finishImageView];
-        finishImageView.contentMode = UIViewContentModeTop;
-        finishImageView.backgroundColor = [UIColor clearColor];
-        _finishImageView = finishImageView;
+//        UIImageView *finishImageView = [[UIImageView alloc] init];
+//        [_finishView addSubview:finishImageView];
+//        finishImageView.contentMode = UIViewContentModeTop;
+//        finishImageView.backgroundColor = [UIColor clearColor];
+//        _finishImageView = finishImageView;
+        
+        UILabel *numberLabel = [[UILabel alloc] init];
+        [_finishView addSubview:numberLabel];
+        numberLabel.numberOfLines = 0;
+        numberLabel.font = [UIFont fontWithName:@"STFangsong" size:20];
+        numberLabel.textColor = [UIColor blackColor];
+        numberLabel.textAlignment = NSTextAlignmentCenter;
+//        numberLabel.backgroundColor = [UIColor greenColor];
+        [numberLabel sizeToFit];
+        _numberLabel = numberLabel;
         
         UIImageView *shadowView = [[UIImageView alloc] init];
         shadowView.image = [UIImage imageNamed:@"影子"];
@@ -114,39 +128,49 @@
     self.shareButton.frame = CGRectMake((Incense_Screen_Width - 100) * 0.5, self.shadowView.frame.origin.y - 50, 100, 30);
 }
 
-- (void)setupWithBurntOffNumber:(NSString *)numberString {
-    CGFloat digitW = 20 * Size_Ratio_To_iPhone6;
-    CGFloat digitH = digitW + 2 * Size_Ratio_To_iPhone6;
-    self.blurView.alpha = 1.0f;
-    self.finishImageView.frame = CGRectMake((Incense_Screen_Width - digitW) * 0.5, Incense_Screen_Height * 0.25 - 10, digitW, 300);
+- (void)setupWithBurntOffNumber:(NSMutableString *)numberString incenseSnapShot:(UIView *)incenseShot {
     
-    NSInteger totalNumber = numberString.length;
-
-    CGFloat digitX = 0;
-    for (NSInteger i = 0; i <= totalNumber; i++) {
-        CGFloat digitY = i * (digitH + 10);
-        UIImageView *digitImageView = [[UIImageView alloc] init];
-        if (i == totalNumber) {
-            digitImageView.frame = CGRectMake(digitW * 0.5 - 5, digitY + 3, 10, 10);
-            digitImageView.image = [UIImage imageNamed:@"句号"];
-        } else {
-            digitImageView.frame = CGRectMake(digitX, digitY, digitW, digitH);
-            NSRange range = NSMakeRange(i, 1);
-            NSString *imageName = [numberString substringWithRange:range];
-            digitImageView.image = [UIImage imageNamed:imageName];
-        }
-        digitImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.finishImageView addSubview:digitImageView];
+    NSUInteger length = numberString.length;
+    for (int i = 0; i < length - 1; i++) {
+        [numberString insertString:@"\n\n" atIndex:3 * i + 1];
     }
+    
+    NSString *newNumberString = [NSString stringWithFormat:@"%@\n\n 。", numberString];
+    NSMutableAttributedString *finalNumberString = [[NSMutableAttributedString alloc] initWithString:newNumberString];
+
+    
+    
+    CGFloat digitW = 56 * Size_Ratio_To_iPhone6;
+    self.shareButton.hidden = NO;
+    self.numberLabel.frame = CGRectMake((Incense_Screen_Width - digitW) * 0.5 + 18, 0, digitW, 0.5 * Incense_Screen_Height);
+    self.numberLabel.attributedText = [self arrangeAttributedString:finalNumberString];
+    
+    incenseShot.frame = CGRectMake(0, 100, 100, 50);
+    incenseShot.backgroundColor = [UIColor greenColor];
+    CLFCardView *card = self.shareCardView.cardView;
+    [card.shotView addSubview:incenseShot];
+}
+
+- (NSMutableAttributedString *)arrangeAttributedString:(NSMutableAttributedString *)attributedString {
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"STFangsong" size:21] range:NSMakeRange(0, attributedString.length)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, attributedString.length - 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(attributedString.length - 1, 1)];
+    
+    NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
+    paraStyle.paragraphSpacing = -7;
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paraStyle range:NSMakeRange(0, attributedString.length - 3)];
+    NSMutableParagraphStyle *paraStyle2 = [[NSMutableParagraphStyle alloc] init];
+    paraStyle2.paragraphSpacing = -15;
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paraStyle2 range:NSMakeRange(attributedString.length - 3, 3)];
+    return attributedString;
 }
 
 - (void)setupWithFailure {
-    self.blurView.alpha = 0.0f;
-    CGFloat finishViewW = 22 * Size_Ratio_To_iPhone6;
-    CGFloat finishViewH = 40 * Size_Ratio_To_iPhone6;
-    self.finishImageView.frame = CGRectMake((Incense_Screen_Width - finishViewW) * 0.5, Incense_Screen_Height * 0.25 - finishViewH, finishViewW, finishViewH);
-    self.finishImageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.finishImageView.image = [UIImage imageNamed:@"灭"];
+    self.shareButton.hidden = YES;
+    CGFloat finishViewW = 56 * Size_Ratio_To_iPhone6;
+    self.numberLabel.frame = CGRectMake((Incense_Screen_Width - finishViewW) * 0.5 + 18, 0, finishViewW, 0.5 * Incense_Screen_Height);
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"滅\n\n 。"];
+    self.numberLabel.attributedText = [self arrangeAttributedString:attributedString];
 }
 
 - (void)showFinishView {
@@ -172,17 +196,24 @@
 }
 
 - (void)showTheShareView {
-    if ([self.delegate respondsToSelector:@selector(showShareView)]) {
-        [self.delegate showShareView];
+    if ([self.delegate respondsToSelector:@selector(showShareActivity)]) {
+        [self.delegate showShareActivity];
     }
 }
 
+- (CLFShareView *)shareCardView {
+    if (!_shareCardView) {
+        CLFShareView *shareCardView = [[CLFShareView alloc] init];
+        shareCardView.frame = self.frame;
+        shareCardView.alpha = 0.0f;
+        [self addSubview:shareCardView];
+        _shareCardView = shareCardView;
+    }
+    return _shareCardView;
+}
+
 - (void)showShareCard {
-//    NSLog(@"showShareCard");
-    CLFShareView *shareCardView = [[CLFShareView alloc] init];
-    shareCardView.frame = self.frame;
-    [self addSubview:shareCardView];
-    
+    self.shareCardView.alpha = 1.0f;
 }
 
 @end
