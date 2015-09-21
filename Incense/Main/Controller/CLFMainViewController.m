@@ -19,7 +19,9 @@
 #import "CLFAudioPlayView.h"
 #import "CLFEndView.h"
 #import "CLFIncenseCommonHeader.h"
-#import "WeixinActivity.h"
+#include "CLFFunctions.h"
+#import "CLFShareViewController.h"
+#import "CLFModalTransitionManager.h"
 
 @interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, CLFEndViewDelegate>
 
@@ -38,20 +40,11 @@
 
 @property (nonatomic, weak)                      UITapGestureRecognizer *tap;
 
+@property (nonatomic, weak)                      UIView                 *container;
+
+@property (nonatomic, strong)                    CLFModalTransitionManager *modalTransitionManager;
+
 @end
-
-CATransform3D CATransform3DMakePerspective(CGPoint center, float disZ) {
-    CATransform3D transToCenter = CATransform3DMakeTranslation(-center.x, -center.y, 0);
-    CATransform3D transBack = CATransform3DMakeTranslation(center.x, center.y, 0);
-    CATransform3D scale = CATransform3DIdentity;
-    scale.m34 = -1.0f / disZ;
-    return CATransform3DConcat(CATransform3DConcat(transToCenter, scale), transBack);
-}
-
-CATransform3D CATransform3DPerspect(CATransform3D t, CGPoint center, float disZ) {
-    return CATransform3DConcat(t, CATransform3DMakePerspective(center, disZ));
-}
-
 
 @implementation CLFMainViewController
 
@@ -78,9 +71,21 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     return self;
 }
 
+- (UIView *)container {
+    if (!_container) {
+        UIView *container = [[UIView alloc] init];
+//        container.backgroundColor = [UIColor greenColor];
+        container.tag = 111;
+        [self.view addSubview:container];
+        _container = container;
+    }
+    return _container;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    self.modalTransitionManager = [[CLFModalTransitionManager alloc] init];
+    self.container.frame = CGRectMake(0, Incense_Screen_Height - Incense_Location - 200 * Size_Ratio_To_iPhone6, Incense_Screen_Width, 200 * Size_Ratio_To_iPhone6);
     [self makeIncense];
     [self makeCloud];
     [self makeRipple];
@@ -177,10 +182,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     
     [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
     
-    UIView *incenseShot = [self.incenseView resizableSnapshotViewFromRect:CGRectMake(150, 0, 100, 50) afterScreenUpdates:NO withCapInsets:UIEdgeInsetsMake(100, 0, 0, 0)];
-//    UIView *incenseShot = [self.incenseView snapshotViewAfterScreenUpdates:NO];
-    [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber] incenseSnapShot:incenseShot];
-
+    [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber]];
+    
     self.burning = NO;
     
     [self.audioView stopPlayAudio];
@@ -204,7 +207,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self.incenseView.waver.displaylink invalidate];
     [self.incenseView.displaylink invalidate];
 }
-
 
 /**
  *  If the user ignored the alert, show a incompletely burnt incense.
@@ -240,8 +242,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         
         [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
         
-        UIView *incenseShot = [self.incenseView snapshotViewAfterScreenUpdates:NO];
-        [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber] incenseSnapShot:incenseShot];
+        [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber]];
         self.endView.alpha = 1.0f;
     }
     
@@ -309,7 +310,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     if (!_incenseView) {
         CLFIncenseView *incenseView = [[CLFIncenseView alloc] init];
         incenseView.delegate = self;
-        [self.view insertSubview:incenseView belowSubview:self.smoke];
+//        [self.view insertSubview:incenseView belowSubview:self.smoke];
+        [self.container addSubview:incenseView];
         _incenseView = incenseView;
     }
     return _incenseView;
@@ -330,7 +332,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self.incenseView initialSetupWithIncenseHeight:incenseHeight];
 
     // Incense_Location should be modified. It's related with incenseHeight --> It is fine
-    self.incenseView.frame = CGRectMake(0, Incense_Screen_Height - Incense_Location - incenseHeight, Incense_Screen_Width, incenseHeight);
+    self.incenseView.frame = CGRectMake(0, 0, Incense_Screen_Width, incenseHeight);
     self.incenseView.waver.alpha = 0.0f;
     self.incenseView.incenseHeadView.alpha = 0.0f;
     
@@ -348,7 +350,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
     anim.repeatCount = 1500;
-    anim.values = @[@(Incense_Screen_Height - Incense_Location), @(Incense_Screen_Height - Incense_Location - 5), @(Incense_Screen_Height - Incense_Location)];
+//    anim.values = @[@(Incense_Screen_Height - Incense_Location), @(Incense_Screen_Height - Incense_Location - 5), @(Incense_Screen_Height - Incense_Location)];
+    anim.values = @[@(200 * Size_Ratio_To_iPhone6), @(200 * Size_Ratio_To_iPhone6 -5), @(200 * Size_Ratio_To_iPhone6)];
     anim.duration = animationTime;
     anim.removedOnCompletion = NO;
     anim.fillMode = kCAFillModeForwards;
@@ -568,37 +571,11 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 #pragma - mark Share snapshot of endView;
 
-- (void)showShareActivity {
-    if (needShare) {
-        UIImage *screenShot = [self takeSnapshotOfView:self.view];
-        NSArray *actItems = @[screenShot];
-        NSArray *activity = @[[[WeixinSessionActivity alloc] init], [[WeixinTimelineActivity alloc] init]];
-        
-        UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:actItems applicationActivities:activity];
-        activityView.excludedActivityTypes = @[UIActivityTypePrint,
-                                               UIActivityTypeCopyToPasteboard,
-                                               UIActivityTypeAssignToContact,
-                                               UIActivityTypeMessage,
-                                               UIActivityTypeAddToReadingList];
-        [self presentViewController:activityView animated:YES completion:nil];
-        needShare = NO;
-        
-        [activityView setCompletionWithItemsHandler:^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *error) {
-            needShare = YES;
-        }];
-    }
-}
-
-// 这个也该抽出去
-
-- (UIImage *)takeSnapshotOfView:(UIView *)view {
-    CGFloat reductionFactor = 0.3;
-    UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor));
-    [view drawViewHierarchyInRect:CGRectMake(0, 0, view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor) afterScreenUpdates:YES];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
+- (void)switchToShareVC {
+    CLFShareViewController *shareVC = [[CLFShareViewController alloc] init];
+    self.modalTransitionManager.pushed = NO;
+    shareVC.transitioningDelegate = self.modalTransitionManager;
+    [self presentViewController:shareVC animated:true completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {

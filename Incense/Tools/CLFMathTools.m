@@ -7,6 +7,7 @@
 //
 
 #import "CLFMathTools.h"
+#import <UIKit/UIKit.h>
 
 @implementation CLFMathTools
 
@@ -58,5 +59,8 @@
 
     return finialString;
 }
+
+
+
 
 @end

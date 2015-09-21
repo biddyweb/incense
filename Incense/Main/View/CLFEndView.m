@@ -9,7 +9,6 @@
 #import "CLFEndView.h"
 #import "CLFIncenseCommonHeader.h"
 #import "CLFEndButton.h"
-#import "CLFShareView.h"
 #import "CLFCardView.h"
 
 @interface CLFEndView ()
@@ -20,7 +19,6 @@
 @property (nonatomic, weak) UIButton     *restartButton;
 @property (nonatomic, weak) UIImageView  *shadowView;
 @property (nonatomic, weak) UIButton     *shareButton;
-@property (nonatomic, weak) CLFShareView *shareCardView;
 
 @property (nonatomic, weak) UILabel      *numberLabel;
 
@@ -78,8 +76,6 @@
         
         [restartButton addTarget:self action:@selector(wantOneMoreIncense) forControlEvents:UIControlEventTouchUpInside];
         
-        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showTheShareView)];
-        [restartButton addGestureRecognizer:longPress];
         restartButton.adjustsImageWhenHighlighted = NO;
         
         _restartButton = restartButton;
@@ -128,7 +124,7 @@
     self.shareButton.frame = CGRectMake((Incense_Screen_Width - 100) * 0.5, self.shadowView.frame.origin.y - 50, 100, 30);
 }
 
-- (void)setupWithBurntOffNumber:(NSMutableString *)numberString incenseSnapShot:(UIView *)incenseShot {
+- (void)setupWithBurntOffNumber:(NSMutableString *)numberString {
     
     NSUInteger length = numberString.length;
     for (int i = 0; i < length - 1; i++) {
@@ -138,17 +134,10 @@
     NSString *newNumberString = [NSString stringWithFormat:@"%@\n\n 。", numberString];
     NSMutableAttributedString *finalNumberString = [[NSMutableAttributedString alloc] initWithString:newNumberString];
 
-    
-    
     CGFloat digitW = 56 * Size_Ratio_To_iPhone6;
     self.shareButton.hidden = NO;
     self.numberLabel.frame = CGRectMake((Incense_Screen_Width - digitW) * 0.5 + 18, 0, digitW, 0.5 * Incense_Screen_Height);
     self.numberLabel.attributedText = [self arrangeAttributedString:finalNumberString];
-    
-    incenseShot.frame = CGRectMake(0, 100, 100, 50);
-    incenseShot.backgroundColor = [UIColor greenColor];
-    CLFCardView *card = self.shareCardView.cardView;
-    [card.shotView addSubview:incenseShot];
 }
 
 - (NSMutableAttributedString *)arrangeAttributedString:(NSMutableAttributedString *)attributedString {
@@ -195,25 +184,8 @@
     [self.restartButton.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 }
 
-- (void)showTheShareView {
-    if ([self.delegate respondsToSelector:@selector(showShareActivity)]) {
-        [self.delegate showShareActivity];
-    }
-}
-
-- (CLFShareView *)shareCardView {
-    if (!_shareCardView) {
-        CLFShareView *shareCardView = [[CLFShareView alloc] init];
-        shareCardView.frame = self.frame;
-        shareCardView.alpha = 0.0f;
-        [self addSubview:shareCardView];
-        _shareCardView = shareCardView;
-    }
-    return _shareCardView;
-}
-
 - (void)showShareCard {
-    self.shareCardView.alpha = 1.0f;
+    [self.delegate switchToShareVC];
 }
 
 @end

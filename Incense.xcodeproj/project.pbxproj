@@ -40,10 +40,12 @@
 		3F67E2A51B8EFA9100BBBC04 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2A41B8EFA9100BBBC04 /* libsqlite3.0.dylib */; };
 		3F67E2A71B8EFA9F00BBBC04 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2A61B8EFA9F00BBBC04 /* SystemConfiguration.framework */; };
 		3F69D23E1B846E0A00DD6B03 /* CLFCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */; };
-		3F710C3F1BAE5FEB006B1044 /* CLFShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F710C3E1BAE5FEB006B1044 /* CLFShareView.m */; settings = {ASSET_TAGS = (); }; };
 		3F710C421BAE67DB006B1044 /* CLFCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F710C411BAE67DB006B1044 /* CLFCardView.m */; settings = {ASSET_TAGS = (); }; };
 		3F7F66531B7D91E20045C689 /* Fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66521B7D91E20045C689 /* Fire.gif */; };
 		3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66571B7DFD390045C689 /* LaunchScreen.xib */; };
+		3F8FDA5C1BB010D1004C86B5 /* CLFFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 3F8FDA5A1BB010D1004C86B5 /* CLFFunctions.c */; settings = {ASSET_TAGS = (); }; };
+		3F8FDA641BB02CB2004C86B5 /* CLFShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8FDA631BB02CB2004C86B5 /* CLFShareViewController.m */; settings = {ASSET_TAGS = (); }; };
+		3F8FDA6B1BB032A7004C86B5 /* CLFModalTransitionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8FDA6A1BB032A7004C86B5 /* CLFModalTransitionManager.m */; settings = {ASSET_TAGS = (); }; };
 		3FA747A51B8D950E001121AD /* 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA747A41B8D950E001121AD /* 3.mp3 */; };
 		3FA8695D1B858C3B00799E0A /* CLFPlayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */; };
 		3FA869631B85C98A00799E0A /* 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA869601B85C98A00799E0A /* 2.mp3 */; };
@@ -134,12 +136,16 @@
 		3F67E2A61B8EFA9F00BBBC04 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3F69D23C1B846E0A00DD6B03 /* CLFCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFCloud.h; sourceTree = "<group>"; };
 		3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFCloud.m; sourceTree = "<group>"; };
-		3F710C3D1BAE5FEB006B1044 /* CLFShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFShareView.h; sourceTree = "<group>"; };
-		3F710C3E1BAE5FEB006B1044 /* CLFShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFShareView.m; sourceTree = "<group>"; };
 		3F710C401BAE67DB006B1044 /* CLFCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFCardView.h; sourceTree = "<group>"; };
 		3F710C411BAE67DB006B1044 /* CLFCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFCardView.m; sourceTree = "<group>"; };
 		3F7F66521B7D91E20045C689 /* Fire.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Fire.gif; sourceTree = "<group>"; };
 		3F7F66571B7DFD390045C689 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
+		3F8FDA5A1BB010D1004C86B5 /* CLFFunctions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLFFunctions.c; sourceTree = "<group>"; };
+		3F8FDA5B1BB010D1004C86B5 /* CLFFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFFunctions.h; sourceTree = "<group>"; };
+		3F8FDA621BB02CB2004C86B5 /* CLFShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFShareViewController.h; sourceTree = "<group>"; };
+		3F8FDA631BB02CB2004C86B5 /* CLFShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFShareViewController.m; sourceTree = "<group>"; };
+		3F8FDA691BB032A7004C86B5 /* CLFModalTransitionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFModalTransitionManager.h; sourceTree = "<group>"; };
+		3F8FDA6A1BB032A7004C86B5 /* CLFModalTransitionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFModalTransitionManager.m; sourceTree = "<group>"; };
 		3FA747A41B8D950E001121AD /* 3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 3.mp3; sourceTree = "<group>"; };
 		3FA8695B1B858C3B00799E0A /* CLFPlayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFPlayButton.h; sourceTree = "<group>"; };
 		3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFPlayButton.m; sourceTree = "<group>"; };
@@ -282,6 +288,8 @@
 				6A7089371B8EF4C70047ED0B /* Fabric.framework */,
 				6A7089381B8EF4C70047ED0B /* Crashlytics.framework */,
 				3F55A5B21B862B7C000FAE56 /* Tools */,
+				3F8FDA651BB02D2F004C86B5 /* Transition */,
+				3F8FDA611BB02C80004C86B5 /* Share */,
 				3F55A5AF1B862A3A000FAE56 /* NewFeature */,
 				3F732C0A1B79E534009DE244 /* Main */,
 				3F1956A01B789B95003A5575 /* Libs */,
@@ -358,6 +366,8 @@
 			children = (
 				3F55A5B31B862BA0000FAE56 /* CLFMathTools.h */,
 				3F55A5B41B862BA0000FAE56 /* CLFMathTools.m */,
+				3F8FDA5A1BB010D1004C86B5 /* CLFFunctions.c */,
+				3F8FDA5B1BB010D1004C86B5 /* CLFFunctions.h */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -401,10 +411,6 @@
 				3FCB4CF41B86C33B00B854E4 /* CLFEndView.m */,
 				3FDEF5B21B8D6DAE00A65DC1 /* CLFEndButton.h */,
 				3FDEF5B31B8D6DAE00A65DC1 /* CLFEndButton.m */,
-				3F710C3D1BAE5FEB006B1044 /* CLFShareView.h */,
-				3F710C3E1BAE5FEB006B1044 /* CLFShareView.m */,
-				3F710C401BAE67DB006B1044 /* CLFCardView.h */,
-				3F710C411BAE67DB006B1044 /* CLFCardView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -416,6 +422,26 @@
 				3F48CDFD1B78777F00F889BC /* CLFMainViewController.m */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		3F8FDA611BB02C80004C86B5 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				3F8FDA621BB02CB2004C86B5 /* CLFShareViewController.h */,
+				3F8FDA631BB02CB2004C86B5 /* CLFShareViewController.m */,
+				3F710C401BAE67DB006B1044 /* CLFCardView.h */,
+				3F710C411BAE67DB006B1044 /* CLFCardView.m */,
+			);
+			path = Share;
+			sourceTree = "<group>";
+		};
+		3F8FDA651BB02D2F004C86B5 /* Transition */ = {
+			isa = PBXGroup;
+			children = (
+				3F8FDA691BB032A7004C86B5 /* CLFModalTransitionManager.h */,
+				3F8FDA6A1BB032A7004C86B5 /* CLFModalTransitionManager.m */,
+			);
+			path = Transition;
 			sourceTree = "<group>";
 		};
 		3FB5EA791B8E16AA00CDF0B0 /* WeChatSDK_1.5 */ = {
@@ -568,13 +594,14 @@
 				3FA8695D1B858C3B00799E0A /* CLFPlayButton.m in Sources */,
 				3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */,
 				3F67E29E1B8EF88200BBBC04 /* WeixinActivity.m in Sources */,
+				3F8FDA5C1BB010D1004C86B5 /* CLFFunctions.c in Sources */,
 				3F1956C41B78B95A003A5575 /* MASLayoutConstraint.m in Sources */,
-				3F710C3F1BAE5FEB006B1044 /* CLFShareView.m in Sources */,
 				3FE6F4941B887B6000D06810 /* CLFPageControl.m in Sources */,
 				3F1956C71B78B95A003A5575 /* NSArray+MASAdditions.m in Sources */,
 				3F3AA2B81B7B0BFD00DD9E84 /* BMWaveMaker.m in Sources */,
 				3F67E29F1B8EF88200BBBC04 /* WeixinActivityBase.m in Sources */,
 				3F1956C61B78B95A003A5575 /* MASViewConstraint.m in Sources */,
+				3F8FDA6B1BB032A7004C86B5 /* CLFModalTransitionManager.m in Sources */,
 				3F55A5B81B862DC3000FAE56 /* CLFNewFeatureController.m in Sources */,
 				3FDEF5B41B8D6DAE00A65DC1 /* CLFEndButton.m in Sources */,
 				3F1956C51B78B95A003A5575 /* MASViewAttribute.m in Sources */,
@@ -586,6 +613,7 @@
 				3F1956C11B78B95A003A5575 /* MASCompositeConstraint.m in Sources */,
 				3FE6F4981B88A05A00D06810 /* CLFAudioPlayView.m in Sources */,
 				3F55A5B51B862BA0000FAE56 /* CLFMathTools.m in Sources */,
+				3F8FDA641BB02CB2004C86B5 /* CLFShareViewController.m in Sources */,
 				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				3F67E2A11B8EF88200BBBC04 /* WeixinTimelineActivity.m in Sources */,
