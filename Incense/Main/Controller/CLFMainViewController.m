@@ -542,9 +542,12 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 #pragma - Swith to ShareVC;
 
-- (void)switchToShareVC {
+- (void)switchToShareVCWithView:(UIView *)view {
     CLFShareViewController *shareVC = [[CLFShareViewController alloc] init];
     self.modalTransitionManager.pushed = NO;
+    NSLog(@"dddd %@", view);
+    self.modalTransitionManager.numberSnapshot = view;
+    self.modalTransitionManager.numberRatio = 1.0f * CGRectGetHeight(view.frame) / CGRectGetWidth(view.frame);
     shareVC.transitioningDelegate = self.modalTransitionManager;
     [self presentViewController:shareVC animated:true completion:nil];
 }

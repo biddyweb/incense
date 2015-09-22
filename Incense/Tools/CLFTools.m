@@ -106,5 +106,20 @@
     view.layer.anchorPoint = anchor;
 }
 
++ (NSMutableAttributedString *)arrangeAttributedString:(NSMutableAttributedString *)attributedString {
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"STFangsong" size:20] range:NSMakeRange(0, attributedString.length)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, attributedString.length - 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(attributedString.length - 1, 1)];
+    
+    NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
+    paraStyle.paragraphSpacing = -7;
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paraStyle range:NSMakeRange(0, attributedString.length - 3)];
+    NSMutableParagraphStyle *paraStyle2 = [[NSMutableParagraphStyle alloc] init];
+    paraStyle2.paragraphSpacing = -15;
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paraStyle2 range:NSMakeRange(attributedString.length - 3, 3)];
+    return attributedString;
+}
+
+
 
 @end

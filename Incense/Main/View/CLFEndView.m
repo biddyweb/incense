@@ -10,6 +10,7 @@
 #import "CLFIncenseCommonHeader.h"
 #import "CLFEndButton.h"
 #import "CLFCardView.h"
+#import "CLFTools.h"
 
 @interface CLFEndView ()
 
@@ -35,19 +36,11 @@
         [self addSubview:finishedView];
         _finishView = finishedView;
         
-//        UIImageView *finishImageView = [[UIImageView alloc] init];
-//        [_finishView addSubview:finishImageView];
-//        finishImageView.contentMode = UIViewContentModeTop;
-//        finishImageView.backgroundColor = [UIColor clearColor];
-//        _finishImageView = finishImageView;
-        
         UILabel *numberLabel = [[UILabel alloc] init];
         [_finishView addSubview:numberLabel];
         numberLabel.numberOfLines = 0;
         numberLabel.font = [UIFont fontWithName:@"STFangsong" size:20];
         numberLabel.textColor = [UIColor blackColor];
-        numberLabel.textAlignment = NSTextAlignmentCenter;
-//        numberLabel.backgroundColor = [UIColor greenColor];
         [numberLabel sizeToFit];
         _numberLabel = numberLabel;
         
@@ -136,30 +129,16 @@
 
     CGFloat digitW = 56 * Size_Ratio_To_iPhone6;
     self.shareButton.hidden = NO;
-    self.numberLabel.frame = CGRectMake((Incense_Screen_Width - digitW) * 0.5 + 18, 0, digitW, 0.5 * Incense_Screen_Height);
-    self.numberLabel.attributedText = [self arrangeAttributedString:finalNumberString];
-}
-
-- (NSMutableAttributedString *)arrangeAttributedString:(NSMutableAttributedString *)attributedString {
-    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"STFangsong" size:21] range:NSMakeRange(0, attributedString.length)];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, attributedString.length - 1)];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(attributedString.length - 1, 1)];
-    
-    NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
-    paraStyle.paragraphSpacing = -7;
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paraStyle range:NSMakeRange(0, attributedString.length - 3)];
-    NSMutableParagraphStyle *paraStyle2 = [[NSMutableParagraphStyle alloc] init];
-    paraStyle2.paragraphSpacing = -15;
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paraStyle2 range:NSMakeRange(attributedString.length - 3, 3)];
-    return attributedString;
+    self.numberLabel.frame = CGRectMake((Incense_Screen_Width - digitW) * 0.5 + 18 * Size_Ratio_To_iPhone6, 125 * Size_Ratio_To_iPhone6, digitW, (length + 3) * 20);
+    self.numberLabel.attributedText = [CLFTools arrangeAttributedString:finalNumberString];
 }
 
 - (void)setupWithFailure {
     self.shareButton.hidden = YES;
     CGFloat finishViewW = 56 * Size_Ratio_To_iPhone6;
-    self.numberLabel.frame = CGRectMake((Incense_Screen_Width - finishViewW) * 0.5 + 18, 0, finishViewW, 0.5 * Incense_Screen_Height);
+    self.numberLabel.frame = CGRectMake((Incense_Screen_Width - finishViewW) * 0.5 + 18 * Size_Ratio_To_iPhone6, 125 * Size_Ratio_To_iPhone6, finishViewW, 4 * 20);
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"滅\n\n 。"];
-    self.numberLabel.attributedText = [self arrangeAttributedString:attributedString];
+    self.numberLabel.attributedText = [CLFTools arrangeAttributedString:attributedString];
 }
 
 - (void)showFinishView {
@@ -185,7 +164,7 @@
 }
 
 - (void)showShareCard {
-    [self.delegate switchToShareVC];
+    [self.delegate switchToShareVCWithView:[self.numberLabel snapshotViewAfterScreenUpdates:NO]];
 }
 
 @end

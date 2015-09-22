@@ -12,5 +12,7 @@
 
 @property (nonatomic, weak) UIView *containerSnapShot;
 @property (nonatomic, assign) CGFloat containerRatio;
+@property (nonatomic, weak) UIView *numberSnapShot;
+@property (nonatomic, assign) CGFloat numberRatio;
 
 @end

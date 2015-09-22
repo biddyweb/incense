@@ -48,7 +48,9 @@
     
     self.homeSnapshot = [fromViewController.view snapshotViewAfterScreenUpdates:false];
     self.incenseSnapshot = [fromViewController.container snapshotViewAfterScreenUpdates:false];
-    
+
+    toViewController.numberRatio = self.numberRatio;
+    toViewController.numberSnapShot = self.numberSnapshot;
     toViewController.containerRatio = 1.0f * CGRectGetHeight(fromViewController.container.frame) / CGRectGetWidth(fromViewController.container.frame);
     toViewController.containerSnapShot = self.incenseSnapshot;
     toViewController.view.frame = [transitionContext finalFrameForViewController:toViewController];

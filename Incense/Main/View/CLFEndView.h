@@ -11,7 +11,7 @@
 @protocol CLFEndViewDelegate <NSObject>
 
 - (void)oneMoreIncense;
-- (void)switchToShareVC;
+- (void)switchToShareVCWithView:(UIView *)view;
 
 @end
 

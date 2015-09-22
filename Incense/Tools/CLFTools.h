@@ -19,4 +19,6 @@
 
 + (void)stopAnimationInView:(UIView *)view withPosition:(CGPoint)position anchor:(CGPoint)anchor;
 
++ (NSMutableAttributedString *)arrangeAttributedString:(NSMutableAttributedString *)attributedString;
+
 @end

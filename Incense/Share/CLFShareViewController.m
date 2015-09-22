@@ -50,6 +50,13 @@
     self.cardView.incenseSnapshot = containerSnapShot;
 }
 
+- (void)setNumberSnapShot:(UIView *)numberSnapShot {
+    _numberSnapShot = numberSnapShot;
+    numberSnapShot.frame = CGRectMake(8, 15, 20, 20 * self.numberRatio);
+//    numberSnapShot.backgroundColor = [UIColor greenColor];
+    [self.cardView addSubview:numberSnapShot];
+}
+
 - (CLFCardView *)cardView {
     if (!_cardView) {
         CLFCardView *cardView = [[CLFCardView alloc] init];
