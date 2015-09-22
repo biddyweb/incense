@@ -10,4 +10,7 @@
 
 @interface CLFShareViewController : UIViewController
 
+@property (nonatomic, weak) UIView *containerSnapShot;
+@property (nonatomic, assign) CGFloat containerRatio;
+
 @end

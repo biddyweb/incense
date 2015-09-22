@@ -12,5 +12,7 @@
 
 @property (nonatomic, weak) UIImageView *shotView;
 @property (nonatomic, weak) UIView      *poemView;
+@property (nonatomic, weak) UIView      *incenseSnapshot;
+@property (nonatomic, assign) CGFloat   containerRatio;
 
 @end

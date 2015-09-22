@@ -9,6 +9,7 @@
 #import "CLFCardView.h"
 #import "BMWaveMaker.h"
 #include "CLFFunctions.h"
+#import "CLFIncenseCommonHeader.h"
 
 @interface CLFCardView ()
 
@@ -26,6 +27,17 @@ static BOOL rippleMade = NO;
         self.backgroundColor = [UIColor colorWithRed:245 / 255.0 green:245 / 255.0 blue:245 / 255.0 alpha:1.0];
     }
     return self;
+}
+
+- (void)setIncenseSnapshot:(UIView *)incenseSnapshot {
+    _incenseSnapshot = incenseSnapshot;
+    incenseSnapshot.backgroundColor = [UIColor greenColor];
+    CGFloat incenseSnapshotW = 260;
+    CGFloat incenseSnapshotH = incenseSnapshotW * self.containerRatio;
+    CGFloat incenseSnapshotX = -0.5 * (incenseSnapshotW - (Incense_Screen_Width - 40 - 48) * 0.5);
+    CGFloat incenseSnapshotY = CGRectGetHeight(self.frame) - 65 - incenseSnapshotH;
+    incenseSnapshot.frame = CGRectMake(incenseSnapshotX, incenseSnapshotY, incenseSnapshotW, incenseSnapshotH);
+    [self.shotView addSubview:incenseSnapshot];
 }
 
 - (UIImageView *)shotView {
@@ -62,7 +74,8 @@ static BOOL rippleMade = NO;
     if (!_rippleView) {
         UIView *rippleView = [[UIView alloc] init];
         rippleView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - 110, CGRectGetWidth(self.shotView.frame), 100);
-        rippleView.backgroundColor = [UIColor clearColor];
+        rippleView.backgroundColor = [UIColor blueColor];
+//        rippleView.backgroundColor = [UIColor clearColor];
         [self.shotView addSubview:rippleView];
         _rippleView = rippleView;
     }
@@ -83,7 +96,7 @@ static BOOL rippleMade = NO;
 - (BMWaveMaker *)rippleMaker {
     if (!_rippleMaker) {
         _rippleMaker = [[BMWaveMaker alloc] init];
-        _rippleMaker.spanScale = 80.0f;
+        _rippleMaker.spanScale = 60.0f;
         _rippleMaker.originRadius = 0.9f;
         _rippleMaker.waveColor = [UIColor whiteColor];
         _rippleMaker.animationDuration = 30.0f;

@@ -15,7 +15,7 @@
 #import "BMWaveMaker.h"
 #import "Waver.h"
 #import "UIImage+animatedGIF.h"
-#import "CLFMathTools.h"
+#import "CLFTools.h"
 #import "CLFAudioPlayView.h"
 #import "CLFEndView.h"
 #import "CLFIncenseCommonHeader.h"
@@ -40,8 +40,6 @@
 
 @property (nonatomic, weak)                      UITapGestureRecognizer *tap;
 
-@property (nonatomic, weak)                      UIView                 *container;
-
 @property (nonatomic, strong)                    CLFModalTransitionManager *modalTransitionManager;
 
 @end
@@ -52,7 +50,6 @@ static CGFloat cloudLocation = -380.0f;
 static CGFloat smokeLocation = -520.0f;
 static CGFloat animationTime = 4.0f;
 static CGFloat smokeChangeRate = 0.0f;
-static BOOL    needShare = YES;
 static BOOL    needSpan = YES;
 
 static const CGFloat kWaverVoiceFactor = 10.0f;
@@ -182,7 +179,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     
     [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
     
-    [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber]];
+    [self.endView setupWithBurntOffNumber:[CLFTools numberToChinese:burntIncenseNumber]];
     
     self.burning = NO;
     
@@ -226,7 +223,14 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self.recorder stop];
 
     if ([resultString isEqualToString:@"failure"]) {
-        [self stopFloating];
+        [CLFTools stopAnimationInView:self.incenseView
+                     withPosition:CGPointMake(0, Incense_Screen_Height - Incense_Location)
+                           anchor:CGPointMake(0, 1)];
+        
+        [CLFTools stopAnimationInView:self.incenseShadowView
+                     withPosition:CGPointMake(Incense_Screen_Width * 0.5, Incense_Screen_Height - Incense_Location + 10)
+                           anchor:CGPointMake(0.5, 0.5)];
+        
         [self showFailure];
         [self.rippleMaker stopWave];
         needSpan = YES;
@@ -242,7 +246,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         
         [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
         
-        [self.endView setupWithBurntOffNumber:[CLFMathTools numberToChinese:burntIncenseNumber]];
+        [self.endView setupWithBurntOffNumber:[CLFTools numberToChinese:burntIncenseNumber]];
         self.endView.alpha = 1.0f;
     }
     
@@ -276,7 +280,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self.view bringSubviewToFront:self.smoke];
     self.smoke.layer.zPosition = 101;
     
-    needShare = YES;
     smokeLocation = -520.0f;
     cloudLocation = -380.0f;
     [UIView animateWithDuration:3.0f animations:^{
@@ -338,52 +341,20 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     
     self.incenseShadowView.frame = CGRectMake((Incense_Screen_Width - 6) / 2, Incense_Screen_Height - Incense_Location + 10, 6, 3);
     
-    [self floating];
-}
-
-#pragma mark - floatingAnimation 其实这个应该放到 IncenseView 里面
-
-/**
- *  Make incense floating above the ripple, and the shadow should react to the floating.
- */
-- (void)floating {
-    CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
-    anim.keyPath = @"position.y";
-    anim.repeatCount = 1500;
-//    anim.values = @[@(Incense_Screen_Height - Incense_Location), @(Incense_Screen_Height - Incense_Location - 5), @(Incense_Screen_Height - Incense_Location)];
-    anim.values = @[@(200 * Size_Ratio_To_iPhone6), @(200 * Size_Ratio_To_iPhone6 -5), @(200 * Size_Ratio_To_iPhone6)];
-    anim.duration = animationTime;
-    anim.removedOnCompletion = NO;
-    anim.fillMode = kCAFillModeForwards;
-    anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [CLFTools positionFloatingInView:self.incenseView
+                          withValue1:(200 * Size_Ratio_To_iPhone6)
+                              value2:(200 * Size_Ratio_To_iPhone6 - 5)
+                       layerPosition:CGPointMake(0, Incense_Screen_Height - Incense_Location)
+                         anchorPoint:CGPointMake(0, 1)
+                       animationTime:animationTime];
     
-    self.incenseView.layer.position = CGPointMake(0, Incense_Screen_Height - Incense_Location);
-    self.incenseView.layer.anchorPoint = CGPointMake(0, 1);
-    [self.incenseView.layer addAnimation:anim forKey:nil];
+    [CLFTools boundsFloatingInView:self.incenseShadowView
+                         withRect1:CGRectMake(0, 0, 6, 3)
+                             rect2:CGRectMake(0, 0, 3, 1.5)
+                     layerPosition:CGPointMake(Incense_Screen_Width * 0.5, Incense_Screen_Height - Incense_Location + 10)
+                       anchorPoint:CGPointMake(0.5, 0.5)
+                     animationTime:animationTime];
     
-    NSValue *bounds1 = [NSValue valueWithCGRect:CGRectMake(0, 0, 6, 3)];
-    NSValue *bounds2 = [NSValue valueWithCGRect:CGRectMake(0, 0, 3, 1.5)];
-    
-    CAKeyframeAnimation *shadowAnim = [CAKeyframeAnimation animation];
-    shadowAnim.keyPath = @"bounds";
-    shadowAnim.repeatCount = 1500;
-    shadowAnim.values = @[bounds1, bounds2, bounds1];
-    shadowAnim.duration = animationTime;
-    shadowAnim.removedOnCompletion = NO;
-    shadowAnim.fillMode = kCAFillModeForwards;
-    anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    
-    self.incenseShadowView.layer.position = CGPointMake(Incense_Screen_Width * 0.5, Incense_Screen_Height - Incense_Location + 10);
-    self.incenseShadowView.layer.anchorPoint = CGPointMake(0.5, 0.5);
-    [self.incenseShadowView.layer addAnimation:shadowAnim forKey:nil];
-}
-
-- (void)stopFloating {
-    [self.incenseView.layer removeAllAnimations];
-    [self.incenseShadowView.layer removeAllAnimations];
-    
-    self.incenseView.layer.position = CGPointMake(0, Incense_Screen_Height - Incense_Location);
-    self.incenseView.layer.anchorPoint = CGPointMake(0, 1);
 }
 
 #pragma mark - Smoke
@@ -569,7 +540,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self.recorder record];
 }
 
-#pragma - mark Share snapshot of endView;
+#pragma - Swith to ShareVC;
 
 - (void)switchToShareVC {
     CLFShareViewController *shareVC = [[CLFShareViewController alloc] init];

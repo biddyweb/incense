@@ -15,6 +15,7 @@
 @property (nonatomic, weak)                     CLFIncenseView  *incenseView;
 @property (nonatomic, assign, getter=isBurning) BOOL            burning;
 @property (nonatomic, strong)                   AVAudioRecorder *recorder;
+@property (nonatomic, weak)                     UIView          *container;
 
 - (void)incenseDidBurnOffFromBackgroundWithResult:(NSString *)resultString;
 - (void)renewSmokeStatusWithTimeHaveGone:(CGFloat)leaveBackInterval;

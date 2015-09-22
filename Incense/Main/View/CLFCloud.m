@@ -8,7 +8,7 @@
 
 #import "CLFIncenseCommonHeader.h"
 #import "CLFCloud.h"
-#import "CLFMathTools.h"
+#import "CLFTools.h"
 
 @interface CLFCloud ()
 
@@ -110,7 +110,7 @@ static CGFloat beginCenterY = -140.0f;
         CGFloat minutes = round(totalSeconds / 60.0);
         
 //        NSLog(@"minutes %f round minutes %f", minutes, round(minutes));
-        NSString *timeString = [NSString stringWithFormat:@"%@%@", [CLFMathTools numberToChinese:minutes], @"分"];
+        NSString *timeString = [NSString stringWithFormat:@"%@%@", [CLFTools numberToChinese:minutes], @"分"];
 //        self.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
         if ([timeString isEqualToString:@"貳拾分"]) {
             timeString = @"貳拾分鐘";

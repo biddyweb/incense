@@ -13,8 +13,8 @@
 
 @interface CLFShareViewController ()
 
-@property (nonatomic, weak) UIButton *shareButton;
 @property (nonatomic, weak) CLFCardView *cardView;
+@property (nonatomic, weak) UIButton *shareButton;
 
 @end
 
@@ -40,6 +40,16 @@
     return YES;
 }
 
+- (void)setContainerRatio:(CGFloat)containerRatio {
+    _containerRatio = containerRatio;
+    self.cardView.containerRatio = containerRatio;
+}
+
+- (void)setContainerSnapShot:(UIView *)containerSnapShot {
+    _containerSnapShot = containerSnapShot;
+    self.cardView.incenseSnapshot = containerSnapShot;
+}
+
 - (CLFCardView *)cardView {
     if (!_cardView) {
         CLFCardView *cardView = [[CLFCardView alloc] init];
@@ -57,7 +67,13 @@
     if (!_shareButton) {
         UIButton *shareButton = [[UIButton alloc] init];
         [shareButton addTarget:self action:@selector(showShareActivity) forControlEvents:UIControlEventTouchUpInside];
-        shareButton.backgroundColor = [UIColor blueColor];
+//        shareButton.backgroundColor = [UIColor blueColor];
+        [shareButton setImage:[UIImage imageNamed:@"ShareButton"] forState:UIControlStateNormal];
+        shareButton.layer.shadowColor = [[UIColor blackColor] CGColor];
+        shareButton.layer.shadowOffset = CGSizeMake(0.0f, 5.0f);
+        shareButton.layer.shadowOpacity = 0.1f;
+        shareButton.layer.shadowRadius = 6.0f;
+        shareButton.adjustsImageWhenHighlighted = NO;
         [self.view addSubview:shareButton];
         _shareButton = shareButton;
     }
@@ -97,8 +113,6 @@
     [activityView setCompletionWithItemsHandler:^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *error) {
     }];
 }
-
-// 这个也该抽出去
 
 - (UIImage *)takeSnapshotOfView:(UIView *)view {
     CGFloat reductionFactor = 0.3;

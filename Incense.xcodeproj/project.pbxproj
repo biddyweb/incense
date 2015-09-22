@@ -29,7 +29,7 @@
 		3F48CE031B78777F00F889BC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F48CE021B78777F00F889BC /* Images.xcassets */; };
 		3F48CE121B78777F00F889BC /* IncenseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F48CE111B78777F00F889BC /* IncenseTests.m */; };
 		3F4EA70C1BAFCC22002E4A8C /* STFangsong.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F4EA70B1BAFCC22002E4A8C /* STFangsong.ttf */; settings = {ASSET_TAGS = (); }; };
-		3F55A5B51B862BA0000FAE56 /* CLFMathTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F55A5B41B862BA0000FAE56 /* CLFMathTools.m */; };
+		3F55A5B51B862BA0000FAE56 /* CLFTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F55A5B41B862BA0000FAE56 /* CLFTools.m */; };
 		3F55A5B81B862DC3000FAE56 /* CLFNewFeatureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F55A5B71B862DC3000FAE56 /* CLFNewFeatureController.m */; };
 		3F67E2831B8EF78200BBBC04 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2821B8EF78200BBBC04 /* libc++.dylib */; };
 		3F67E29E1B8EF88200BBBC04 /* WeixinActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F67E28F1B8EF88200BBBC04 /* WeixinActivity.m */; };
@@ -118,8 +118,8 @@
 		3F48CE101B78777F00F889BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F48CE111B78777F00F889BC /* IncenseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IncenseTests.m; sourceTree = "<group>"; };
 		3F4EA70B1BAFCC22002E4A8C /* STFangsong.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = STFangsong.ttf; sourceTree = "<group>"; };
-		3F55A5B31B862BA0000FAE56 /* CLFMathTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFMathTools.h; sourceTree = "<group>"; };
-		3F55A5B41B862BA0000FAE56 /* CLFMathTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFMathTools.m; sourceTree = "<group>"; };
+		3F55A5B31B862BA0000FAE56 /* CLFTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFTools.h; sourceTree = "<group>"; };
+		3F55A5B41B862BA0000FAE56 /* CLFTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFTools.m; sourceTree = "<group>"; };
 		3F55A5B61B862DC3000FAE56 /* CLFNewFeatureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFNewFeatureController.h; sourceTree = "<group>"; };
 		3F55A5B71B862DC3000FAE56 /* CLFNewFeatureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFNewFeatureController.m; sourceTree = "<group>"; };
 		3F67E2821B8EF78200BBBC04 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -364,8 +364,8 @@
 		3F55A5B21B862B7C000FAE56 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				3F55A5B31B862BA0000FAE56 /* CLFMathTools.h */,
-				3F55A5B41B862BA0000FAE56 /* CLFMathTools.m */,
+				3F55A5B31B862BA0000FAE56 /* CLFTools.h */,
+				3F55A5B41B862BA0000FAE56 /* CLFTools.m */,
 				3F8FDA5A1BB010D1004C86B5 /* CLFFunctions.c */,
 				3F8FDA5B1BB010D1004C86B5 /* CLFFunctions.h */,
 			);
@@ -612,7 +612,7 @@
 				3F1956A41B789BE7003A5575 /* Waver.m in Sources */,
 				3F1956C11B78B95A003A5575 /* MASCompositeConstraint.m in Sources */,
 				3FE6F4981B88A05A00D06810 /* CLFAudioPlayView.m in Sources */,
-				3F55A5B51B862BA0000FAE56 /* CLFMathTools.m in Sources */,
+				3F55A5B51B862BA0000FAE56 /* CLFTools.m in Sources */,
 				3F8FDA641BB02CB2004C86B5 /* CLFShareViewController.m in Sources */,
 				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
