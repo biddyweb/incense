@@ -19,7 +19,6 @@
 #import "CLFAudioPlayView.h"
 #import "CLFEndView.h"
 #import "CLFIncenseCommonHeader.h"
-#include "CLFFunctions.h"
 #import "CLFShareViewController.h"
 #import "CLFModalTransitionManager.h"
 
@@ -487,7 +486,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     }
 
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
-    self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);
+    self.rippleView.layer.transform = [CLFTools CATransform3DPerspect:rotate center:CGPointMake(0, 0) disZ:200];
 }
 
 - (BMWaveMaker *)rippleMaker {

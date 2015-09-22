@@ -34,7 +34,6 @@
 }
 
 - (void)dismissToMain {
-    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -62,6 +61,7 @@
 - (CLFCardView *)cardView {
     if (!_cardView) {
         CLFCardView *cardView = [[CLFCardView alloc] init];
+        [cardView getPoem];
         cardView.layer.shadowColor = [[UIColor blackColor] CGColor];
         cardView.layer.shadowOffset = CGSizeMake(0.0f, 12.0f);
         cardView.layer.shadowOpacity = 0.1f;

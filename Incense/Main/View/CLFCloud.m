@@ -117,9 +117,8 @@ static CGFloat beginCenterY = -140.0f;
         } else if ([timeString isEqualToString:@"叄拾分"]) {
             timeString = @"兩刻鐘整";
         } else if ([timeString isEqualToString:@"壹拾伍分"]) {
-            timeString = @"一刻鐘整";
+            timeString = @"壹刻鐘整";
         }
-        
         
         self.timeLabel.text = timeString;
         
@@ -138,13 +137,14 @@ static CGFloat beginCenterY = -140.0f;
     if (!self.isDragEnable) {
         return;
     }
-//    NSLog(@"self.center.y %f", self.center.y);
-    // MARK: 180???
+
     self.timeLabel.alpha = 0.0f;
-    [self.delegate cloudRebound];
+
     if (self.wouldBurnt) {
         [self.delegate lightTheIncenseWithIncenseHeight:200.0f * Size_Ratio_To_iPhone6 - lengthNeedToBeCut];
         self.dragEnable = NO;
+    } else {
+        [self.delegate cloudRebound];
     }
 }
 

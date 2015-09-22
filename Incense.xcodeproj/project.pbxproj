@@ -43,10 +43,11 @@
 		3F710C421BAE67DB006B1044 /* CLFCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F710C411BAE67DB006B1044 /* CLFCardView.m */; settings = {ASSET_TAGS = (); }; };
 		3F7F66531B7D91E20045C689 /* Fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66521B7D91E20045C689 /* Fire.gif */; };
 		3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66571B7DFD390045C689 /* LaunchScreen.xib */; };
-		3F8FDA5C1BB010D1004C86B5 /* CLFFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 3F8FDA5A1BB010D1004C86B5 /* CLFFunctions.c */; settings = {ASSET_TAGS = (); }; };
 		3F8FDA641BB02CB2004C86B5 /* CLFShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8FDA631BB02CB2004C86B5 /* CLFShareViewController.m */; settings = {ASSET_TAGS = (); }; };
 		3F8FDA6B1BB032A7004C86B5 /* CLFModalTransitionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8FDA6A1BB032A7004C86B5 /* CLFModalTransitionManager.m */; settings = {ASSET_TAGS = (); }; };
 		3FA24AED1BB165F80088C602 /* CLFPoemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA24AEC1BB165F80088C602 /* CLFPoemView.m */; settings = {ASSET_TAGS = (); }; };
+		3FA24AF01BB17A310088C602 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA24AEF1BB17A310088C602 /* CloudKit.framework */; };
+		3FA24AF21BB185710088C602 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA24AF11BB185710088C602 /* QuartzCore.framework */; };
 		3FA747A51B8D950E001121AD /* 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA747A41B8D950E001121AD /* 3.mp3 */; };
 		3FA8695D1B858C3B00799E0A /* CLFPlayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */; };
 		3FA869631B85C98A00799E0A /* 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA869601B85C98A00799E0A /* 2.mp3 */; };
@@ -141,8 +142,6 @@
 		3F710C411BAE67DB006B1044 /* CLFCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFCardView.m; sourceTree = "<group>"; };
 		3F7F66521B7D91E20045C689 /* Fire.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Fire.gif; sourceTree = "<group>"; };
 		3F7F66571B7DFD390045C689 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
-		3F8FDA5A1BB010D1004C86B5 /* CLFFunctions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLFFunctions.c; sourceTree = "<group>"; };
-		3F8FDA5B1BB010D1004C86B5 /* CLFFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFFunctions.h; sourceTree = "<group>"; };
 		3F8FDA621BB02CB2004C86B5 /* CLFShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFShareViewController.h; sourceTree = "<group>"; };
 		3F8FDA631BB02CB2004C86B5 /* CLFShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFShareViewController.m; sourceTree = "<group>"; };
 		3F8FDA691BB032A7004C86B5 /* CLFModalTransitionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFModalTransitionManager.h; sourceTree = "<group>"; };
@@ -150,6 +149,8 @@
 		3FA24AEB1BB165F80088C602 /* CLFPoemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFPoemView.h; sourceTree = "<group>"; };
 		3FA24AEC1BB165F80088C602 /* CLFPoemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFPoemView.m; sourceTree = "<group>"; };
 		3FA24AEE1BB179CB0088C602 /* Incense.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Incense.entitlements; sourceTree = "<group>"; };
+		3FA24AEF1BB17A310088C602 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		3FA24AF11BB185710088C602 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3FA747A41B8D950E001121AD /* 3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 3.mp3; sourceTree = "<group>"; };
 		3FA8695B1B858C3B00799E0A /* CLFPlayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFPlayButton.h; sourceTree = "<group>"; };
 		3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFPlayButton.m; sourceTree = "<group>"; };
@@ -178,11 +179,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FA24AF21BB185710088C602 /* QuartzCore.framework in Frameworks */,
 				6A70893A1B8EF4C70047ED0B /* Crashlytics.framework in Frameworks */,
 				6A7089391B8EF4C70047ED0B /* Fabric.framework in Frameworks */,
 				3F67E2A71B8EFA9F00BBBC04 /* SystemConfiguration.framework in Frameworks */,
 				3F67E2A51B8EFA9100BBBC04 /* libsqlite3.0.dylib in Frameworks */,
 				3F67E2A31B8EFA8200BBBC04 /* libz.dylib in Frameworks */,
+				3FA24AF01BB17A310088C602 /* CloudKit.framework in Frameworks */,
 				3F67E2831B8EF78200BBBC04 /* libc++.dylib in Frameworks */,
 				3FB5EA7E1B8E16AA00CDF0B0 /* libWeChatSDK.a in Frameworks */,
 			);
@@ -267,6 +270,8 @@
 		3F48CDE91B78777F00F889BC = {
 			isa = PBXGroup;
 			children = (
+				3FA24AF11BB185710088C602 /* QuartzCore.framework */,
+				3FA24AEF1BB17A310088C602 /* CloudKit.framework */,
 				3F67E2A61B8EFA9F00BBBC04 /* SystemConfiguration.framework */,
 				3F67E2A41B8EFA9100BBBC04 /* libsqlite3.0.dylib */,
 				3F67E2A21B8EFA8200BBBC04 /* libz.dylib */,
@@ -371,8 +376,6 @@
 			children = (
 				3F55A5B31B862BA0000FAE56 /* CLFTools.h */,
 				3F55A5B41B862BA0000FAE56 /* CLFTools.m */,
-				3F8FDA5A1BB010D1004C86B5 /* CLFFunctions.c */,
-				3F8FDA5B1BB010D1004C86B5 /* CLFFunctions.h */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -516,7 +519,7 @@
 		3F48CDEA1B78777F00F889BC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = CaiGavin;
 				TargetAttributes = {
 					3F48CDF11B78777F00F889BC = {
@@ -608,7 +611,6 @@
 				3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */,
 				3FA24AED1BB165F80088C602 /* CLFPoemView.m in Sources */,
 				3F67E29E1B8EF88200BBBC04 /* WeixinActivity.m in Sources */,
-				3F8FDA5C1BB010D1004C86B5 /* CLFFunctions.c in Sources */,
 				3F1956C41B78B95A003A5575 /* MASLayoutConstraint.m in Sources */,
 				3FE6F4941B887B6000D06810 /* CLFPageControl.m in Sources */,
 				3F1956C71B78B95A003A5575 /* NSArray+MASAdditions.m in Sources */,
@@ -679,6 +681,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -758,6 +761,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Incense/Libs/WeChatSDK_1.5",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.catchlab.Incense;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -782,6 +786,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Incense/Libs/WeChatSDK_1.5",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.catchlab.Incense;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -801,6 +806,7 @@
 				);
 				INFOPLIST_FILE = IncenseTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "GavinFlying.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Incense.app/Incense";
 			};
@@ -816,6 +822,7 @@
 				);
 				INFOPLIST_FILE = IncenseTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "GavinFlying.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Incense.app/Incense";
 			};

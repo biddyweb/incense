@@ -21,4 +21,6 @@
 
 + (NSMutableAttributedString *)arrangeAttributedString:(NSMutableAttributedString *)attributedString;
 
++ (CATransform3D)CATransform3DPerspect:(CATransform3D)t center:(CGPoint)center disZ:(CGFloat)disZ;
+
 @end

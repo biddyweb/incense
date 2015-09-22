@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CloudKit/CloudKit.h>
 
 @class CLFPoemView;
 @interface CLFCardView : UIView
@@ -22,5 +23,6 @@
 @property (nonatomic, copy) NSString    *authorString;
 
 - (void)makeRipple;
+- (void)getPoem;
 
 @end

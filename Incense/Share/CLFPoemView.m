@@ -23,7 +23,7 @@
         firstLine.numberOfLines = 0;
         
         // MARK: 4s 情况下， 字太长了囧
-        firstLine.font = [UIFont fontWithName:@"STFangsong" size:22];
+        firstLine.font = [UIFont fontWithName:@"STFangsong" size:18];
         firstLine.textColor = [UIColor blackColor];
         [self addSubview:firstLine];
 //        firstLine.backgroundColor = [UIColor redColor];
@@ -36,7 +36,7 @@
     if (!_secondLine) {
         UILabel *secondLine = [[UILabel alloc] init];
         secondLine.numberOfLines = 0;
-        secondLine.font = [UIFont fontWithName:@"STFangsong" size:22];
+        secondLine.font = [UIFont fontWithName:@"STFangsong" size:18];
         secondLine.textColor = [UIColor blackColor];
         [self addSubview:secondLine];
 //        secondLine.backgroundColor = [UIColor greenColor];
@@ -49,7 +49,7 @@
     if (!_authorLabel) {
         UILabel *authorLabel = [[UILabel alloc] init];
         authorLabel.numberOfLines = 0;
-        authorLabel.font = [UIFont fontWithName:@"STFangsong" size:14];
+        authorLabel.font = [UIFont fontWithName:@"STFangsong" size:13];
         authorLabel.textColor = [UIColor blackColor];
         [self addSubview:authorLabel];
 //        authorLabel.backgroundColor = [UIColor blueColor];
@@ -59,9 +59,8 @@
 }
 
 - (void)layoutSubviews {
-    NSLog(@"poemView layoutSubviews");
-    self.firstLine.frame = CGRectMake(CGRectGetWidth(self.frame) - 42, 20, 22, self.firstLine.text.length * 22);
-    self.secondLine.frame = CGRectMake(CGRectGetWidth(self.frame) - 72, 20, 22, self.secondLine.text.length * 22);
+    self.firstLine.frame = CGRectMake(CGRectGetWidth(self.frame) - 42, 20, 22, 7 * 22);
+    self.secondLine.frame = CGRectMake(CGRectGetWidth(self.frame) - 72, 20, 22, 7 * 22);
     self.authorLabel.frame = CGRectMake(8, CGRectGetHeight(self.frame) - 65, 15, 60);
 }
 

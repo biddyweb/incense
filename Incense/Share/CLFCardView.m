@@ -8,7 +8,6 @@
 
 #import "CLFCardView.h"
 #import "BMWaveMaker.h"
-#include "CLFFunctions.h"
 #import "CLFIncenseCommonHeader.h"
 #import "CLFTools.h"
 #import "CLFPoemView.h"
@@ -18,6 +17,8 @@
 @property (nonatomic, weak) UIView *rippleView;
 @property (nonatomic, strong) BMWaveMaker *rippleMaker;
 @property (nonatomic, weak) UIImageView *shadowView;
+
+@property (nonatomic, strong) NSMutableArray *poemsArray;
 
 @end
 
@@ -56,10 +57,42 @@
                      layerPosition:CGPointMake(incenseSnapshotX + 0.5 * incenseSnapshotW, cardViewH - 60)
                        anchorPoint:CGPointMake(0.5, 0.5)
                      animationTime:4.0f];
+}
+
+- (void)getPoem {
+    CKContainer *container = [CKContainer defaultContainer];
+    CKDatabase *database = [container publicCloudDatabase];
+    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
     
-    self.poemView.firstLine.text = @"天街小雨潤如酥";
-    self.poemView.secondLine.text = @"草色遙看近卻無";
-    self.poemView.authorLabel.text = @"韩愈";
+    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Poems" predicate:predicate];
+    __weak typeof(self) weakSelf = self;
+    [database performQuery:query inZoneWithID:nil completionHandler:^(NSArray<CKRecord *> * _Nullable results, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"error %@", error);
+        } else {
+            for (CKRecord *result in results) {
+                [weakSelf.poemsArray addObject:result];
+            }
+            NSLog(@"results %@", results);
+            NSLog(@"array %@", weakSelf.poemsArray);
+            CKRecord *selectedRecord = results[0];
+            NSLog(@"selectedRecord %@", selectedRecord);
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                
+                self.poemView.firstLine.text = (NSString *)[selectedRecord valueForKey:@"FirstLine"];
+                self.poemView.secondLine.text = (NSString *)[selectedRecord valueForKey:@"SecondLine"];
+                self.poemView.authorLabel.text = (NSString *)[selectedRecord valueForKey:@"Author"];
+
+            }];
+        }
+    }];
+    
+//    self.poemView.firstLine.text = @"天街小雨潤如酥";
+//    self.poemView.secondLine.text = @"草色遙看近卻無";
+//    self.poemView.authorLabel.text = @"韩愈";
+
+    
 }
 
 - (void)setPoemString1:(NSString *)poemString1 {
@@ -130,7 +163,7 @@
     [self.rippleMaker spanWaveContinuallyWithTimeInterval:4];
     
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
-    self.rippleView.layer.transform = CATransform3DPerspect(rotate, CGPointMake(0, 0), 200);
+    self.rippleView.layer.transform = [CLFTools CATransform3DPerspect:rotate center:CGPointMake(0, 0) disZ:200];
 }
 
 - (BMWaveMaker *)rippleMaker {
