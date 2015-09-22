@@ -21,5 +21,6 @@
 
 - (void)setupWithFailure;
 - (void)setupWithBurntOffNumber:(NSMutableString *)numberString;
+- (void)restartButtonBeginRotate;
 
 @end

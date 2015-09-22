@@ -94,6 +94,14 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self fireAppearInSky];
 }
 
+// 修复 restartButton 停止转动的 bug
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (self.endView) {
+        [self.endView restartButtonBeginRotate];
+    }
+}
+
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
@@ -180,6 +188,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
     
     [self.endView setupWithBurntOffNumber:[CLFTools numberToChinese:burntIncenseNumber]];
+    [self.endView restartButtonBeginRotate];
     
     self.burning = NO;
     
@@ -248,6 +257,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
         
         [self.endView setupWithBurntOffNumber:[CLFTools numberToChinese:burntIncenseNumber]];
         self.endView.alpha = 1.0f;
+        [self.endView restartButtonBeginRotate];
     }
     
     [self.incenseView.waver.displaylink invalidate];
@@ -545,7 +555,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)switchToShareVCWithView:(UIView *)view {
     CLFShareViewController *shareVC = [[CLFShareViewController alloc] init];
     self.modalTransitionManager.pushed = NO;
-    NSLog(@"dddd %@", view);
     self.modalTransitionManager.numberSnapshot = view;
     self.modalTransitionManager.numberRatio = 1.0f * CGRectGetHeight(view.frame) / CGRectGetWidth(view.frame);
     shareVC.transitioningDelegate = self.modalTransitionManager;

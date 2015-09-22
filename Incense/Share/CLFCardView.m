@@ -11,6 +11,7 @@
 #include "CLFFunctions.h"
 #import "CLFIncenseCommonHeader.h"
 #import "CLFTools.h"
+#import "CLFPoemView.h"
 
 @interface CLFCardView ()
 
@@ -21,8 +22,6 @@
 @end
 
 @implementation CLFCardView
-
-static BOOL rippleMade = NO;
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -57,6 +56,22 @@ static BOOL rippleMade = NO;
                      layerPosition:CGPointMake(incenseSnapshotX + 0.5 * incenseSnapshotW, cardViewH - 60)
                        anchorPoint:CGPointMake(0.5, 0.5)
                      animationTime:4.0f];
+    
+    self.poemView.firstLine.text = @"天街小雨潤如酥";
+    self.poemView.secondLine.text = @"草色遙看近卻無";
+    self.poemView.authorLabel.text = @"韩愈";
+}
+
+- (void)setPoemString1:(NSString *)poemString1 {
+    _poemString1 = poemString1;
+}
+
+- (void)setPoemString2:(NSString *)poemString2 {
+    _poemString2 = poemString2;
+}
+
+- (void)setAuthorString:(NSString *)authorString {
+    _authorString = authorString;
 }
 
 
@@ -80,9 +95,9 @@ static BOOL rippleMade = NO;
     return _shotView;
 }
 
-- (UIView *)poemView {
+- (CLFPoemView *)poemView {
     if (!_poemView) {
-        UIView *poemView = [[UIView alloc] init];
+        CLFPoemView *poemView = [[CLFPoemView alloc] init];
         poemView.backgroundColor = [UIColor whiteColor];
         [self addSubview:poemView];
         _poemView = poemView;
@@ -93,11 +108,6 @@ static BOOL rippleMade = NO;
 - (void)layoutSubviews {
     self.shotView.frame = CGRectMake(8, 20, (CGRectGetWidth(self.frame) - 36) * 0.5, CGRectGetHeight(self.frame) - 40);
     self.poemView.frame = CGRectMake(CGRectGetMaxX(self.shotView.frame) + 8, 20, CGRectGetWidth(self.shotView.frame), CGRectGetHeight(self.shotView.frame));
-    
-    if (!rippleMade) {
-        [self makeRipple];
-        rippleMade = YES;
-    }
 }
 
 - (UIView *)rippleView {
@@ -134,8 +144,5 @@ static BOOL rippleMade = NO;
     }
     return _rippleMaker;
 }
-
-
-
 
 @end

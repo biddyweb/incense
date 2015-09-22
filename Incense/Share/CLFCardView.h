@@ -8,11 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class CLFPoemView;
 @interface CLFCardView : UIView
 
 @property (nonatomic, weak) UIImageView *shotView;
-@property (nonatomic, weak) UIView      *poemView;
+@property (nonatomic, weak) CLFPoemView *poemView;
 @property (nonatomic, weak) UIView      *incenseSnapshot;
 @property (nonatomic, assign) CGFloat   containerRatio;
+
+// should be an array
+@property (nonatomic, copy) NSString    *poemString1;
+@property (nonatomic, copy) NSString    *poemString2;
+@property (nonatomic, copy) NSString    *authorString;
+
+- (void)makeRipple;
 
 @end

@@ -46,6 +46,7 @@
 		3F8FDA5C1BB010D1004C86B5 /* CLFFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 3F8FDA5A1BB010D1004C86B5 /* CLFFunctions.c */; settings = {ASSET_TAGS = (); }; };
 		3F8FDA641BB02CB2004C86B5 /* CLFShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8FDA631BB02CB2004C86B5 /* CLFShareViewController.m */; settings = {ASSET_TAGS = (); }; };
 		3F8FDA6B1BB032A7004C86B5 /* CLFModalTransitionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8FDA6A1BB032A7004C86B5 /* CLFModalTransitionManager.m */; settings = {ASSET_TAGS = (); }; };
+		3FA24AED1BB165F80088C602 /* CLFPoemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA24AEC1BB165F80088C602 /* CLFPoemView.m */; settings = {ASSET_TAGS = (); }; };
 		3FA747A51B8D950E001121AD /* 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA747A41B8D950E001121AD /* 3.mp3 */; };
 		3FA8695D1B858C3B00799E0A /* CLFPlayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */; };
 		3FA869631B85C98A00799E0A /* 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA869601B85C98A00799E0A /* 2.mp3 */; };
@@ -146,6 +147,9 @@
 		3F8FDA631BB02CB2004C86B5 /* CLFShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFShareViewController.m; sourceTree = "<group>"; };
 		3F8FDA691BB032A7004C86B5 /* CLFModalTransitionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFModalTransitionManager.h; sourceTree = "<group>"; };
 		3F8FDA6A1BB032A7004C86B5 /* CLFModalTransitionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFModalTransitionManager.m; sourceTree = "<group>"; };
+		3FA24AEB1BB165F80088C602 /* CLFPoemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFPoemView.h; sourceTree = "<group>"; };
+		3FA24AEC1BB165F80088C602 /* CLFPoemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFPoemView.m; sourceTree = "<group>"; };
+		3FA24AEE1BB179CB0088C602 /* Incense.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Incense.entitlements; sourceTree = "<group>"; };
 		3FA747A41B8D950E001121AD /* 3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 3.mp3; sourceTree = "<group>"; };
 		3FA8695B1B858C3B00799E0A /* CLFPlayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFPlayButton.h; sourceTree = "<group>"; };
 		3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFPlayButton.m; sourceTree = "<group>"; };
@@ -285,6 +289,7 @@
 		3F48CDF41B78777F00F889BC /* Incense */ = {
 			isa = PBXGroup;
 			children = (
+				3FA24AEE1BB179CB0088C602 /* Incense.entitlements */,
 				6A7089371B8EF4C70047ED0B /* Fabric.framework */,
 				6A7089381B8EF4C70047ED0B /* Crashlytics.framework */,
 				3F55A5B21B862B7C000FAE56 /* Tools */,
@@ -431,6 +436,8 @@
 				3F8FDA631BB02CB2004C86B5 /* CLFShareViewController.m */,
 				3F710C401BAE67DB006B1044 /* CLFCardView.h */,
 				3F710C411BAE67DB006B1044 /* CLFCardView.m */,
+				3FA24AEB1BB165F80088C602 /* CLFPoemView.h */,
+				3FA24AEC1BB165F80088C602 /* CLFPoemView.m */,
 			);
 			path = Share;
 			sourceTree = "<group>";
@@ -514,6 +521,12 @@
 				TargetAttributes = {
 					3F48CDF11B78777F00F889BC = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = Y2VDUB37Q5;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					3F48CE0A1B78777F00F889BC = {
 						CreatedOnToolsVersion = 6.4;
@@ -593,6 +606,7 @@
 				3F1956C21B78B95A003A5575 /* MASConstraint.m in Sources */,
 				3FA8695D1B858C3B00799E0A /* CLFPlayButton.m in Sources */,
 				3F1956CA1B78B95A003A5575 /* ViewController+MASAdditions.m in Sources */,
+				3FA24AED1BB165F80088C602 /* CLFPoemView.m in Sources */,
 				3F67E29E1B8EF88200BBBC04 /* WeixinActivity.m in Sources */,
 				3F8FDA5C1BB010D1004C86B5 /* CLFFunctions.c in Sources */,
 				3F1956C41B78B95A003A5575 /* MASLayoutConstraint.m in Sources */,
@@ -729,6 +743,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Incense/Incense.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -752,6 +767,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Incense/Incense.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;

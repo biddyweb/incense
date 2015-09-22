@@ -23,17 +23,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:233 / 255.0 green:233 / 255.0 blue:233 / 255.0 alpha:1.0];
-//    [self loadSubViews];
-    self.shareButton.frame = CGRectMake((Incense_Screen_Width - 50) * 0.5, Incense_Screen_Height - 115, 50, 50);
-    CGFloat cardViewX = 20.0f;
-    CGFloat cardViewW = Incense_Screen_Width - 2.0f * cardViewX;
-    CGFloat cardViewH = (cardViewW / 4.0f) * 3.0f;
-    self.cardView.frame = CGRectMake(cardViewX, Incense_Screen_Height + 10, cardViewW, cardViewH);
+    self.shareButton.adjustsImageWhenHighlighted = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self showCardView];
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissToMain)];
+    [self.view addGestureRecognizer:tapRecognizer];
+}
+
+- (void)dismissToMain {
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -52,7 +54,7 @@
 
 - (void)setNumberSnapShot:(UIView *)numberSnapShot {
     _numberSnapShot = numberSnapShot;
-    numberSnapShot.frame = CGRectMake(8, 15, 20, 20 * self.numberRatio);
+    numberSnapShot.frame = CGRectMake(8, 15, 40 * Size_Ratio_To_iPhone6, 40 * self.numberRatio * Size_Ratio_To_iPhone6);
 //    numberSnapShot.backgroundColor = [UIColor greenColor];
     [self.cardView addSubview:numberSnapShot];
 }
@@ -64,6 +66,11 @@
         cardView.layer.shadowOffset = CGSizeMake(0.0f, 12.0f);
         cardView.layer.shadowOpacity = 0.1f;
         cardView.layer.shadowRadius = 6.0f;
+        CGFloat cardViewX = 20.0f;
+        CGFloat cardViewW = Incense_Screen_Width - 2.0f * cardViewX;
+        CGFloat cardViewH = (cardViewW / 4.0f) * 3.0f;
+        cardView.frame = CGRectMake(cardViewX, Incense_Screen_Height + 10, cardViewW, cardViewH);
+        [cardView.layer setShadowPath:[[UIBezierPath bezierPathWithRect:cardView.bounds] CGPath]];
         [self.view addSubview:cardView];
         _cardView = cardView;
     }
@@ -76,11 +83,13 @@
         [shareButton addTarget:self action:@selector(showShareActivity) forControlEvents:UIControlEventTouchUpInside];
 //        shareButton.backgroundColor = [UIColor blueColor];
         [shareButton setImage:[UIImage imageNamed:@"ShareButton"] forState:UIControlStateNormal];
+        shareButton.frame = CGRectMake((Incense_Screen_Width - 50) * 0.5, Incense_Screen_Height - 115, 50, 50);
         shareButton.layer.shadowColor = [[UIColor blackColor] CGColor];
         shareButton.layer.shadowOffset = CGSizeMake(0.0f, 5.0f);
         shareButton.layer.shadowOpacity = 0.1f;
         shareButton.layer.shadowRadius = 6.0f;
-        shareButton.adjustsImageWhenHighlighted = NO;
+        [shareButton.layer setShadowPath:[[UIBezierPath bezierPathWithOvalInRect:shareButton.bounds] CGPath]];
+        
         [self.view addSubview:shareButton];
         _shareButton = shareButton;
     }
@@ -101,7 +110,9 @@
                      animations:^{
                          self.cardView.frame = CGRectMake(cardViewX, cardViewY, cardViewW, cardViewH);
     }
-                     completion:nil];
+                     completion:^(BOOL finished) {
+                         [self.cardView makeRipple];
+                     }];
 }
 
 - (void)showShareActivity {

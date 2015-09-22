@@ -72,17 +72,19 @@
         restartButton.adjustsImageWhenHighlighted = NO;
         
         _restartButton = restartButton;
-        
-        CABasicAnimation* rotationAnimation;
-        rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-        rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 1.5];
-        rotationAnimation.duration = 3.0;
-        rotationAnimation.cumulative = YES;
-        rotationAnimation.repeatCount = 10000;
-        [_restartButton.layer addAnimation:rotationAnimation forKey:@"rotationAnimation2"];
-        
     }
     return self;
+}
+
+- (void)restartButtonBeginRotate {
+    [_restartButton.layer removeAllAnimations];
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 1.5];
+    rotationAnimation.duration = 3.0;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = 10000;
+    [_restartButton.layer addAnimation:rotationAnimation forKey:@"rotationAnimation2"];
 }
 
 - (UIImageView *)blurView {
