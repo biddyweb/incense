@@ -79,23 +79,16 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSInteger numberOfPoems = [defaults integerForKey:@"numberOfPoems"];
     
-    NSLog(@"numberOfPoems %d arrCount %d", numberOfPoems, arr.count);
-    
     Poem *poem = nil;
     if (!numberOfPoems) {
         numberOfPoems = arr.count;
     }
     
-    NSLog(@"%@", arr);
-    
     if (numberOfPoems == arr.count) {
         int value = arc4random() % numberOfPoems;
-        NSLog(@"value 1 %d", value);
         poem = arr[value];
-
     } else if (numberOfPoems < arr.count) {
-        int value = (arc4random() % arr.count - numberOfPoems) + numberOfPoems;
-        NSLog(@"value 2 %d", value);
+        int value = arc4random() % (arr.count - numberOfPoems) + numberOfPoems;
         poem = arr[value];
         numberOfPoems = arr.count;
     }

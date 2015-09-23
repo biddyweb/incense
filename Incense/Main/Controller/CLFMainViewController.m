@@ -122,13 +122,10 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [request setEntity:entity];
     NSError *error;
     NSArray *arr = [managedContext executeFetchRequest:request error:&error];
-
-    NSLog(@"main arr.count %d", arr.count);
     
     Poem *lastPoem = [arr lastObject];
     NSNumber *finalPoemID = lastPoem.poemid;
 
-    NSLog(@"main final PoemID %@", lastPoem.poemid);
     CKContainer *container = [CKContainer defaultContainer];
     CKDatabase *database = [container publicCloudDatabase];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"poemID > %@", finalPoemID];
@@ -139,9 +136,10 @@ static const CGFloat kFireVoiceFactor = 40.0f;
             NSLog(@"error %@", error);
         } else {
             if (results.count) {
-                self.poem = [NSEntityDescription insertNewObjectForEntityForName:@"Poem" inManagedObjectContext:managedContext];
+
                 
                 for (CKRecord *result in results) {
+                    self.poem = [NSEntityDescription insertNewObjectForEntityForName:@"Poem" inManagedObjectContext:managedContext];
                     self.poem.firstline = (NSString *)[result valueForKey:@"FirstLine"];
                     self.poem.secondline = (NSString *)[result valueForKey:@"SecondLine"];
                     self.poem.author = (NSString *)[result valueForKey:@"Author"];
