@@ -231,10 +231,10 @@ static BOOL burntOffFromBackground = NO;
 
 - (void)renewStatusWithTheTimeHaveGone:(CGFloat)timeInterval {
     modifyDust = YES;
-    CGFloat tempIncenseHeight = self.incenseHeight - timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
+    CGFloat tempIncenseHeight = self.incenseHeight - timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burnt_Off_Time);
     if (tempIncenseHeight > incenseBurnOffLength) {
         self.incenseHeight = tempIncenseHeight;
-        waverHeight -= timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burn_Off_Time);
+        waverHeight -= timeInterval * (135.0f * Size_Ratio_To_iPhone6 / Incense_Burnt_Off_Time);
         colorLocation -= timeInterval * (2.2 / 100) * (60 / self.displaylink.frameInterval);
         x += timeInterval * 0.0072f * (60.0f / self.displaylink.frameInterval) * (8.0f / self.displaylink.frameInterval);
         
@@ -283,7 +283,7 @@ static CGFloat colorLocation = 0.8f;
         self.lightView.alpha = 0.0f;
     }
     
-    CGFloat declineDistance = Incense_Burn_Off_Time * 60 / self.displaylink.frameInterval;
+    CGFloat declineDistance = Incense_Burnt_Off_Time * 60 / self.displaylink.frameInterval;
 
     
 // What's the meaning of 135.0f ? --> 135.0 is the flammable incense length
@@ -327,7 +327,7 @@ CGFloat eulerSpiralLength = 0.0f;
         [self.dustPath addLineToPoint:CGPointMake(m, headDustHeight - n)];
     }
     
-    x += (0.0072f / (Incense_Burn_Off_Time / 60.0f)) * (self.displaylink.frameInterval / 8.0f);
+    x += (0.0072f / (Incense_Burnt_Off_Time / 60.0f)) * (self.displaylink.frameInterval / 8.0f);
     self.dustLine.path = self.dustPath.CGPath;
 }
 

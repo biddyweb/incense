@@ -9,6 +9,7 @@
 #import "CLFIncenseCommonHeader.h"
 #import "CLFCloud.h"
 #import "CLFTools.h"
+#import "AppDelegate.h"
 
 @interface CLFCloud ()
 
@@ -26,7 +27,6 @@ static CGFloat beginCenterY = -140.0f;
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        
         // MARK: dragEnable? 
         self.dragEnable = YES;
         self.wouldBurnt = NO;
@@ -96,7 +96,7 @@ static CGFloat beginCenterY = -140.0f;
     CGFloat burnLine = incenseToTopDistance - fireLocationModifyFactor;
     
     // 当一炷香总时间为30分钟时,其可燃烧长度为 135, 当它的燃烧总时间为15分钟时,可燃烧长度为67.5
-    int totalSeconds = 1800;
+    int totalSeconds = Incense_Burnt_Off_Time;
     if (distance >= burnLine) {
         if (distance >= burnLine + 67.5 * Size_Ratio_To_iPhone6) {
             newCenterY = beginCenterY + burnLine + 67.5 * Size_Ratio_To_iPhone6;
@@ -104,14 +104,13 @@ static CGFloat beginCenterY = -140.0f;
         }
         
         self.timeLabel.alpha = 1.0;
-        totalSeconds -= (distance - burnLine) * (900 / (67.5 * Size_Ratio_To_iPhone6));
-        
-//        int seconds = totalSeconds % 60;
+        totalSeconds -= (distance - burnLine) * (0.5 * Incense_Burnt_Off_Time / (67.5 * Size_Ratio_To_iPhone6));
+
+        AppDelegate* delegate = [UIApplication sharedApplication].delegate;
+        delegate.incenseBurntOffTime = totalSeconds;
+
         CGFloat minutes = round(totalSeconds / 60.0);
-        
-//        NSLog(@"minutes %f round minutes %f", minutes, round(minutes));
         NSString *timeString = [NSString stringWithFormat:@"%@%@", [CLFTools numberToChinese:minutes], @"分"];
-//        self.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
         if ([timeString isEqualToString:@"貳拾分"]) {
             timeString = @"貳拾分鐘";
         } else if ([timeString isEqualToString:@"叄拾分"]) {
@@ -145,6 +144,7 @@ static CGFloat beginCenterY = -140.0f;
         self.dragEnable = NO;
     } else {
         [self.delegate cloudRebound];
+
     }
 }
 

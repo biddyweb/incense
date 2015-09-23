@@ -40,8 +40,8 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    
+
+    self.incenseBurntOffTime = Incense_Burnt_Off_Time;
     [WXApi registerApp:@"wxf2f0e430f493af01"];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -73,6 +73,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
                                     CFNotificationSuspensionBehaviorDeliverImmediately);
 
     [self appLaunchTimes];
+
 
     return YES;
 }
@@ -122,7 +123,7 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 }
 
 - (void)addFinishedNotificationWithTimeHaveGone:(CGFloat)timeHaveGone; {
-    CGFloat notificationTimeInterval = Incense_Burn_Off_Time - timeHaveGone;
+    CGFloat notificationTimeInterval = self.incenseBurntOffTime- timeHaveGone;
 
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     if (notification) {
@@ -191,11 +192,11 @@ static CGFloat totalLeaveBackInterval = 0;
 
             if (leaveBySwitch && leaveBackInterval > 10) {
                 [mainVC incenseDidBurnOffFromBackgroundWithResult:@"failure"];
-            } else if (leaveBackInterval > Incense_Burn_Off_Time - timeHaveGone) {  // If the incense have burnt off when user come back.
-                totalLeaveBackInterval += Incense_Burn_Off_Time - timeHaveGone;
+            } else if (leaveBackInterval > Incense_Burnt_Off_Time - timeHaveGone) {  // If the incense have burnt off when user come back.
+                totalLeaveBackInterval += Incense_Burnt_Off_Time - timeHaveGone;
 
                 [incense renewStatusWithTheTimeHaveGone:leaveBackInterval];
-                [mainVC renewSmokeStatusWithTimeHaveGone:Incense_Burn_Off_Time - timeHaveGone];
+                [mainVC renewSmokeStatusWithTimeHaveGone:Incense_Burnt_Off_Time - timeHaveGone];
             } else {
                 totalLeaveBackInterval += leaveBackInterval;
 

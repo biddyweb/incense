@@ -6,9 +6,6 @@
 //  Copyright (c) 2015 CaiGavin. All rights reserved.
 //
 
-
-#warning 分享的时候: This app is not allowed to query for scheme weixin
-
 #import "CLFMainViewController.h"
 #import "CLFCloud.h"
 #import "CLFIncenseView.h"
@@ -96,7 +93,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     
     [self makeAudioView];
     
-    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burn_Off_Time * (60 / 20.0f)));
+    smokeChangeRate = (cloudLocation - smokeLocation) / (1.0f * (Incense_Burnt_Off_Time * (60 / 20.0f)));
     self.smoke.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + 50);
     [self fireAppearInSky];
 }
