@@ -12,9 +12,9 @@
 @class CLFPoemView;
 @interface CLFCardView : UIView
 
-@property (nonatomic, weak) UIImageView *shotView;
+@property (nonatomic, weak) UIView *shotView;
 @property (nonatomic, weak) CLFPoemView *poemView;
-@property (nonatomic, weak) UIView      *incenseSnapshot;
+@property (nonatomic, weak) UIImageView      *incenseSnapshot;
 @property (nonatomic, assign) CGFloat   containerRatio;
 
 - (void)makeRipple;

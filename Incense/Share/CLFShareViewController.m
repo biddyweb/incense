@@ -10,11 +10,13 @@
 #import "CLFCardView.h"
 #import "CLFIncenseCommonHeader.h"
 #import "WeixinActivity.h"
+#import "CLFTools.h"
 
 @interface CLFShareViewController ()
 
 @property (nonatomic, weak) CLFCardView *cardView;
 @property (nonatomic, weak) UIButton *shareButton;
+@property (nonatomic, weak) UIView   *container;
 
 @end
 
@@ -22,7 +24,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithRed:233 / 255.0 green:233 / 255.0 blue:233 / 255.0 alpha:1.0];
+//    self.view.backgroundColor = [UIColor colorWithRed:233 / 255.0 green:233 / 255.0 blue:233 / 255.0 alpha:1.0];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.shareButton.adjustsImageWhenHighlighted = NO;
 }
 
@@ -46,16 +49,26 @@
     self.cardView.containerRatio = containerRatio;
 }
 
-- (void)setContainerSnapShot:(UIView *)containerSnapShot {
+- (void)setContainerSnapShot:(UIImageView *)containerSnapShot {
     _containerSnapShot = containerSnapShot;
     self.cardView.incenseSnapshot = containerSnapShot;
 }
 
-- (void)setNumberSnapShot:(UIView *)numberSnapShot {
+- (void)setNumberSnapShot:(UIImageView *)numberSnapShot {
     _numberSnapShot = numberSnapShot;
     numberSnapShot.frame = CGRectMake(8, 15, 40 * Size_Ratio_To_iPhone6, 40 * self.numberRatio * Size_Ratio_To_iPhone6);
 //    numberSnapShot.backgroundColor = [UIColor greenColor];
     [self.cardView addSubview:numberSnapShot];
+}
+
+- (UIView *)container {
+    if (!_container) {
+        UIView *container = [[UIView alloc] init];
+        container.backgroundColor = [UIColor whiteColor];
+        [self.view addSubview:container];
+        _container = container;
+    }
+    return _container;
 }
 
 - (CLFCardView *)cardView {
@@ -69,9 +82,11 @@
         CGFloat cardViewX = 20.0f;
         CGFloat cardViewW = Incense_Screen_Width - 2.0f * cardViewX;
         CGFloat cardViewH = (cardViewW / 4.0f) * 3.0f;
+        cardView.layer.borderWidth = 1.5f;
+        cardView.layer.borderColor = [[UIColor whiteColor] CGColor];
         cardView.frame = CGRectMake(cardViewX, Incense_Screen_Height + 10, cardViewW, cardViewH);
         [cardView.layer setShadowPath:[[UIBezierPath bezierPathWithRect:cardView.bounds] CGPath]];
-        [self.view addSubview:cardView];
+        [self.container addSubview:cardView];
         _cardView = cardView;
     }
     return _cardView;
@@ -102,13 +117,17 @@
     CGFloat cardViewW = Incense_Screen_Width - 2.0f * cardViewX;
     CGFloat cardViewH = (cardViewW / 4.0f) * 3.0f;
     
+    CGFloat padding =  (Incense_Screen_Width - cardViewH) * 0.33;
+    
+    self.container.frame = CGRectMake(0, cardViewY - padding, Incense_Screen_Width, Incense_Screen_Width);
+    
     [UIView animateWithDuration:1.0f
                           delay:0.0f
          usingSpringWithDamping:0.8f
           initialSpringVelocity:0.0f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.cardView.frame = CGRectMake(cardViewX, cardViewY, cardViewW, cardViewH);
+                         self.cardView.frame = CGRectMake(cardViewX, padding, cardViewW, cardViewH);
     }
                      completion:^(BOOL finished) {
                          [self.cardView makeRipple];
@@ -116,11 +135,7 @@
 }
 
 - (void)showShareActivity {
-    UIView *cardSnapshot = [self.cardView snapshotViewAfterScreenUpdates:false];
-    cardSnapshot.frame = self.cardView.bounds;
-    
-//    UIImage *screenShot = [self takeSnapshotOfView:cardSnapshot];
-    UIImage *screenShot = [self takeSnapshotOfView:self.cardView];
+    UIImage *screenShot = [CLFTools takeSnapshotOfView:self.container];
     NSArray *actItems = @[screenShot];
     NSArray *activity = @[[[WeixinSessionActivity alloc] init], [[WeixinTimelineActivity alloc] init]];
     
@@ -134,16 +149,6 @@
     
     [activityView setCompletionWithItemsHandler:^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *error) {
     }];
-}
-
-- (UIImage *)takeSnapshotOfView:(UIView *)view {
-    CGFloat reductionFactor = 0.3;
-    UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor));
-    [view drawViewHierarchyInRect:CGRectMake(0, 0, view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor) afterScreenUpdates:YES];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
 }
 
 @end

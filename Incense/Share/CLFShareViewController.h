@@ -10,9 +10,9 @@
 
 @interface CLFShareViewController : UIViewController
 
-@property (nonatomic, weak) UIView *containerSnapShot;
+@property (nonatomic, weak) UIImageView *containerSnapShot;
 @property (nonatomic, assign) CGFloat containerRatio;
-@property (nonatomic, weak) UIView *numberSnapShot;
+@property (nonatomic, weak) UIImageView *numberSnapShot;
 @property (nonatomic, assign) CGFloat numberRatio;
 
 @end

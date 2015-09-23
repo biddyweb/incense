@@ -132,4 +132,14 @@
     return CATransform3DConcat(t, [self CATransform3DMakePerspective:center disZ:disZ]);
 }
 
++ (UIImage *)takeSnapshotOfView:(UIView *)view {
+    CGFloat reductionFactor = 0.3;
+    UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor));
+    [view drawViewHierarchyInRect:CGRectMake(0, 0, view.frame.size.width/reductionFactor, view.frame.size.height/reductionFactor) afterScreenUpdates:NO];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
 @end

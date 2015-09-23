@@ -81,7 +81,7 @@
     if (!_quoteLabel) {
         UILabel *quoteLabel = [[UILabel alloc] init];
         quoteLabel.font = [UIFont fontWithName:@"STFangsong" size:40];
-        quoteLabel.textColor = [UIColor grayColor];
+        quoteLabel.textColor = [UIColor lightGrayColor];
         quoteLabel.text = @"“";
         [self addSubview:quoteLabel];
         _quoteLabel = quoteLabel;
@@ -96,7 +96,7 @@
     
     self.stopLabel.frame = CGRectMake(CGRectGetMaxX(self.secondLine.frame) - 5, CGRectGetMaxY(self.secondLine.frame) - 19, 60, 30);
     
-    self.quoteLabel.frame = CGRectMake(0, 10, 40, 40);
+    self.quoteLabel.frame = CGRectMake(0, 21, 40, 40);
 }
 
 

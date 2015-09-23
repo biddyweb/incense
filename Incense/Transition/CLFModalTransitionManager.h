@@ -12,7 +12,7 @@
 @interface CLFModalTransitionManager : NSObject <UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, assign, getter=isPushed) BOOL pushed;
-@property (nonatomic, strong) UIView *numberSnapshot;
+@property (nonatomic, strong) UIImageView *numberSnapshot;
 @property (nonatomic, assign) CGFloat numberRatio;
 
 @end

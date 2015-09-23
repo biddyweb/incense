@@ -153,7 +153,7 @@
     if ([self.delegate respondsToSelector:@selector(oneMoreIncense)]) {
         [self.delegate oneMoreIncense];
     }
-    
+
     [self.restartButton.layer removeAllAnimations];
     
     CABasicAnimation* rotationAnimation;
@@ -166,7 +166,10 @@
 }
 
 - (void)showShareCard {
-    [self.delegate switchToShareVCWithView:[self.numberLabel snapshotViewAfterScreenUpdates:NO]];
+    UIImageView *numberSnapshot = [[UIImageView alloc] init];
+    numberSnapshot.image = [CLFTools takeSnapshotOfView:self.numberLabel];
+    CGFloat ratio = 1.0f * CGRectGetHeight(self.numberLabel.frame) / CGRectGetWidth(self.numberLabel.frame);
+    [self.delegate switchToShareVCWithView:numberSnapshot viewRatio:ratio];
 }
 
 @end

@@ -31,7 +31,7 @@
     return self;
 }
 
-- (void)setIncenseSnapshot:(UIView *)incenseSnapshot {
+- (void)setIncenseSnapshot:(UIImageView *)incenseSnapshot {
     _incenseSnapshot = incenseSnapshot;
     
     CGFloat cardViewH = CGRectGetHeight(self.frame);
@@ -69,7 +69,7 @@
     [request setEntity:entity];
     NSError *error;
     NSArray *arr = [managedContext executeFetchRequest:request error:&error];
-    Poem *poem = [arr lastObject];
+    Poem *poem = arr[8];
     
     self.poemView.firstLine.text = poem.firstline;
     self.poemView.secondLine.text = poem.secondline;
@@ -86,9 +86,9 @@
     return _shadowView;
 }
 
-- (UIImageView *)shotView {
+- (UIView *)shotView {
     if (!_shotView) {
-        UIImageView *shotView = [[UIImageView alloc] init];
+        UIView *shotView = [[UIView alloc] init];
         [self addSubview:shotView];
         _shotView = shotView;
     }

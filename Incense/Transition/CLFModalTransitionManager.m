@@ -9,11 +9,11 @@
 #import "CLFModalTransitionManager.h"
 #import "CLFMainViewController.h"
 #import "CLFShareViewController.h"
+#import "CLFTools.h"
 
 @interface CLFModalTransitionManager ()
 
 @property (nonatomic, weak) UIView *homeSnapshot;
-@property (nonatomic, weak) UIView *incenseSnapshot;
 
 @end
 
@@ -47,12 +47,17 @@
     UIView *containerView = [transitionContext containerView];
     
     self.homeSnapshot = [fromViewController.view snapshotViewAfterScreenUpdates:false];
-    self.incenseSnapshot = [fromViewController.container snapshotViewAfterScreenUpdates:false];
-
+//    self.incenseSnapshot = [fromViewController.container snapshotViewAfterScreenUpdates:false];
+    UIImageView *incenseSnapshot = [[UIImageView alloc] init];
+    incenseSnapshot.image = [CLFTools takeSnapshotOfView:fromViewController.container];
+    
     toViewController.numberRatio = self.numberRatio;
+    
     toViewController.numberSnapShot = self.numberSnapshot;
+    
+    
     toViewController.containerRatio = 1.0f * CGRectGetHeight(fromViewController.container.frame) / CGRectGetWidth(fromViewController.container.frame);
-    toViewController.containerSnapShot = self.incenseSnapshot;
+    toViewController.containerSnapShot = incenseSnapshot;
     toViewController.view.frame = [transitionContext finalFrameForViewController:toViewController];
     toViewController.view.alpha = 0.0;
     

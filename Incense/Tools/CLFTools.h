@@ -23,4 +23,6 @@
 
 + (CATransform3D)CATransform3DPerspect:(CATransform3D)t center:(CGPoint)center disZ:(CGFloat)disZ;
 
++ (UIImage *)takeSnapshotOfView:(UIView *)view;
+
 @end
