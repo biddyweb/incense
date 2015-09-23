@@ -27,6 +27,7 @@
 //    self.view.backgroundColor = [UIColor colorWithRed:233 / 255.0 green:233 / 255.0 blue:233 / 255.0 alpha:1.0];
     self.view.backgroundColor = [UIColor whiteColor];
     self.shareButton.adjustsImageWhenHighlighted = NO;
+    self.shareButton.alpha = 0.0f;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -94,7 +95,6 @@
     if (!_shareButton) {
         UIButton *shareButton = [[UIButton alloc] init];
         [shareButton addTarget:self action:@selector(showShareActivity) forControlEvents:UIControlEventTouchUpInside];
-//        shareButton.backgroundColor = [UIColor blueColor];
         [shareButton setImage:[UIImage imageNamed:@"ShareButton"] forState:UIControlStateNormal];
         shareButton.frame = CGRectMake((Incense_Screen_Width - 50) * 0.5, Incense_Screen_Height - 115, 50, 50);
         shareButton.layer.shadowColor = [[UIColor blackColor] CGColor];
@@ -129,6 +129,9 @@
     }
                      completion:^(BOOL finished) {
                          [self.cardView makeRipple];
+                         [UIView animateWithDuration:0.5f animations:^{
+                             self.shareButton.alpha = 1.0f;
+                         }];
                      }];
 }
 

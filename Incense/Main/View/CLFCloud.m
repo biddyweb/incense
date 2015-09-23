@@ -84,7 +84,7 @@ static CGFloat beginCenterY = -140.0f;
     
     CGFloat offsetY = currentPoint.y - beginPoint.y;
 
-    // MARK: Incense Height ---> 200 trigger
+    // Incense Height ---> 200 trigger
     CGFloat incenseToTopDistance = Incense_Screen_Height - 200 * Size_Ratio_To_iPhone6 - Incense_Location;
     // 火永远距离云的底部 80 但是还要考虑 Fire 的高度 24. 加上 24 才是 fire 的底部所在的位置. 24 似乎还差一点, 改成 20
     // 云初始位置永远是 -380

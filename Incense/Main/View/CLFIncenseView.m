@@ -286,7 +286,7 @@ static CGFloat colorLocation = 0.8f;
     CGFloat declineDistance = Incense_Burn_Off_Time * 60 / self.displaylink.frameInterval;
 
     
-// MARK: What's the meaning of 135.0f ? --> 135.0 is the flammable incense length
+// What's the meaning of 135.0f ? --> 135.0 is the flammable incense length
     
     self.incenseHeight -= 135.0f * Size_Ratio_To_iPhone6 / declineDistance;
     self.frame = (CGRect){self.frame.origin, {Incense_Screen_Width, self.incenseHeight}};
@@ -358,7 +358,7 @@ CGFloat integral(CGFloat(*f)(CGFloat x), CGFloat low, CGFloat high, NSInteger n)
 - (void)initialSetupWithIncenseHeight:(CGFloat)height {
     headDustHeight = 73.0f * Size_Ratio_To_iPhone6;
     
-    // MARK: So, here is the incenseHeight when the incense be lightened
+    // So, here is the incenseHeight when the incense be lightened
     self.incenseHeight = height;
     x = 2.5f;
     y = 0.0f;

@@ -16,12 +16,13 @@
 
 @property (nonatomic, weak) UIImageView  *blurView;
 @property (nonatomic, weak) UIView       *finishView;
-//@property (nonatomic, weak) UIImageView  *finishImageView;
 @property (nonatomic, weak) UIButton     *restartButton;
 @property (nonatomic, weak) UIImageView  *shadowView;
 @property (nonatomic, weak) UIButton     *shareButton;
 
 @property (nonatomic, weak) UILabel      *numberLabel;
+
+@property (nonatomic, strong) NSTimer    *shareTimer;
 
 @end
 
@@ -49,14 +50,14 @@
         [_finishView addSubview:shadowView];
         _shadowView = shadowView;
         
-        UIButton *shareButton = [[UIButton alloc] init];
-        [shareButton setTitle:@"分享" forState:UIControlStateNormal];
-        shareButton.backgroundColor = [UIColor whiteColor];
-        [shareButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        shareButton.titleLabel.font = [UIFont systemFontOfSize:14];
-        [shareButton addTarget:self action:@selector(showShareCard) forControlEvents:UIControlEventTouchUpInside];
-        [_finishView addSubview:shareButton];
-        _shareButton = shareButton;
+//        UIButton *shareButton = [[UIButton alloc] init];
+//        [shareButton setTitle:@"分享" forState:UIControlStateNormal];
+//        shareButton.backgroundColor = [UIColor whiteColor];
+//        [shareButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        shareButton.titleLabel.font = [UIFont systemFontOfSize:14];
+//        [shareButton addTarget:self action:@selector(showShareCard) forControlEvents:UIControlEventTouchUpInside];
+//        [_finishView addSubview:shareButton];
+//        _shareButton = shareButton;
 
         UIButton *restartButton = [[UIButton alloc] init];
         [_finishView addSubview:restartButton];
@@ -116,7 +117,7 @@
     
     self.restartButton.frame = CGRectMake((Incense_Screen_Width - restartButtonW) * 0.5, Incense_Screen_Height * 0.875, restartButtonW, restartButtonH);
     self.shadowView.frame = CGRectMake((Incense_Screen_Width - 26) * 0.5, Incense_Screen_Height * 0.875 + 13, 26, 26);
-    self.shareButton.frame = CGRectMake((Incense_Screen_Width - 100) * 0.5, self.shadowView.frame.origin.y - 50, 100, 30);
+//    self.shareButton.frame = CGRectMake((Incense_Screen_Width - 100) * 0.5, self.shadowView.frame.origin.y - 50, 100, 30);
 }
 
 - (void)setupWithBurntOffNumber:(NSMutableString *)numberString {
@@ -130,13 +131,15 @@
     NSMutableAttributedString *finalNumberString = [[NSMutableAttributedString alloc] initWithString:newNumberString];
 
     CGFloat digitW = 56 * Size_Ratio_To_iPhone6;
-    self.shareButton.hidden = NO;
+//    self.shareButton.hidden = NO;
     self.numberLabel.frame = CGRectMake((Incense_Screen_Width - digitW) * 0.5 + 18 * Size_Ratio_To_iPhone6, 125 * Size_Ratio_To_iPhone6, digitW, (length + 3) * 20);
     self.numberLabel.attributedText = [CLFTools arrangeAttributedString:finalNumberString];
+    
+    self.shareTimer = [NSTimer scheduledTimerWithTimeInterval:4.0f target:self selector:@selector(showShareCard) userInfo:nil repeats:NO];
 }
 
 - (void)setupWithFailure {
-    self.shareButton.hidden = YES;
+//    self.shareButton.hidden = YES;
     CGFloat finishViewW = 56 * Size_Ratio_To_iPhone6;
     self.numberLabel.frame = CGRectMake((Incense_Screen_Width - finishViewW) * 0.5 + 18 * Size_Ratio_To_iPhone6, 125 * Size_Ratio_To_iPhone6, finishViewW, 4 * 20);
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"滅\n\n 。"];
@@ -150,6 +153,7 @@
 }
 
 - (void)wantOneMoreIncense {
+    [self.shareTimer invalidate];
     if ([self.delegate respondsToSelector:@selector(oneMoreIncense)]) {
         [self.delegate oneMoreIncense];
     }
@@ -166,10 +170,8 @@
 }
 
 - (void)showShareCard {
-    UIImageView *numberSnapshot = [[UIImageView alloc] init];
-    numberSnapshot.image = [CLFTools takeSnapshotOfView:self.numberLabel];
-    CGFloat ratio = 1.0f * CGRectGetHeight(self.numberLabel.frame) / CGRectGetWidth(self.numberLabel.frame);
     [self.delegate switchToShareVC];
+    [self.shareTimer invalidate];
 }
 
 @end

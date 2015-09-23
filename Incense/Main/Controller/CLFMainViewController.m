@@ -77,7 +77,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (UIView *)container {
     if (!_container) {
         UIView *container = [[UIView alloc] init];
-//        container.backgroundColor = [UIColor greenColor];
         container.tag = 111;
         [self.view addSubview:container];
         _container = container;
@@ -150,7 +149,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
             }
         }
     }];
-
 }
 
 #pragma mark - LightTheIncense
@@ -282,7 +280,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
     if ([resultString isEqualToString:@"failure"]) {
         [CLFTools stopAnimationInView:self.incenseView
-                     withPosition:CGPointMake(0, Incense_Screen_Height - Incense_Location)
+                     withPosition:CGPointMake(0, 200 * Size_Ratio_To_iPhone6)
                            anchor:CGPointMake(0, 1)];
         
         [CLFTools stopAnimationInView:self.incenseShadowView
@@ -401,9 +399,9 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     self.incenseShadowView.frame = CGRectMake((Incense_Screen_Width - 6) / 2, Incense_Screen_Height - Incense_Location + 10, 6, 3);
     
     [CLFTools positionFloatingInView:self.incenseView
-                          withValue1:(200 * Size_Ratio_To_iPhone6)
-                              value2:(200 * Size_Ratio_To_iPhone6 - 5)
-                       layerPosition:CGPointMake(0, Incense_Screen_Height - Incense_Location)
+                          withValue1:(incenseHeight)
+                              value2:(incenseHeight - 5)
+                       layerPosition:CGPointMake(0, incenseHeight)
                          anchorPoint:CGPointMake(0, 1)
                        animationTime:animationTime];
     

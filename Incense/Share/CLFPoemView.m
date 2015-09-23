@@ -28,12 +28,9 @@
     if (!_firstLine) {
         UILabel *firstLine = [[UILabel alloc] init];
         firstLine.numberOfLines = 0;
-        
-        // MARK: 4s 情况下， 字太长了囧
         firstLine.font = [UIFont fontWithName:@"STFangsong" size:18];
         firstLine.textColor = [UIColor blackColor];
         [self addSubview:firstLine];
-//        firstLine.backgroundColor = [UIColor redColor];
         _firstLine = firstLine;
     }
     return _firstLine;
@@ -46,7 +43,6 @@
         secondLine.font = [UIFont fontWithName:@"STFangsong" size:18];
         secondLine.textColor = [UIColor blackColor];
         [self addSubview:secondLine];
-//        secondLine.backgroundColor = [UIColor greenColor];
         _secondLine = secondLine;
     }
     return _secondLine;
@@ -59,7 +55,6 @@
         authorLabel.font = [UIFont fontWithName:@"STFangsong" size:13];
         authorLabel.textColor = [UIColor blackColor];
         [self addSubview:authorLabel];
-//        authorLabel.backgroundColor = [UIColor blueColor];
         _authorLabel = authorLabel;
     }
     return _authorLabel;
@@ -96,7 +91,7 @@
     
     self.stopLabel.frame = CGRectMake(CGRectGetMaxX(self.secondLine.frame) - 8, CGRectGetMaxY(self.secondLine.frame) - 19, 60, 30);
     
-    self.quoteLabel.frame = CGRectMake(6, 16, 40, 40);
+    self.quoteLabel.frame = CGRectMake(self.secondLine.frame.origin.x - 44, 16, 40, 40);
 }
 
 
