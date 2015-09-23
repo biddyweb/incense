@@ -16,6 +16,7 @@
 @property (nonatomic, weak) CLFPoemView *poemView;
 @property (nonatomic, weak) UIImageView      *incenseSnapshot;
 @property (nonatomic, assign) CGFloat   containerRatio;
+@property (nonatomic, assign) NSInteger burntNumber;
 
 - (void)makeRipple;
 - (void)getPoem;

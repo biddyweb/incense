@@ -54,11 +54,9 @@
     self.cardView.incenseSnapshot = containerSnapShot;
 }
 
-- (void)setNumberSnapShot:(UIImageView *)numberSnapShot {
-    _numberSnapShot = numberSnapShot;
-    numberSnapShot.frame = CGRectMake(8, 15, 40 * Size_Ratio_To_iPhone6, 40 * self.numberRatio * Size_Ratio_To_iPhone6);
-//    numberSnapShot.backgroundColor = [UIColor greenColor];
-    [self.cardView addSubview:numberSnapShot];
+- (void)setBurntNumber:(NSInteger)burntNumber {
+    _burntNumber = burntNumber;
+    self.cardView.burntNumber = burntNumber;
 }
 
 - (UIView *)container {

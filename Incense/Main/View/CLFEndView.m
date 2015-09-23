@@ -169,7 +169,7 @@
     UIImageView *numberSnapshot = [[UIImageView alloc] init];
     numberSnapshot.image = [CLFTools takeSnapshotOfView:self.numberLabel];
     CGFloat ratio = 1.0f * CGRectGetHeight(self.numberLabel.frame) / CGRectGetWidth(self.numberLabel.frame);
-    [self.delegate switchToShareVCWithView:numberSnapshot viewRatio:ratio];
+    [self.delegate switchToShareVC];
 }
 
 @end

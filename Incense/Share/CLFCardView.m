@@ -19,6 +19,7 @@
 @property (nonatomic, weak) UIView *rippleView;
 @property (nonatomic, strong) BMWaveMaker *rippleMaker;
 @property (nonatomic, weak) UIImageView *shadowView;
+@property (nonatomic, weak) UILabel *numberLabel;
 
 @end
 
@@ -59,17 +60,40 @@
                      animationTime:4.0f];
 }
 
+- (void)setBurntNumber:(NSInteger)burntNumber {
+    _burntNumber = burntNumber;
+    self.numberLabel.text = [CLFTools numberToChinese:burntNumber];
+    self.numberLabel.frame = CGRectMake(8, 20, 15, self.numberLabel.text.length * 14);
+}
+
 - (void)getPoem {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
-    
     
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Poem" inManagedObjectContext:managedContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entity];
     NSError *error;
     NSArray *arr = [managedContext executeFetchRequest:request error:&error];
-    Poem *poem = arr[8];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger numberOfPoems = [defaults integerForKey:@"numberOfPoems"];
+    
+    Poem *poem = nil;
+    
+    if (!numberOfPoems) {
+        numberOfPoems = arr.count;
+    }
+    
+    if (numberOfPoems == arr.count) {
+        int value = arc4random() % numberOfPoems;
+        poem = arr[value];
+    } else if (numberOfPoems < arr.count) {
+        int value = arc4random() % arr.count + numberOfPoems;
+        poem = arr[value];
+        numberOfPoems = arr.count;
+        [defaults setInteger:numberOfPoems forKey:@"numberOfPoems"];
+    }
     
     self.poemView.firstLine.text = poem.firstline;
     self.poemView.secondLine.text = poem.secondline;
@@ -103,6 +127,18 @@
         _poemView = poemView;
     }
     return _poemView;
+}
+
+- (UILabel *)numberLabel {
+    if (!_numberLabel) {
+        UILabel *numberLabel = [[UILabel alloc] init];
+        [self addSubview:numberLabel];
+        numberLabel.font = [UIFont fontWithName:@"STFangsong" size:14];
+        numberLabel.numberOfLines = 0;
+        numberLabel.textColor = [UIColor blackColor];
+        _numberLabel = numberLabel;
+    }
+    return _numberLabel;
 }
 
 - (void)layoutSubviews {

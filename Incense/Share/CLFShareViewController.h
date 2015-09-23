@@ -12,7 +12,7 @@
 
 @property (nonatomic, weak) UIImageView *containerSnapShot;
 @property (nonatomic, assign) CGFloat containerRatio;
-@property (nonatomic, weak) UIImageView *numberSnapShot;
-@property (nonatomic, assign) CGFloat numberRatio;
+
+@property (nonatomic, assign) NSInteger burntNumber;
 
 @end

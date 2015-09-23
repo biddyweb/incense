@@ -46,6 +46,8 @@
 
 @property (nonatomic, weak)                      Poem                      *poem;
 
+@property (nonatomic, assign)                    NSInteger                 burntNumber;
+
 @end
 
 @implementation CLFMainViewController
@@ -120,7 +122,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [request setEntity:entity];
     NSError *error;
     NSArray *arr = [managedContext executeFetchRequest:request error:&error];
-    
+        
     Poem *lastPoem = [arr lastObject];
     NSNumber *finalPoemID = lastPoem.poemid;
 
@@ -229,6 +231,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     }
     
     [defaults setInteger:burntIncenseNumber forKey:@"burntIncenseNumber"];
+    
+    self.burntNumber = burntIncenseNumber;
     
     [self.endView setupWithBurntOffNumber:[CLFTools numberToChinese:burntIncenseNumber]];
     [self.endView restartButtonBeginRotate];
@@ -595,11 +599,10 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 #pragma - Swith to ShareVC;
 
-- (void)switchToShareVCWithView:(UIImageView *)view viewRatio:(CGFloat)viewRatio {
+- (void)switchToShareVC {
     CLFShareViewController *shareVC = [[CLFShareViewController alloc] init];
     self.modalTransitionManager.pushed = NO;
-    self.modalTransitionManager.numberSnapshot = view;
-    self.modalTransitionManager.numberRatio = viewRatio;
+    self.modalTransitionManager.burnNumber = self.burntNumber;
     shareVC.transitioningDelegate = self.modalTransitionManager;
     [self presentViewController:shareVC animated:true completion:nil];
 }

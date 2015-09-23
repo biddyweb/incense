@@ -11,7 +11,7 @@
 @protocol CLFEndViewDelegate <NSObject>
 
 - (void)oneMoreIncense;
-- (void)switchToShareVCWithView:(UIImageView *)view viewRatio:(CGFloat)viewRatio;
+- (void)switchToShareVC;
 
 @end
 

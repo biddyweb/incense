@@ -47,15 +47,12 @@
     UIView *containerView = [transitionContext containerView];
     
     self.homeSnapshot = [fromViewController.view snapshotViewAfterScreenUpdates:false];
-//    self.incenseSnapshot = [fromViewController.container snapshotViewAfterScreenUpdates:false];
+
     UIImageView *incenseSnapshot = [[UIImageView alloc] init];
     incenseSnapshot.image = [CLFTools takeSnapshotOfView:fromViewController.container];
     
-    toViewController.numberRatio = self.numberRatio;
-    
-    toViewController.numberSnapShot = self.numberSnapshot;
-    
-    
+    toViewController.burntNumber = self.burnNumber;
+
     toViewController.containerRatio = 1.0f * CGRectGetHeight(fromViewController.container.frame) / CGRectGetWidth(fromViewController.container.frame);
     toViewController.containerSnapShot = incenseSnapshot;
     toViewController.view.frame = [transitionContext finalFrameForViewController:toViewController];

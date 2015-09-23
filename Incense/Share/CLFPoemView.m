@@ -68,9 +68,9 @@
 - (UILabel *)stopLabel {
     if (!_stopLabel) {
         UILabel *stopLabel = [[UILabel alloc] init];
-        stopLabel.font = [UIFont fontWithName:@"STFangsong" size:19];
+        stopLabel.font = [UIFont fontWithName:@"STFangsong" size:24];
         stopLabel.textColor = [UIColor redColor];
-        stopLabel.text = @"。  。";
+        stopLabel.text = @"。 。";
         [self addSubview:stopLabel];
         _stopLabel = stopLabel;
     }
@@ -92,11 +92,11 @@
 - (void)layoutSubviews {
     self.firstLine.frame = CGRectMake(CGRectGetWidth(self.frame) - 42, 20, 22, self.firstLine.text.length * 18);
     self.secondLine.frame = CGRectMake(CGRectGetWidth(self.frame) - 72, 20, 22, self.secondLine.text.length * 18);
-    self.authorLabel.frame = CGRectMake(8, CGRectGetHeight(self.frame) - 65, 15, 60);
+    self.authorLabel.frame = CGRectMake(8, CGRectGetHeight(self.frame) - self.authorLabel.text.length * 13 - 8, 15, self.authorLabel.text.length * 13);
     
-    self.stopLabel.frame = CGRectMake(CGRectGetMaxX(self.secondLine.frame) - 5, CGRectGetMaxY(self.secondLine.frame) - 19, 60, 30);
+    self.stopLabel.frame = CGRectMake(CGRectGetMaxX(self.secondLine.frame) - 8, CGRectGetMaxY(self.secondLine.frame) - 19, 60, 30);
     
-    self.quoteLabel.frame = CGRectMake(0, 21, 40, 40);
+    self.quoteLabel.frame = CGRectMake(6, 16, 40, 40);
 }
 
 
