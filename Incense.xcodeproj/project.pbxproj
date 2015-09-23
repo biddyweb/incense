@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F079FA21BB2B6B900E2BBFF /* CLFPoems.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 3F079F9F1BB2B6B900E2BBFF /* CLFPoems.sqlite */; settings = {ASSET_TAGS = (); }; };
+		3F079FA31BB2B6B900E2BBFF /* CLFPoems.sqlite-shm in Resources */ = {isa = PBXBuildFile; fileRef = 3F079FA01BB2B6B900E2BBFF /* CLFPoems.sqlite-shm */; settings = {ASSET_TAGS = (); }; };
+		3F079FA41BB2B6B900E2BBFF /* CLFPoems.sqlite-wal in Resources */ = {isa = PBXBuildFile; fileRef = 3F079FA11BB2B6B900E2BBFF /* CLFPoems.sqlite-wal */; settings = {ASSET_TAGS = (); }; };
 		3F1956A41B789BE7003A5575 /* Waver.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956A31B789BE7003A5575 /* Waver.m */; };
 		3F1956C01B78B95A003A5575 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3F1956A61B78B95A003A5575 /* Info.plist */; };
 		3F1956C11B78B95A003A5575 /* MASCompositeConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1956A81B78B95A003A5575 /* MASCompositeConstraint.m */; };
@@ -76,6 +79,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F079F9F1BB2B6B900E2BBFF /* CLFPoems.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = CLFPoems.sqlite; sourceTree = "<group>"; };
+		3F079FA01BB2B6B900E2BBFF /* CLFPoems.sqlite-shm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CLFPoems.sqlite-shm"; sourceTree = "<group>"; };
+		3F079FA11BB2B6B900E2BBFF /* CLFPoems.sqlite-wal */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CLFPoems.sqlite-wal"; sourceTree = "<group>"; };
 		3F1956A21B789BE7003A5575 /* Waver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Waver.h; sourceTree = "<group>"; };
 		3F1956A31B789BE7003A5575 /* Waver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Waver.m; sourceTree = "<group>"; };
 		3F1956A61B78B95A003A5575 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -445,6 +451,9 @@
 		3F739D891BB2421E00953AEA /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				3F079F9F1BB2B6B900E2BBFF /* CLFPoems.sqlite */,
+				3F079FA01BB2B6B900E2BBFF /* CLFPoems.sqlite-shm */,
+				3F079FA11BB2B6B900E2BBFF /* CLFPoems.sqlite-wal */,
 				3F739D8A1BB2447E00953AEA /* Poem+CoreDataProperties.h */,
 				3F739D8B1BB2447E00953AEA /* Poem+CoreDataProperties.m */,
 				3F739D8C1BB2447E00953AEA /* Poem.h */,
@@ -583,6 +592,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F079FA21BB2B6B900E2BBFF /* CLFPoems.sqlite in Resources */,
+				3F079FA41BB2B6B900E2BBFF /* CLFPoems.sqlite-wal in Resources */,
 				3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */,
 				3F4EA70C1BAFCC22002E4A8C /* STFangsong.ttf in Resources */,
 				3FA747A51B8D950E001121AD /* 3.mp3 in Resources */,
@@ -590,6 +601,7 @@
 				3FA869631B85C98A00799E0A /* 2.mp3 in Resources */,
 				3F7F66531B7D91E20045C689 /* Fire.gif in Resources */,
 				3F3AF0781B8C7D090016D548 /* 4.mp3 in Resources */,
+				3F079FA31BB2B6B900E2BBFF /* CLFPoems.sqlite-shm in Resources */,
 				3FB5EA7F1B8E16AA00CDF0B0 /* read_me.txt in Resources */,
 				3F48CE031B78777F00F889BC /* Images.xcassets in Resources */,
 			);

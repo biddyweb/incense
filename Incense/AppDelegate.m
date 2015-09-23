@@ -40,6 +40,8 @@ static void displayStatusChanged(CFNotificationCenterRef center,
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    
     [WXApi registerApp:@"wxf2f0e430f493af01"];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -288,6 +290,16 @@ static CGFloat totalLeaveBackInterval = 0;
     
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"CLFPoems.sqlite"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path]) {
+        NSArray *sourceSqliteURLs = @[[[NSBundle mainBundle] URLForResource:@"CLFPoems" withExtension:@"sqlite"], [[NSBundle mainBundle] URLForResource:@"CLFPoems" withExtension:@"sqlite-wal"], [[NSBundle mainBundle] URLForResource:@"CLFPoems" withExtension:@"sqlite-shm"]];
+        NSArray *destSqliteURLs = @[[[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"CLFPoems.sqlite"], [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"CLFPoems.sqlite-wal"], [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"CLFPoems.sqlite-shm"]];
+        NSError *error = nil;
+        for (int index = 0; index < sourceSqliteURLs.count; index++) {
+            [[NSFileManager defaultManager] copyItemAtURL:sourceSqliteURLs[index] toURL:destSqliteURLs[index] error:&error];
+        }
+    }
+    
     NSError *error = nil;
     NSString *failureReason = @"There was an error creating or loading the application's saved data.";
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {

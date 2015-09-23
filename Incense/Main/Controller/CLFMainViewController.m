@@ -117,12 +117,14 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 - (void)loadNewPoems {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
+    
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Poem" inManagedObjectContext:managedContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entity];
     NSError *error;
     NSArray *arr = [managedContext executeFetchRequest:request error:&error];
-        
+
+    NSLog(@"%@", arr);
     Poem *lastPoem = [arr lastObject];
     NSNumber *finalPoemID = lastPoem.poemid;
 
