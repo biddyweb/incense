@@ -11,14 +11,14 @@
 #import "CLFIncenseCommonHeader.h"
 #import "CLFTools.h"
 #import "CLFPoemView.h"
+#import "Poem.h"
+#import "AppDelegate.h"
 
 @interface CLFCardView ()
 
 @property (nonatomic, weak) UIView *rippleView;
 @property (nonatomic, strong) BMWaveMaker *rippleMaker;
 @property (nonatomic, weak) UIImageView *shadowView;
-
-@property (nonatomic, strong) NSMutableArray *poemsArray;
 
 @end
 
@@ -60,53 +60,21 @@
 }
 
 - (void)getPoem {
-    CKContainer *container = [CKContainer defaultContainer];
-    CKDatabase *database = [container publicCloudDatabase];
-    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
     
-    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Poems" predicate:predicate];
-    __weak typeof(self) weakSelf = self;
-    [database performQuery:query inZoneWithID:nil completionHandler:^(NSArray<CKRecord *> * _Nullable results, NSError * _Nullable error) {
-        if (error != nil) {
-            NSLog(@"error %@", error);
-        } else {
-            for (CKRecord *result in results) {
-                [weakSelf.poemsArray addObject:result];
-            }
-            NSLog(@"results %@", results);
-            NSLog(@"array %@", weakSelf.poemsArray);
-            CKRecord *selectedRecord = results[0];
-            NSLog(@"selectedRecord %@", selectedRecord);
-            
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                
-                self.poemView.firstLine.text = (NSString *)[selectedRecord valueForKey:@"FirstLine"];
-                self.poemView.secondLine.text = (NSString *)[selectedRecord valueForKey:@"SecondLine"];
-                self.poemView.authorLabel.text = (NSString *)[selectedRecord valueForKey:@"Author"];
-
-            }];
-        }
-    }];
     
-//    self.poemView.firstLine.text = @"天街小雨潤如酥";
-//    self.poemView.secondLine.text = @"草色遙看近卻無";
-//    self.poemView.authorLabel.text = @"韩愈";
-
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Poem" inManagedObjectContext:managedContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entity];
+    NSError *error;
+    NSArray *arr = [managedContext executeFetchRequest:request error:&error];
+    Poem *poem = [arr lastObject];
     
+    self.poemView.firstLine.text = poem.firstline;
+    self.poemView.secondLine.text = poem.secondline;
+    self.poemView.authorLabel.text = poem.author;
 }
-
-- (void)setPoemString1:(NSString *)poemString1 {
-    _poemString1 = poemString1;
-}
-
-- (void)setPoemString2:(NSString *)poemString2 {
-    _poemString2 = poemString2;
-}
-
-- (void)setAuthorString:(NSString *)authorString {
-    _authorString = authorString;
-}
-
 
 - (UIImageView *)shadowView {
     if (!_shadowView) {
@@ -121,7 +89,6 @@
 - (UIImageView *)shotView {
     if (!_shotView) {
         UIImageView *shotView = [[UIImageView alloc] init];
-//        shotView.backgroundColor = [UIColor blueColor];
         [self addSubview:shotView];
         _shotView = shotView;
     }

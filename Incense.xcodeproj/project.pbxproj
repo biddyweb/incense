@@ -41,6 +41,8 @@
 		3F67E2A71B8EFA9F00BBBC04 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F67E2A61B8EFA9F00BBBC04 /* SystemConfiguration.framework */; };
 		3F69D23E1B846E0A00DD6B03 /* CLFCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */; };
 		3F710C421BAE67DB006B1044 /* CLFCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F710C411BAE67DB006B1044 /* CLFCardView.m */; settings = {ASSET_TAGS = (); }; };
+		3F739D8E1BB2447E00953AEA /* Poem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F739D8B1BB2447E00953AEA /* Poem+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
+		3F739D8F1BB2447E00953AEA /* Poem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F739D8D1BB2447E00953AEA /* Poem.m */; settings = {ASSET_TAGS = (); }; };
 		3F7F66531B7D91E20045C689 /* Fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66521B7D91E20045C689 /* Fire.gif */; };
 		3F7F66581B7DFD390045C689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F7F66571B7DFD390045C689 /* LaunchScreen.xib */; };
 		3F8FDA641BB02CB2004C86B5 /* CLFShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8FDA631BB02CB2004C86B5 /* CLFShareViewController.m */; settings = {ASSET_TAGS = (); }; };
@@ -51,6 +53,7 @@
 		3FA747A51B8D950E001121AD /* 3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA747A41B8D950E001121AD /* 3.mp3 */; };
 		3FA8695D1B858C3B00799E0A /* CLFPlayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */; };
 		3FA869631B85C98A00799E0A /* 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3FA869601B85C98A00799E0A /* 2.mp3 */; };
+		3FABE4E51BB1A8E60020489D /* CLFPoems.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3FABE4E31BB1A8E60020489D /* CLFPoems.xcdatamodeld */; settings = {ASSET_TAGS = (); }; };
 		3FB5EA7E1B8E16AA00CDF0B0 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB5EA7A1B8E16AA00CDF0B0 /* libWeChatSDK.a */; };
 		3FB5EA7F1B8E16AA00CDF0B0 /* read_me.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3FB5EA7B1B8E16AA00CDF0B0 /* read_me.txt */; };
 		3FCB4CF51B86C33B00B854E4 /* CLFEndView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FCB4CF41B86C33B00B854E4 /* CLFEndView.m */; };
@@ -140,6 +143,10 @@
 		3F69D23D1B846E0A00DD6B03 /* CLFCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFCloud.m; sourceTree = "<group>"; };
 		3F710C401BAE67DB006B1044 /* CLFCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFCardView.h; sourceTree = "<group>"; };
 		3F710C411BAE67DB006B1044 /* CLFCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFCardView.m; sourceTree = "<group>"; };
+		3F739D8A1BB2447E00953AEA /* Poem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Poem+CoreDataProperties.h"; sourceTree = "<group>"; };
+		3F739D8B1BB2447E00953AEA /* Poem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Poem+CoreDataProperties.m"; sourceTree = "<group>"; };
+		3F739D8C1BB2447E00953AEA /* Poem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Poem.h; sourceTree = "<group>"; };
+		3F739D8D1BB2447E00953AEA /* Poem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Poem.m; sourceTree = "<group>"; };
 		3F7F66521B7D91E20045C689 /* Fire.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Fire.gif; sourceTree = "<group>"; };
 		3F7F66571B7DFD390045C689 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		3F8FDA621BB02CB2004C86B5 /* CLFShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFShareViewController.h; sourceTree = "<group>"; };
@@ -155,6 +162,7 @@
 		3FA8695B1B858C3B00799E0A /* CLFPlayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFPlayButton.h; sourceTree = "<group>"; };
 		3FA8695C1B858C3B00799E0A /* CLFPlayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLFPlayButton.m; sourceTree = "<group>"; };
 		3FA869601B85C98A00799E0A /* 2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 2.mp3; sourceTree = "<group>"; };
+		3FABE4E41BB1A8E60020489D /* CLFPoems.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CLFPoems.xcdatamodel; sourceTree = "<group>"; };
 		3FB5EA7A1B8E16AA00CDF0B0 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
 		3FB5EA7B1B8E16AA00CDF0B0 /* read_me.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = read_me.txt; sourceTree = "<group>"; };
 		3FB5EA7C1B8E16AA00CDF0B0 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
@@ -294,6 +302,7 @@
 		3F48CDF41B78777F00F889BC /* Incense */ = {
 			isa = PBXGroup;
 			children = (
+				3F739D891BB2421E00953AEA /* Data */,
 				3FA24AEE1BB179CB0088C602 /* Incense.entitlements */,
 				6A7089371B8EF4C70047ED0B /* Fabric.framework */,
 				6A7089381B8EF4C70047ED0B /* Crashlytics.framework */,
@@ -323,6 +332,7 @@
 				3F48CDF61B78777F00F889BC /* Info.plist */,
 				3F48CDF71B78777F00F889BC /* main.m */,
 				3F7F66571B7DFD390045C689 /* LaunchScreen.xib */,
+				3FABE4E31BB1A8E60020489D /* CLFPoems.xcdatamodeld */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -430,6 +440,18 @@
 				3F48CDFD1B78777F00F889BC /* CLFMainViewController.m */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		3F739D891BB2421E00953AEA /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				3F739D8A1BB2447E00953AEA /* Poem+CoreDataProperties.h */,
+				3F739D8B1BB2447E00953AEA /* Poem+CoreDataProperties.m */,
+				3F739D8C1BB2447E00953AEA /* Poem.h */,
+				3F739D8D1BB2447E00953AEA /* Poem.m */,
+			);
+			name = Data;
+			path = data;
 			sourceTree = "<group>";
 		};
 		3F8FDA611BB02C80004C86B5 /* Share */ = {
@@ -619,8 +641,10 @@
 				3F1956C61B78B95A003A5575 /* MASViewConstraint.m in Sources */,
 				3F8FDA6B1BB032A7004C86B5 /* CLFModalTransitionManager.m in Sources */,
 				3F55A5B81B862DC3000FAE56 /* CLFNewFeatureController.m in Sources */,
+				3F739D8E1BB2447E00953AEA /* Poem+CoreDataProperties.m in Sources */,
 				3FDEF5B41B8D6DAE00A65DC1 /* CLFEndButton.m in Sources */,
 				3F1956C51B78B95A003A5575 /* MASViewAttribute.m in Sources */,
+				3F739D8F1BB2447E00953AEA /* Poem.m in Sources */,
 				3F67E2A01B8EF88200BBBC04 /* WeixinSessionActivity.m in Sources */,
 				3F710C421BAE67DB006B1044 /* CLFCardView.m in Sources */,
 				3F1956C91B78B95A003A5575 /* View+MASAdditions.m in Sources */,
@@ -631,6 +655,7 @@
 				3F55A5B51B862BA0000FAE56 /* CLFTools.m in Sources */,
 				3F8FDA641BB02CB2004C86B5 /* CLFShareViewController.m in Sources */,
 				3F3AA2B71B7B0BFD00DD9E84 /* BMWaveLayer.m in Sources */,
+				3FABE4E51BB1A8E60020489D /* CLFPoems.xcdatamodeld in Sources */,
 				3F1956C81B78B95A003A5575 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				3F67E2A11B8EF88200BBBC04 /* WeixinTimelineActivity.m in Sources */,
 				3FCB4CF51B86C33B00B854E4 /* CLFEndView.m in Sources */,
@@ -859,6 +884,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3FABE4E31BB1A8E60020489D /* CLFPoems.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3FABE4E41BB1A8E60020489D /* CLFPoems.xcdatamodel */,
+			);
+			currentVersion = 3FABE4E41BB1A8E60020489D /* CLFPoems.xcdatamodel */;
+			path = CLFPoems.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 3F48CDEA1B78777F00F889BC /* Project object */;
 }

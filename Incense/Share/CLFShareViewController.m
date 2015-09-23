@@ -116,6 +116,10 @@
 }
 
 - (void)showShareActivity {
+    UIView *cardSnapshot = [self.cardView snapshotViewAfterScreenUpdates:false];
+    cardSnapshot.frame = self.cardView.bounds;
+    
+//    UIImage *screenShot = [self takeSnapshotOfView:cardSnapshot];
     UIImage *screenShot = [self takeSnapshotOfView:self.cardView];
     NSArray *actItems = @[screenShot];
     NSArray *activity = @[[[WeixinSessionActivity alloc] init], [[WeixinTimelineActivity alloc] init]];

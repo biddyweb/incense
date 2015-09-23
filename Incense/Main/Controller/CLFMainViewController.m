@@ -22,6 +22,9 @@
 #import "CLFShareViewController.h"
 #import "CLFModalTransitionManager.h"
 
+#import "Poem.h"
+#import "AppDelegate.h"
+
 @interface CLFMainViewController () <CLFCloudDelegate, CLFIncenseViewDelegate, CLFEndViewDelegate>
 
 @property (nonatomic, weak)                      UIImageView            *incenseShadowView;
@@ -40,6 +43,8 @@
 @property (nonatomic, weak)                      UITapGestureRecognizer *tap;
 
 @property (nonatomic, strong)                    CLFModalTransitionManager *modalTransitionManager;
+
+@property (nonatomic, weak)                      Poem                      *poem;
 
 @end
 
@@ -80,6 +85,8 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self loadNewPoems];
+    
     self.modalTransitionManager = [[CLFModalTransitionManager alloc] init];
     self.container.frame = CGRectMake(0, Incense_Screen_Height - Incense_Location - 200 * Size_Ratio_To_iPhone6, Incense_Screen_Width, 200 * Size_Ratio_To_iPhone6);
     [self makeIncense];
@@ -103,6 +110,43 @@ static const CGFloat kFireVoiceFactor = 40.0f;
 
 - (BOOL)prefersStatusBarHidden {
     return YES;
+}
+
+- (void)loadNewPoems {
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Poem" inManagedObjectContext:managedContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entity];
+    NSError *error;
+    NSArray *arr = [managedContext executeFetchRequest:request error:&error];
+    
+    Poem *lastPoem = [arr lastObject];
+    NSNumber *finalPoemID = lastPoem.poemid;
+
+    CKContainer *container = [CKContainer defaultContainer];
+    CKDatabase *database = [container publicCloudDatabase];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"poemID > %@", finalPoemID];
+
+    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Poems" predicate:predicate];
+    [database performQuery:query inZoneWithID:nil completionHandler:^(NSArray<CKRecord *> * _Nullable results, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"error %@", error);
+        } else {
+            if (results.count) {
+                self.poem = [NSEntityDescription insertNewObjectForEntityForName:@"Poem" inManagedObjectContext:managedContext];
+                
+                for (CKRecord *result in results) {
+                    self.poem.firstline = (NSString *)[result valueForKey:@"FirstLine"];
+                    self.poem.secondline = (NSString *)[result valueForKey:@"SecondLine"];
+                    self.poem.author = (NSString *)[result valueForKey:@"Author"];
+                    self.poem.poemid = (NSNumber *)[result valueForKey:@"poemID"];
+                }
+                [appDelegate saveContext];
+            }
+        }
+    }];
+
 }
 
 #pragma mark - LightTheIncense

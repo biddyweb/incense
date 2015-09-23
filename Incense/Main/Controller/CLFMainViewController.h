@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import <CloudKit/CloudKit.h>
 
 @class CLFIncenseView;
 @interface CLFMainViewController : UIViewController

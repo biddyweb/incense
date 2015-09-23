@@ -8,6 +8,13 @@
 
 #import "CLFPoemView.h"
 
+@interface CLFPoemView ()
+
+@property (nonatomic, weak) UILabel *stopLabel;
+@property (nonatomic, weak) UILabel *quoteLabel;
+
+@end
+
 @implementation CLFPoemView
 
 - (instancetype)init {
@@ -58,10 +65,38 @@
     return _authorLabel;
 }
 
+- (UILabel *)stopLabel {
+    if (!_stopLabel) {
+        UILabel *stopLabel = [[UILabel alloc] init];
+        stopLabel.font = [UIFont fontWithName:@"STFangsong" size:19];
+        stopLabel.textColor = [UIColor redColor];
+        stopLabel.text = @"。  。";
+        [self addSubview:stopLabel];
+        _stopLabel = stopLabel;
+    }
+    return _stopLabel;
+}
+
+- (UILabel *)quoteLabel {
+    if (!_quoteLabel) {
+        UILabel *quoteLabel = [[UILabel alloc] init];
+        quoteLabel.font = [UIFont fontWithName:@"STFangsong" size:40];
+        quoteLabel.textColor = [UIColor grayColor];
+        quoteLabel.text = @"“";
+        [self addSubview:quoteLabel];
+        _quoteLabel = quoteLabel;
+    }
+    return _quoteLabel;
+}
+
 - (void)layoutSubviews {
-    self.firstLine.frame = CGRectMake(CGRectGetWidth(self.frame) - 42, 20, 22, 7 * 22);
-    self.secondLine.frame = CGRectMake(CGRectGetWidth(self.frame) - 72, 20, 22, 7 * 22);
+    self.firstLine.frame = CGRectMake(CGRectGetWidth(self.frame) - 42, 20, 22, self.firstLine.text.length * 18);
+    self.secondLine.frame = CGRectMake(CGRectGetWidth(self.frame) - 72, 20, 22, self.secondLine.text.length * 18);
     self.authorLabel.frame = CGRectMake(8, CGRectGetHeight(self.frame) - 65, 15, 60);
+    
+    self.stopLabel.frame = CGRectMake(CGRectGetMaxX(self.secondLine.frame) - 5, CGRectGetMaxY(self.secondLine.frame) - 19, 60, 30);
+    
+    self.quoteLabel.frame = CGRectMake(0, 10, 40, 40);
 }
 
 
