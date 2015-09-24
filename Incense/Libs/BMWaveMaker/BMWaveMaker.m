@@ -79,7 +79,7 @@ static NSString *const kBMViewError = @"the animationView is nil";
 }
 
 - (void)stopWave {
-    [self stopWaveImmediately: NO];
+    [self stopWaveImmediately: YES];
 }
 
 #pragma mark - convenience

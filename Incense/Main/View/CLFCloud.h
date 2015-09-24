@@ -12,7 +12,6 @@
 
 - (void)lightTheIncenseWithIncenseHeight:(CGFloat)incenseHeight;
 - (void)cloudRebound;
-- (void)changeBurntOffTime;
 
 @end
 

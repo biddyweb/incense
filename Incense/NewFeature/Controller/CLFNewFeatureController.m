@@ -45,7 +45,6 @@ static const NSInteger NewFeaturePages = 5;
     [super viewDidLoad];
 
     [self setupScrollView];
-    
     [self setupPageControl];
 }
 

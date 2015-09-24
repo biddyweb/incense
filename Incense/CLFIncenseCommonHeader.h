@@ -14,6 +14,6 @@
 #define Size_Ratio_To_iPhone6    (Incense_Screen_Height / 667.0f)
 // I think the position is ok for each condition
 #define Incense_Location         ((Incense_Screen_Height - 200 * Size_Ratio_To_iPhone6) * 0.425)
-#define Incense_Burnt_Off_Time    (180.0f)
+#define Incense_Burnt_Off_Time    (1800.0f)
 
 #endif

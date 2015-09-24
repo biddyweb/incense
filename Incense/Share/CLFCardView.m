@@ -149,7 +149,6 @@
     if (!_rippleView) {
         UIView *rippleView = [[UIView alloc] init];
         rippleView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - 110, CGRectGetWidth(self.shotView.frame), 100);
-//        rippleView.backgroundColor = [UIColor blueColor];
         rippleView.backgroundColor = [UIColor clearColor];
         [self.shotView addSubview:rippleView];
         _rippleView = rippleView;
@@ -161,9 +160,7 @@
     self.rippleView.alpha = 1.0f;
     
     self.rippleMaker.animationView = self.rippleView;
-    
     [self.rippleMaker spanWaveContinuallyWithTimeInterval:4];
-    
     CATransform3D rotate = CATransform3DMakeRotation(M_PI / 3, 1, 0, 0);
     self.rippleView.layer.transform = [CLFTools CATransform3DPerspect:rotate center:CGPointMake(0, 0) disZ:200];
 }
