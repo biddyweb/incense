@@ -19,7 +19,6 @@
 
 @implementation CLFModalTransitionManager
 
-
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
     return 1.0;
 }

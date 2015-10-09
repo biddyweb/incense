@@ -276,6 +276,7 @@ static const CGFloat kFireVoiceFactor = 40.0f;
     [self.recorder stop];
 
     if ([resultString isEqualToString:@"failure"]) {
+        [self.rippleMaker stopWave];
         [CLFTools stopAnimationInView:self.incenseView
                      withPosition:CGPointMake(0, 200 * Size_Ratio_To_iPhone6)
                            anchor:CGPointMake(0, 1)];
@@ -285,7 +286,6 @@ static const CGFloat kFireVoiceFactor = 40.0f;
                            anchor:CGPointMake(0.5, 0.5)];
         
         [self showFailure];
-        [self.rippleMaker stopWave];
         needSpan = YES;
     } else {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

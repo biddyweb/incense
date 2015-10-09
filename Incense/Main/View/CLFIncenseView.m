@@ -357,7 +357,6 @@ CGFloat integral(CGFloat(*f)(CGFloat x), CGFloat low, CGFloat high, NSInteger n)
 
 - (void)initialSetupWithIncenseHeight:(CGFloat)height {
     headDustHeight = 73.0f * Size_Ratio_To_iPhone6;
-    
     // So, here is the incenseHeight when the incense be lightened
     self.incenseHeight = height;
     x = 2.5f;

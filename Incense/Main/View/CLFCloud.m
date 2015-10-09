@@ -27,7 +27,6 @@ static CGFloat beginCenterY = -140.0f;
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        // MARK: dragEnable? 
         self.dragEnable = YES;
         self.wouldBurnt = NO;
     }

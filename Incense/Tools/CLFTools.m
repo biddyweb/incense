@@ -52,7 +52,6 @@
     if ([resultStr hasSuffix:@"零"]) {
         NSString *tempString = [resultStr substringToIndex:(resultStr.length - 1)];
         finialString = [NSMutableString stringWithString:tempString];
-//        finialString = [resultStr substringToIndex:resultStr.length - 1];
     } else {
         finialString = [NSMutableString stringWithString:resultStr];
     }
@@ -68,7 +67,6 @@
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
     anim.keyPath = @"position.y";
     anim.repeatCount = 1500;
-    //    anim.values = @[@(Incense_Screen_Height - Incense_Location), @(Incense_Screen_Height - Incense_Location - 5), @(Incense_Screen_Height - Incense_Location)];
     anim.values = @[@(value1), @(value2), @(value1)];
     anim.duration = time;
     anim.removedOnCompletion = NO;
